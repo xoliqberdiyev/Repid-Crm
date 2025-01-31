@@ -42,8 +42,7 @@ async def create_employee(
     date_of_jobstarted: datetime = Form(...),
     db: AsyncSession = Depends(session.get_db),
     file: Optional[UploadFile] = File(None),
-    current_user:models.Employees=Depends(get_current_user_from_token)
-):
+    ):
     
     if file:
         file_name = file.filename
