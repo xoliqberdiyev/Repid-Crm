@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from typing import List, Optional
-
+from fastapi_pagination.utils import disable_installed_extensions_check
 from fastapi_pagination import Page, paginate
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import schemas, session, models

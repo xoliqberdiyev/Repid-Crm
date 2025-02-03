@@ -40,7 +40,9 @@ async def update_expected_value(expected_avl_id:int ,updated_val_params:schemas.
     return await common_action._update_expected_value(session=db, body=body, expected_avl_id=expected_avl_id)
 
 @common_router.get('/get-all-new-task', response_model=List[schemas.ShowNewTask])
-async def get_new_task(task_id:Optional[int]=None ,status:Optional[str]=None,db:AsyncSession = Depends(session.get_db),
+async def get_new_task(task_id:Optional[int]=None ,status:Optional[str]=None,db:AsyncSession = Depends(session.get_db),current_user:models.Employees=Depends(get_current_user_from_token)):
+     new_tasks = await common_action._get_all_tasks(status=status, session=db,task_id=task_id)
+     return paginate(new_tasks)
 
 @common_router.get('/get-all-new-task', response_model=Page[schemas.ShowNewTask])
 async def create_new_task(task_id:Optional[int]=None ,status:Optional[str]=None,db:AsyncSession = Depends(session.get_db),

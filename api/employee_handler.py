@@ -48,7 +48,6 @@ async def create_employee(
     file: Optional[UploadFile] = File(None),
     ):
     # current_user:models.Employees=Depends(get_current_user_from_token)
-):
     if file:
         file_name = file.filename
         file_path = os.path.join(UPLOAD_DIRECTORY, file_name)
@@ -107,7 +106,6 @@ async def update_employee_detail(
         date_of_jobstarted=date_of_jobstarted,
         position_id=position_id
     )
-    
     return await employee._update_employee_detail(session=db, body=employee_data,
                                                   image=file_name, user_id=user_id)
 
@@ -245,5 +243,4 @@ async def get_list_positions(db:AsyncSession = Depends(session.get_db),
 async def create_position(name:str, db:AsyncSession = Depends(session.get_db),
                           current_user:models.Employees=Depends(get_current_user_from_token)):
     return await employee._create_position(session=db, name=name)
-                          ):
-    return await employee._create_position(session=db, name=name)
+   
