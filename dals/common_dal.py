@@ -186,8 +186,7 @@ class CommonDal:
             ),
             self.db_session.execute(
                 select(models.Project)
-                .where(
-                    models.Project.name.contains(query_)
+                .where(models.Project.is_deleted==False,
                 ).filter(models.Project.name.contains(query_))
             )
         )

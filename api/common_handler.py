@@ -15,7 +15,7 @@ common_router = APIRouter()
 @common_router.get('/list-income-expected-val', response_model=Page[schemas.ShowExpectedValue])
 async def get_all_income_val(db:AsyncSession = Depends(session.get_db), current_user:models.Employees=Depends(get_current_user_from_token)):
     expected_value =  await common_action._get_all_income_expected_value(session=db)
-    return paginate(expected_value)
+    return  paginate(expected_value)
 
 @common_router.get('/list-expense-expected-val', response_model=Page[schemas.ShowExpectedValue])
 async def get_all_income_val(db:AsyncSession = Depends(session.get_db),current_user:models.Employees=Depends(get_current_user_from_token)):
@@ -47,8 +47,8 @@ async def get_new_task(task_id:Optional[int]=None ,status:Optional[str]=None,db:
 @common_router.get('/get-all-new-task', response_model=Page[schemas.ShowNewTask])
 async def create_new_task(task_id:Optional[int]=None ,status:Optional[str]=None,db:AsyncSession = Depends(session.get_db),
                           current_user:models.Employees=Depends(get_current_user_from_token)):
-    new_tasks = await common_action._get_all_tasks(status=status, session=db,task_id=task_id)
-    return paginate(new_tasks)
+    return await common_action._get_all_tasks(status=status, session=db,task_id=task_id)
+  
 
 @common_router.post('/create-new-task', response_model=schemas.ShowNewTask)
 async def create_new_task(body:schemas.CreateNewTask, db:AsyncSession = Depends(session.get_db),
