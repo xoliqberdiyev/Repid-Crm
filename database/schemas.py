@@ -1,13 +1,14 @@
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List,Generic, TypeVar
 
-from pydantic import BaseModel, constr, field_validator
+from pydantic import BaseModel, constr, field_validator, Field
+
 
 class EmployeeCreate(BaseModel):
     last_name:str
     first_name:str
     phone_number:str
-    date_of_birth:datetime
+    date_of_birth:Optional[datetime|None]=None
     date_of_jobstarted:datetime
     salary:int
     username:str
@@ -17,11 +18,11 @@ class EmployeeCreate(BaseModel):
     class Config:
         orm_format = True
 
-    @field_validator('date_of_birth', 'date_of_jobstarted')
-    def make_datetimes_naive(cls, v):
-        if v.tzinfo is not None:
-            v = v.replace(tzinfo=None)
-        return v
+    # @field_validator('date_of_birth', 'date_of_jobstarted')
+    # def make_datetimes_naive(cls, v):
+    #     if cls.tzinfo is not None:
+    #         v = v.replace(tzinfo=None)
+    #     return v
     
 class ShowEmployee(BaseModel):
     id:int
@@ -126,23 +127,26 @@ class ShowOperator(BaseModel):
 class ShowExpectedValue(BaseModel):
     id:int
     name:str
-    date:datetime
+    date:Optional[datetime|None] = None
     description:str
     type:Optional[str] = None
+    price:int
 
     class Config:
         from_attributes = True
 
 class CreateExpectedValue(BaseModel):
     name:str
-    date:datetime
+    date:Optional[datetime|None] = None
     description:str
     type:str
+    price:int
 
 class UpdateExpectedValue(BaseModel):
     name:Optional[str] = None
     date:Optional[datetime] = None
     description:Optional[str] =None
+    price:Optional[int]=None
     
 
 class CreateNewTask(BaseModel):
@@ -233,6 +237,7 @@ class UpdateEmployeeDetail(BaseModel):
     first_name:Optional[str]=None
     phone_number:Optional[str]=None
     date_of_jobstarted:Optional[datetime]=None
+    position_id:Optional[int]=None
 
 class UpdateOperator(BaseModel):
     full_name:str=None
@@ -295,3 +300,8 @@ class UpdateExpenseByType(BaseModel):
     description:Optional[str|None] = None
     date_paied:Optional[datetime|None] = None
     real_price:Optional[str|None] = None
+
+class BaseFilterProject(BaseModel):
+    start_date:datetime=None
+    end_date:datetime=None
+    status:str=None

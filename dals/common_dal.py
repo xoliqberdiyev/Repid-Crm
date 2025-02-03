@@ -1,7 +1,9 @@
+import asyncio
+
 from datetime import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, and_, delete
+from sqlalchemy import select, update, and_, delete, or_
 from sqlalchemy.orm import joinedload
 
 from database import models, schemas
@@ -32,6 +34,7 @@ class CommonDal:
             date=body.date,
             description=body.description,
             type=body.type,
+            price=body.price
         )
 
         self.db_session.add(res)
@@ -167,4 +170,30 @@ class CommonDal:
         await self.db_session.commit()
 
         return query
+    
+    async def search_query(self, query_):
+        query, query2 = await asyncio.gather(
+            self.db_session.execute(
+                select(models.Employees)
+                .where(
+                    models.Employees.is_active == True,
+                    or_(
+                        models.Employees.first_name.contains(query_),
+                        models.Employees.username.contains(query_),
+                        models.Employees.last_name.contains(query_),
+                    )
+                )
+            ),
+            self.db_session.execute(
+                select(models.Project)
+                .where(
+                    models.Project.name.contains(query_)
+                ).filter(models.Project.name.contains(query_))
+            )
+        )
+
+        employees = query.scalars().all()
+        projects = query2.scalars().all()
+
+        return employees, projects
    

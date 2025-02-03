@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import select, update, delete, and_, func, case, cast, Integer, extract
+from sqlalchemy import select, update, delete, and_, func, case, cast, Integer, extract, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
@@ -297,8 +297,13 @@ class IncomeExepnseDal:
             .where(
                 and_(
                     extract('year', models.IncomeData.date_paied) == current_year,  # Filter by current year
-                    extract('month', models.IncomeData.date_paied) == month  # Filter by selected month
+                    extract('month', models.IncomeData.date_paied) == month,
+                    or_(
+                        models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
+                        models.IncomeData.project_id.is_(None)  # Include from_student (no project)
+                    )
                 )
+                
             )
             .group_by(extract('day', models.IncomeData.date_paied))
             .order_by(extract('day', models.IncomeData.date_paied))
@@ -322,7 +327,15 @@ class IncomeExepnseDal:
                 extract('month', models.IncomeData.date_paied).label('month'),
                 func.sum(cast(models.IncomeData.pay_price, Integer)).label('total_real_price')
             )
-            .where(extract('year', models.IncomeData.date_paied) == year)  # Filter by selected year
+            .where(
+                and_(
+                    extract('year', models.IncomeData.date_paied) == year,
+                    or_(
+                        models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
+                        models.IncomeData.project_id.is_(None)  # Include from_student (no project)
+                    )
+                )
+            )
             .group_by(extract('month', models.IncomeData.date_paied))
             .order_by(extract('month', models.IncomeData.date_paied))
         )

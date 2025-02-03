@@ -5,6 +5,7 @@ import os
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import Enum, String, ForeignKey, INTEGER, Boolean
 from sqlalchemy.orm import DeclarativeBase, relationship
+from sqlalchemy import BigInteger
 
 
 class Base(DeclarativeBase):
@@ -158,7 +159,8 @@ class ExcpectedValue(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[int] = mapped_column(String(100))
-    date: Mapped[datetime.datetime]
+    date: Mapped[datetime.datetime|None]
+    price:Mapped[int] = mapped_column(BigInteger)
     description: Mapped[str]
     type: Mapped[StatusExpectedVAlue] = mapped_column(Enum(StatusExpectedVAlue))
 

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from typing import List, Optional
 
+from fastapi_pagination import Page, paginate
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import schemas, session, models
 from api.action import income_expense
@@ -13,10 +14,11 @@ async def create_income_student(body:schemas.CreateIncomeStudent ,db:AsyncSessio
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
     return await income_expense._create_income_student(body=body, session=db)
 
-@expense_income_handler.get('/list-income-student', response_model=List[schemas.ShowIncomeStudent])
+@expense_income_handler.get('/list-income-student', response_model=Page[schemas.ShowIncomeStudent])
 async def get_list_income_student(db:AsyncSession=Depends(session.get_db),
                                   current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await income_expense._get_list_income_student(session=db)
+    income_students = await income_expense._get_list_income_student(session=db)
+    return paginate(income_students)
 
 @expense_income_handler.delete('/delete-income-student')
 async def delete_create_income(income_student_id:int, db:AsyncSession=Depends(session.get_db),
@@ -35,10 +37,11 @@ async def create_income_project(body:schemas.CreateIncomeProject, db:AsyncSessio
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
     return await income_expense._create_income_project(session=db, body=body)
 
-@expense_income_handler.get('/get-list-income-project')
+@expense_income_handler.get('/get-list-income-project', response_model=Page[schemas.ShowIncomeProject])
 async def get_list_income_project(db:AsyncSession=Depends(session.get_db),
                                   current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await income_expense._get_list_income_project(session=db)
+    income_projects = await income_expense._get_list_income_project(session=db)
+    return paginate(income_projects)
 
 @expense_income_handler.delete('/delete-income-project')
 async def delete_income_project(income_project_id:int, db:AsyncSession=Depends(session.get_db),
@@ -70,11 +73,12 @@ async def update_expense(update_params:schemas.UpdateExpenseByType, expense_id:i
     body = update_params.model_dump(exclude_none=True)
     return await income_expense._update_expense_by_type(body=body, session=db, expense_id=expense_id)
 
-@expense_income_handler.get('/list-expense-type',
+@expense_income_handler.get('/list-expense-type', response_model = Page[schemas.ShowExpenseType],
                             description="Bu yerda shu status lar keladi (for_office, smm_service, other_expense,renting)")
 async def get_list_expense_type(type:str, db:AsyncSession=Depends(session.get_db),
                                  current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await income_expense._get_expence_type_list(session=db, status=type)
+    expesne_types = await income_expense._get_expence_type_list(session=db, status=type)
+    return paginate(expesne_types)
 
 @expense_income_handler.delete('/delete-expense')
 async def delete_given_expense(expense_id:int, db:AsyncSession=Depends(session.get_db),
@@ -87,10 +91,11 @@ async def create_expense_employee(body:schemas.CreatingExepnseEmployee, db:Async
                                    current_user:models.Employees=Depends(get_current_user_from_token)):
     return await income_expense._create_expense_employee(session=db, body=body)
 
-@expense_income_handler.get('/list-expense-employee')
+@expense_income_handler.get('/list-expense-employee', response_model=Page[schemas.ShowExpenseEmployee])
 async def get_list_expense_employee(db:AsyncSession=Depends(session.get_db),
                                      current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await income_expense._list_expense_employee(session=db)
+    user_expences = await income_expense._list_expense_employee(session=db)
+    return paginate(user_expences)
 
 @expense_income_handler.patch('/update-expense-salary-employee')
 async def update_expense_employee(pay_price:str, expense_id:int, db:AsyncSession=Depends(session.get_db),

@@ -10,7 +10,7 @@ from dals import user_dal
 import os
 
 
-UPLOAD_USER = "uploads"
+UPLOAD_USER = "uploalganda position ozgarish kerakds"
 UPLOAD_PROJETC='projects'
 
 async def _create_new_employee(body: schemas.EmployeeCreate, 
@@ -54,12 +54,12 @@ async def _create_new_employee(body: schemas.EmployeeCreate,
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
 async def _get_all_employee(session:AsyncSession, 
-                            position_id:int):
+                            position_id:int,current_user:str,):
     try:
         async with session.begin():
 
             emp_dal = user_dal.EmployeeDal(session)
-            all_users = await emp_dal.get_all_employee(position_id)  # Ensure this is an async call
+            all_users = await emp_dal.get_all_employee(position_id,current_user)  # Ensure this is an async call
             return [
                 schemas.ShowEmployee(
                     id=user.id,
@@ -105,11 +105,18 @@ async def _create_project(session:AsyncSession,
         except SQLAlchemyError as e:
             raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
-async def _get_all_projects(session:AsyncSession):
+async def _get_all_projects(session:AsyncSession, start_date, end_date, status):
+    if start_date is None and end_date is None:
+        pass
+    elif start_date and end_date:
+        pass
+    elif start_date or end_date:
+        raise HTTPException(status_code=402, detail="You must give me both date for projects")
+    
     async with session.begin():
         try:
             emp_dal = user_dal.EmployeeDal(session)
-            all_projects = await emp_dal.get_al_projects()
+            all_projects = await emp_dal.get_all_projects(start_date, end_date, status)
 
             return [
                 schemas.ShowProject(
@@ -120,7 +127,7 @@ async def _get_all_projects(session:AsyncSession):
                     programmers=[schemas.ProgrammerSchema.model_validate(programmer) for programmer in await emp_dal.get_programmers_by_project_id(project.id)],
                     status=project.status,
                     price=project.price,
-                    image=f"{UPLOAD_PROJETC}/{project.image}",
+                    image=project.image,
                 )
                 
                 for project in all_projects
@@ -133,6 +140,8 @@ async def _get_detail_employee(user_id:int,
     try:
         async with session.begin():
             emp_dal = user_dal.EmployeeDal(session)
+            if not await emp_dal.get_by_user_id(user_id=user_id):
+                raise HTTPException(status_code=404, detail='User with this id is not found or not active')
             user_info, user_projects = await emp_dal.get_employee_detail(user_id=user_id)
 
             all_projects = [
@@ -322,7 +331,8 @@ async def _update_employee_detail(user_id:int, session:AsyncSession, body:schema
                 username=body.username,
                 salary=body.salary,
                 image=image,
-                user_id=user_id
+                user_id=user_id,
+                position_id=body.position_id
             )
 
             # Return the employee details

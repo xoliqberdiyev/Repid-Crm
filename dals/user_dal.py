@@ -4,8 +4,8 @@ from typing import Optional
 
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, and_, delete, func, case
-from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy import select, update, and_, delete, func, case, or_
+from sqlalchemy.orm import joinedload, selectinload, Query
 
 from database import models, schemas
 
@@ -16,11 +16,16 @@ class EmployeeDal:
     def __init__(self, db_session: AsyncSession):
         self.db_session = db_session
 
-    async def get_all_employee(self, position_id):
-        query = select(models.Employees).join(models.Position).where(models.Employees.is_active==True).options(
+    async def get_all_employee(self, position_id,current_user):
+        query = select(models.Employees).join(models.Position).where(models.Employees.is_active==True, 
+                                                                     models.Employees.username!=current_user, 
+                                                                     models.Employees.user_type!=models.UserType.super_admin).options(
                         selectinload(models.Employees.position))
         if position_id:
-            query = select(models.Employees).join(models.Position).where(and_(models.Employees.is_active==True, models.Employees.position_id == position_id)).options(
+            query = select(models.Employees).join(models.Position).where(and_(models.Employees.is_active==True, 
+                                                                            models.Employees.position_id == position_id,
+                                                                            models.Employees.username!=current_user,
+                                                                            models.Employees.user_type!=models.UserType.super_admin)).options(
                         selectinload(models.Employees.position))
         res = await self.db_session.execute(query)
 
@@ -61,7 +66,7 @@ class EmployeeDal:
     async def update_employee(self, first_name: str, last_name: str, user_id: int,
                           phone_number: str, date_of_birth: datetime,
                           date_of_jobstarted: datetime, salary: int, username: str,
-                          image: str):
+                          image: str,position_id:int):
         try:
             # Update the employee record
             query = (
@@ -75,7 +80,8 @@ class EmployeeDal:
                     salary=salary,
                     username=username,
                     date_of_jobstarted=date_of_jobstarted,
-                    image=image
+                    image=image,
+                    position_id=position_id
                 )
                 .returning(models.Employees)
             )
@@ -114,6 +120,12 @@ class EmployeeDal:
         username = res.fetchone()
         if username is not None:
             return username[0]
+        
+    async def get_by_user_id(self, user_id):
+        res = await self.db_session.execute(
+            select(models.Employees).where(and_(models.Employees.id == user_id, models.Employees.is_active==True))
+        )
+        return res.fetchone()
 
     async def create_project(self, name:str, 
                             start_date:datetime,
@@ -153,13 +165,36 @@ class EmployeeDal:
         )
         return result.scalars().all()
 
-    async def get_al_projects(self):
+    async def get_all_projects(self, start_date, end_date, status):
         query = select(models.Project).where(models.Project.is_deleted==False)
+        if (start_date and end_date) and status:
+            query = select(models.Project).where(
+                and_(
+                    models.Project.is_deleted.is_(False),
+                    models.Project.start_date.between(start_date, end_date),
+                    models.Project.status == status
+                )
+            )
+        elif start_date and end_date:
+            query = select(models.Project).where(
+                and_(
+                    models.Project.is_deleted.is_(False),
+                    models.Project.start_date.between(start_date, end_date),
+                )
+            )
+        elif status:
+            query = select(models.Project).where(
+                and_(
+                    models.Project.is_deleted.is_(False),
+                    models.Project.status == status
+                )
+            )
+        
         res = await self.db_session.execute(query)
         all_projects = res.scalars().all()
 
         return all_projects
-    
+        
     async def get_project_id(self, project_id):
         query = select(models.Project).where(and_(models.Project.is_deleted==False),(models.Project.id == project_id))
         res = await self.db_session.execute(query)
@@ -214,7 +249,7 @@ class EmployeeDal:
 
         if oper_type_id and status:
             query = select(models.Operator).where(and_(models.Operator.operator_type_id == oper_type_id, models.Operator.status == status)).join(models.OperatorType).options(joinedload(models.Operator.operator_type))
-        if oper_type_id:
+        elif oper_type_id:
             query = select(models.Operator).where(models.Operator.operator_type_id == oper_type_id).join(models.OperatorType).options(joinedload(models.Operator.operator_type))
         elif status:
             query = select(models.Operator).where(models.Operator.status == status).join(models.OperatorType).options(joinedload(models.Operator.operator_type))

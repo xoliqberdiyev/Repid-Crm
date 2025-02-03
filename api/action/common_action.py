@@ -20,7 +20,8 @@ async def _get_all_income_expected_value(session: AsyncSession):
                     name=income_val.name,
                     date=income_val.date,
                     description=income_val.description,
-                    type=income_val.type
+                    type=income_val.type,
+                    price=income_val.price
                 )
                 for income_val in all_income
             ]
@@ -40,7 +41,8 @@ async def _get_all_expense_expected_value(session: AsyncSession):
                     name=income_val.name,
                     date=income_val.date,
                     description=income_val.description,
-                    type=income_val.type
+                    type=income_val.type,
+                    price=income_val.price,
                 )
                 for income_val in all_income
             ]
@@ -59,7 +61,8 @@ async def _create_expected_value(session:AsyncSession, body:schemas.CreateExpect
                 name=create_val.name,
                 date=create_val.date,
                 description=create_val.description,
-                type=create_val.type
+                type=create_val.type,
+                price=create_val.price
             )
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
@@ -206,4 +209,19 @@ async def _create_operator_type(session:AsyncSession, name:str):
             )
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+
+async def _search_position_project(session:AsyncSession, query:str):
+    try:
+        async with session.begin():
+            com_dal = common_dal.CommonDal(session)
+            employyes, projects = await com_dal.search_query(query)
+
+            return {
+                'employes':employyes,
+                'projects':projects
+            }
+
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+
 

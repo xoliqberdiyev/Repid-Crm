@@ -21,7 +21,7 @@ async def _create_income_student(session:AsyncSession, body:schemas.CreateIncome
                 name=income_student.name,
                 real_price=income_student.real_price,
                 pay_price=income_student.pay_price,
-                left_price=int(income_student.real_price) - int(income_student.real_price),
+                left_price=int(income_student.real_price) - int(income_student.pay_price),
                 date_paied=income_student.date_paied,
                 position=income_student.position,
                 type=income_student.type
@@ -41,8 +41,8 @@ async def _get_list_income_student(session:AsyncSession):
                 id=income_student.id,
                 name=income_student.name,
                 real_price=income_student.real_price,
-                pay_price=income_student.real_price,
-                left_price=int(income_student.real_price) - int(income_student.real_price),
+                pay_price=income_student.pay_price,
+                left_price=int(income_student.real_price) - int(income_student.pay_price),
                 date_paied=income_student.date_paied,
                 position=income_student.position,
                 type=income_student.type
@@ -123,25 +123,25 @@ async def _get_list_income_project(session: AsyncSession):
             result = []
             for income_project in income_projects:
                 project_with_id = await empl_dal.get_project_id(project_id=income_project.project_id)
+                if project_with_id:
+                    programmers = await empl_dal.get_programmers_by_project_id(project_with_id.id)
 
-                programmers = await empl_dal.get_programmers_by_project_id(project_with_id.id)
-
-                result.append(
-                    schemas.ShowIncomeProject(
-                        id=income_project.id,
-                        name=project_with_id.name,
-                        real_price=project_with_id.price,
-                        date_start=project_with_id.start_date,
-                        pay_price=income_project.pay_price,
-                        date_end=project_with_id.end_date,
-                        type=income_project.type,
-                        left_price=int(project_with_id.price) - int(income_project.pay_price),
-                        date_paied=income_project.date_paied,
-                        programmers=[
-                            schemas.ProgrammerSchema.model_validate(programmer) for programmer in programmers
-                        ],
+                    result.append(
+                        schemas.ShowIncomeProject(
+                            id=income_project.id,
+                            name=project_with_id.name,
+                            real_price=project_with_id.price,
+                            date_start=project_with_id.start_date,
+                            pay_price=income_project.pay_price,
+                            date_end=project_with_id.end_date,
+                            type=income_project.type,
+                            left_price=int(project_with_id.price) - int(income_project.pay_price),
+                            date_paied=income_project.date_paied,
+                            programmers=[
+                                schemas.ProgrammerSchema.model_validate(programmer) for programmer in programmers
+                            ],
+                        )
                     )
-                )
 
             return result
     except SQLAlchemyError as e:
@@ -251,8 +251,8 @@ async def _get_expence_type_list(session:AsyncSession,status:str):
 
             expense_list = await in_ex_dal.get_list_expense(status=status)
 
-            if expense_list != []:
-                return [
+            
+            return [
                     schemas.ShowExpenseType(
                         id=expense_.id,
                         name=expense_.name,
@@ -456,3 +456,4 @@ async def _get_main_dashboard(session:AsyncSession):
             'employee_count':only_employee,
             'project_count':only_project
         }
+

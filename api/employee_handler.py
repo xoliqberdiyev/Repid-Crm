@@ -1,8 +1,9 @@
 import shutil
 import os
 from typing import Optional, List
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Form
-from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Form, Query
+from fastapi_pagination import paginate
+from fastapi_pagination import Page
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -19,10 +20,13 @@ UPLOAD_DIRECTORY = "media/uploads"  # Directory to store uploaded files
 os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)  # Ensure the directory exists
 UPLOAD_DIRECTORY1 = 'media/projects'
 
-@emp_router.get('/list',response_model=List[schemas.ShowEmployee])
-async def get_all_employee(position_id:Optional[int]=None ,db:AsyncSession = Depends(session.get_db),
-                           current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await employee._get_all_employee(db, position_id)
+@emp_router.get('/list',response_model=Page[schemas.ShowEmployee])
+async def get_all_employee(position_id:Optional[int]=None ,
+                           db:AsyncSession = Depends(session.get_db),
+                           current_user:models.Employees=Depends(get_current_user_from_token),
+                            ):
+    users = await employee._get_all_employee(db, position_id,current_user.username)
+    return paginate(users)
 
 @emp_router.delete('/delete-employee')
 async def delete_employee(user_id:int, db:AsyncSession = Depends(session.get_db),
@@ -43,7 +47,8 @@ async def create_employee(
     db: AsyncSession = Depends(session.get_db),
     file: Optional[UploadFile] = File(None),
     ):
-    
+    # current_user:models.Employees=Depends(get_current_user_from_token)
+):
     if file:
         file_name = file.filename
         file_path = os.path.join(UPLOAD_DIRECTORY, file_name)
@@ -68,7 +73,7 @@ async def create_employee(
 @emp_router.patch('/update-employee')
 async def update_employee_detail(
     user_id:int,
-    date_of_birth: Optional[datetime] = Form(Ndefault=None),
+    date_of_birth: Optional[datetime] = Form(default=None),
     salary: Optional[str] = Form(default=None),
     last_name: Optional[str] = Form(default=None),
     username: Optional[str] = Form(default=None),
@@ -78,6 +83,7 @@ async def update_employee_detail(
     db: AsyncSession = Depends(session.get_db),
     file: Optional[UploadFile] = File(None),
     image_remove: Optional[bool] = Form(default=False),
+    position_id:Optional[int] = Form(default=None),
     current_user:models.Employees=Depends(get_current_user_from_token)
 ):
     if file:  
@@ -98,7 +104,8 @@ async def update_employee_detail(
         username=username,
         first_name=first_name,
         phone_number=phone_number,
-        date_of_jobstarted=date_of_jobstarted
+        date_of_jobstarted=date_of_jobstarted,
+        position_id=position_id
     )
     
     return await employee._update_employee_detail(session=db, body=employee_data,
@@ -109,10 +116,18 @@ async def get_detail_employee(user_id:int, db:AsyncSession = Depends(session.get
                               current_user:models.Employees=Depends(get_current_user_from_token)):
     return await employee._get_detail_employee(user_id,db)
 
-@emp_router.get('/list-projects', response_model=List[schemas.ShowProject])
-async def get_list_projects(db:AsyncSession = Depends(session.get_db),
-                            current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await employee._get_all_projects(db)
+@emp_router.get('/list-projects', response_model=Page[schemas.ShowProject])
+async def get_list_projects(start_date:datetime=None,
+                            end_date:datetime=None,
+                            status:str=None,
+                            db:AsyncSession = Depends(session.get_db),
+                            current_user:models.Employees=Depends(get_current_user_from_token),
+                            ):
+    projects =  await employee._get_all_projects(session=db, 
+                                                 start_date=start_date, 
+                                                 end_date=end_date,
+                                                 status=status)
+    return paginate(projects)
 
 @emp_router.post('/create_project',response_model=schemas.ShowProject)
 async def create_project(
@@ -198,10 +213,11 @@ async def create_new_operator(body:schemas.CreateOperator, db:AsyncSession = Dep
                               current_user:models.Employees=Depends(get_current_user_from_token)):
     return await employee._create_new_operatoe(session=db, body=body)
 
-@emp_router.get('/list-operator', response_model=List[schemas.ShowOperator])
+@emp_router.get('/list-operator', response_model=Page[schemas.ShowOperator])
 async def get_all_operators(oper_type_id:Optional[int]=None, status:Optional[str]=None, db:AsyncSession = Depends(session.get_db),
                             current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await employee._get_all_operators(operator_type_id=oper_type_id, session=db, status=status)
+    operator_list = await employee._get_all_operators(operator_type_id=oper_type_id, session=db, status=status)
+    return paginate(operator_list)
 
 @emp_router.post('/change-status-operator')
 async def change_operator_status(oper_id:int, status:str, db:AsyncSession = Depends(session.get_db),
@@ -228,4 +244,6 @@ async def get_list_positions(db:AsyncSession = Depends(session.get_db),
 @emp_router.post('/create_position',response_model=schemas.ShowPosition)
 async def create_position(name:str, db:AsyncSession = Depends(session.get_db),
                           current_user:models.Employees=Depends(get_current_user_from_token)):
+    return await employee._create_position(session=db, name=name)
+                          ):
     return await employee._create_position(session=db, name=name)
