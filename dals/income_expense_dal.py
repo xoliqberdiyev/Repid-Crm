@@ -28,8 +28,12 @@ class IncomeExepnseDal:
 
         return query
     
-    async def get_list_income_student(self):
+    async def get_list_income_student(self,start_date,end_date):
+
         query = select(models.IncomeData).where(models.IncomeData.type=='from_student')
+        if start_date and end_date:
+            query = select(models.IncomeData).where(and_(models.IncomeData.type=='from_student',
+                                                         models.IncomeData.date_paied.between(start_date,end_date)))
 
         res = await self.db_session.execute(query)
 
@@ -65,8 +69,11 @@ class IncomeExepnseDal:
 
         return query
     
-    async def get_list_income_project(self):
+    async def get_list_income_project(self,start_date,end_date):
         query = select(models.IncomeData).where(models.IncomeData.type=='from_project')
+        if start_date and end_date:
+            query = select(models.IncomeData).where(and_(models.IncomeData.type=='from_project',
+                                                         models.IncomeData.date_paied.between(start_date,end_date)))
 
         res = await self.db_session.execute(query)
         return res.scalars().all()
@@ -105,6 +112,11 @@ class IncomeExepnseDal:
                 ).label("total_from_project"),
                 func.sum(cast(models.IncomeData.pay_price, Integer)).label("grand_total")
             )
+        ).where(
+            or_(
+                        models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
+                        models.IncomeData.project_id.is_(None)  # Include from_student (no project)
+                    )
         )
 
         result = await self.db_session.execute(query)
@@ -127,8 +139,12 @@ class IncomeExepnseDal:
 
         return query
     
-    async def get_list_expense(self,status):
+    async def get_list_expense(self,status,start_date, end_date):
         query = select(models.ExpenseData).where(and_(models.ExpenseData.type==status, models.ExpenseData.type!='employee_salary'))
+        if start_date and end_date:
+            query = select(models.ExpenseData).where(and_(models.ExpenseData.type==status, 
+                                                          models.ExpenseData.type!='employee_salary',
+                                                          models.ExpenseData.date_paied.between(start_date,end_date)))
 
         res = await self.db_session.execute(query)
 
@@ -178,7 +194,7 @@ class IncomeExepnseDal:
         await self.db_session.commit()
         return updated_expense
 
-    async def get_list_expense_employee(self):
+    async def get_list_expense_employee(self,start_date, end_date):
         query = (
                 select(models.ExpenseData)
                 .join(models.Employees)  # Ensure Employees is joined correctly
@@ -186,7 +202,8 @@ class IncomeExepnseDal:
                 .where(
                     and_(
                         models.ExpenseData.type == 'employee_salary',
-                        models.Employees.is_active == True
+                        models.Employees.is_active == True,
+                        models.ExpenseData.date_paied.between(start_date, end_date)
                     )
                 )
                 .options(
@@ -387,7 +404,12 @@ class IncomeExepnseDal:
 
         result = await self.db_session.execute(
             select(func.sum(cast(models.IncomeData.pay_price, Integer))).where(
-                models.IncomeData.date_paied >= thirty_days_ago  # Filter only last 30 days
+        
+                models.IncomeData.date_paied >= thirty_days_ago,
+                or_(
+                        models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
+                        models.IncomeData.project_id.is_(None)  # Include from_student (no project)
+                    )
             )
         )
         total_expense = result.scalar() or 0  # Handle case where no expenses exist
@@ -407,3 +429,42 @@ class IncomeExepnseDal:
         )
 
         return result.scalar() or 0
+    
+    async def get_projects_done_chart(self, year):
+        if year is None:
+            year = datetime.utcnow().year
+
+        months_dict = {month: 0 for month in range(1, 13)}
+
+        resutl = await self.db_session.execute(
+
+            select(
+                extract('month', models.Project.start_date).label('month'),
+                func.count().label('count_project')
+            )
+            .where(and_(models.Project.status==models.StatusProject.done, models.Project.is_deleted==False))
+            .group_by(extract('month', models.Project.start_date))
+            .order_by(extract('month', models.Project.start_date))
+        )
+        for row in resutl.fetchall():
+            months_dict[int(row.month)] = row.count_project
+        print(months_dict)
+
+        return months_dict
+
+    async def get_project_done_pie_chart(self):
+        result = await self.db_session.execute(
+            select(
+                func.count(
+                    case((models.Project.status == models.StatusProject.done, 1))
+                ).label("project_done_count"),
+                func.count(
+                    case((models.Project.status == models.StatusProject.in_progres, 1))
+                ).label("project_progres_count")
+            ).where(models.Project.is_deleted == False)
+        )
+
+        return result.one_or_none()
+
+
+

@@ -305,3 +305,12 @@ class BaseFilterProject(BaseModel):
     start_date:datetime=None
     end_date:datetime=None
     status:str=None
+
+class ShowLoginPassword(BaseModel):
+    id:int
+    login:str
+    password:str
+
+class UpdateLoginPassword(BaseModel):
+    login:str|None = None
+    password:str|None = None

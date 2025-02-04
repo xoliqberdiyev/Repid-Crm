@@ -29,12 +29,18 @@ async def _create_income_student(session:AsyncSession, body:schemas.CreateIncome
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
     
-async def _get_list_income_student(session:AsyncSession):
+async def _get_list_income_student(session:AsyncSession,start_date,end_date):
+    if start_date is None and end_date is None:
+        pass
+    elif start_date and end_date:
+        pass
+    else:
+        raise HTTPException(status_code=422, detail='Bro you need to fill both of them')
     try:
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            income_students = await in_ex_dal.get_list_income_student()
+            income_students = await in_ex_dal.get_list_income_student(start_date,end_date)
 
             return [
                 schemas.ShowIncomeStudent(
@@ -86,7 +92,7 @@ async def _update_income_student(session:AsyncSession, income_student_id:int, bo
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 # ------------------------------------------------------------------------------------------------------------------
-
+from fastapi_pagination.utils import disable_installed_extensions_check
 async def _create_income_project(session:AsyncSession, body:schemas.CreateIncomeProject):
         try:
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
@@ -112,13 +118,19 @@ async def _create_income_project(session:AsyncSession, body:schemas.CreateIncome
         except SQLAlchemyError as e:
             raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
         
-async def _get_list_income_project(session: AsyncSession):
+async def _get_list_income_project(session: AsyncSession,start_date,end_date):
+    if start_date is None and end_date is None:
+        pass
+    elif start_date and end_date:
+        pass
+    else:
+        raise HTTPException(status_code=422, detail='Bro you need to fill both of them')
     try:
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
             empl_dal = user_dal.EmployeeDal(session)
 
-            income_projects = await in_ex_dal.get_list_income_project()
+            income_projects = await in_ex_dal.get_list_income_project(start_date,end_date)
 
             result = []
             for income_project in income_projects:
@@ -244,12 +256,12 @@ async def _update_expense_by_type(session:AsyncSession, expense_id:int ,body:dic
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
-async def _get_expence_type_list(session:AsyncSession,status:str):
+async def _get_expence_type_list(session:AsyncSession,status:str,start_date,end_date):
     try:
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            expense_list = await in_ex_dal.get_list_expense(status=status)
+            expense_list = await in_ex_dal.get_list_expense(status=status,start_date=start_date,end_date=end_date)
 
             
             return [
@@ -326,12 +338,12 @@ async def _update_expense_employee(pay_price:str, expense_id:int, session:AsyncS
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
-async def _list_expense_employee(session: AsyncSession):
+async def _list_expense_employee(session: AsyncSession,start_date, end_date):
     try:
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            list_expense_employee = await in_ex_dal.get_list_expense_employee()
+            list_expense_employee = await in_ex_dal.get_list_expense_employee(start_date, end_date)
 
             return [
                 schemas.ShowExpenseEmployee(
@@ -456,4 +468,38 @@ async def _get_main_dashboard(session:AsyncSession):
             'employee_count':only_employee,
             'project_count':only_project
         }
+    
+async def _get_projects_done_chart(session:AsyncSession, year:int):
+    try:
+        async with session.begin():
+            in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
+            projects_done_chart = await in_ex_dal.get_projects_done_chart(year=year)
+
+            return {
+                month:count_project
+                for month, count_project in projects_done_chart.items()
+            }
+
+
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")    
+    
+async def _get_project_done_pie_chart(session:AsyncSession):
+    try:
+        async with session.begin():
+            in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
+            project_done_pie_chart = await in_ex_dal.get_project_done_pie_chart()
+            print(project_done_pie_chart)
+
+            return {
+                'count_done_project':project_done_pie_chart.project_done_count,
+                'count_progres_project':project_done_pie_chart.project_progres_count,
+                'total_project':project_done_pie_chart.project_done_count+project_done_pie_chart.project_progres_count
+            }
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")    
+
+
+ 
+
 

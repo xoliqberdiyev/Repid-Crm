@@ -224,4 +224,68 @@ async def _search_position_project(session:AsyncSession, query:str):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
+async def _create_login_password_note(session:AsyncSession, login:str, password:str):
+    try:
+        async with session.begin():
+            com_dal = common_dal.CommonDal(session)
+            login_password = await com_dal.create_login_password(login, password)
+
+            return {
+                'id':login_password.id,
+                'login':login_password.login,
+                'password':login_password.password
+            }
+
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+
+async def _get_all_login_password(session:AsyncSession):
+    try:
+        async with session.begin():
+            com_dal = common_dal.CommonDal(session)
+            login_password = await com_dal.get_all_login_password_note()
+
+            return [
+                schemas.ShowLoginPassword(
+                    id=login_note.id,
+                    login=login_note.login,
+                    password=login_note.password
+                )
+                 for login_note in login_password
+            ]
+
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+
+async def _update_login_password_note(session:AsyncSession, body:dict,login_note_id:int):
+    try:
+        async with session.begin():
+            com_dal = common_dal.CommonDal(session)
+            login_password = await com_dal.update_login_password(login_note_id,**body)
+
+            return schemas.ShowLoginPassword(
+                id=login_password.id,
+                login=login_password.login,
+                password=login_password.password
+            )
+
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+    
+async def _delete_login_password(session:AsyncSession, login_note_id:int):
+    try:
+        async with session.begin():
+            com_dal = common_dal.CommonDal(session)
+            login_password = await com_dal.delete_login_password(login_note_id)
+
+            return {'success':True,
+                    'message':'Deleted successfully'} if login_password else {'Success':False,
+                                                                              'message':'Error happaend'}
+
+
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+
+
+
 

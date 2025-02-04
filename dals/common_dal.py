@@ -195,4 +195,43 @@ class CommonDal:
         projects = query2.scalars().all()
 
         return employees, projects
+    
+    async def create_login_password(self, login:str, password:str):
+            result = models.LoginPasswordNote(
+                login=login,
+                password=password
+            )   
+            self.db_session.add(result)
+
+            await self.db_session.commit()
+
+            return result
+    
+    async def update_login_password(self,login_note_id, **kwargs):
+        result = await self.db_session.execute(
+            update(models.LoginPasswordNote)
+            .where(models.LoginPasswordNote.id==login_note_id)
+            .values(kwargs).returning(models.LoginPasswordNote)
+        )
+
+        await self.db_session.commit()
+
+        return result.scalar_one_or_none()
+    
+    async def delete_login_password(self, note_id:int):
+        result = await self.db_session.execute(
+            delete(models.LoginPasswordNote).where(models.LoginPasswordNote.id==note_id)
+        )
+
+        await self.db_session.commit()
+
+        if result.rowcount > 0:
+            return True
+        return False
+
+    async def get_all_login_password_note(self):
+        result = await self.db_session.execute(
+            select(models.LoginPasswordNote)
+        )
+        return result.scalars().all()
    

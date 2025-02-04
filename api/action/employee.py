@@ -9,7 +9,6 @@ from dals import user_dal
 
 import os
 
-
 UPLOAD_USER = "uploalganda position ozgarish kerakds"
 UPLOAD_PROJETC='projects'
 
@@ -99,7 +98,7 @@ async def _create_project(session:AsyncSession,
                 end_date=new_project.end_date,
                 status=new_project.status,
                 price=new_project.price,
-                image=f"{UPLOAD_PROJETC}/{new_project.image}",
+                image=new_project.image,
                 programmers=[schemas.ProgrammerSchema.model_validate(programmer) for programmer in programmers]
             )
         except SQLAlchemyError as e:

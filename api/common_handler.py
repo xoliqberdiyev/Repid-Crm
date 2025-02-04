@@ -44,6 +44,8 @@ async def get_new_task(task_id:Optional[int]=None ,status:Optional[str]=None,db:
      return await common_action._get_all_tasks(status=status, session=db,task_id=task_id)
      
 @common_router.get('/get-all-new-task', response_model=Page[schemas.ShowNewTask])
+#in this right here you can see only task related handlers
+@common_router.get('/get-all-new-task', response_model=List[schemas.ShowNewTask])
 async def create_new_task(task_id:Optional[int]=None ,status:Optional[str]=None,db:AsyncSession = Depends(session.get_db),
                           current_user:models.Employees=Depends(get_current_user_from_token)):
     return await common_action._get_all_tasks(status=status, session=db,task_id=task_id)
@@ -84,3 +86,24 @@ async def create_operator_type(name:str, db:AsyncSession=Depends(session.get_db)
 async def search_position_project(query:str, db:AsyncSession=Depends(session.get_db),
                                   current_user:models.Employees=Depends(get_current_user_from_token)):
     return await common_action._search_position_project(query=query, session=db)
+
+@common_router.post('/login-password-note')
+async def create_login_password_note(login:str,password:str,
+                                     db:AsyncSession=Depends(session.get_db)):
+    return await common_action._create_login_password_note(session=db, login=login, password=password)
+
+@common_router.get('/login-password-note',response_model=Page[schemas.ShowLoginPassword])
+async def get_all_login_password(db:AsyncSession=Depends(session.get_db)):
+    list_login_note =  await common_action._get_all_login_password(session=db)
+    return paginate(list_login_note)
+
+@common_router.patch('login-password-note')
+async def update_login_password(update_params:schemas.UpdateLoginPassword,
+                                login_note_id:int, 
+                                db:AsyncSession=Depends(session.get_db)):
+    body = update_params.model_dump(exclude_none=True)
+    return await common_action._update_login_password_note(session=db, body=body,login_note_id=login_note_id)
+
+@common_router.delete('/login-password-note')
+async def delete_login_password(login_note_id:int, db:AsyncSession=Depends(session.get_db)):
+    return await common_action._delete_login_password(login_note_id=login_note_id, session=db)

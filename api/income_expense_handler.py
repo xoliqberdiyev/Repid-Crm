@@ -1,6 +1,9 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends
 from typing import List, Optional
 from fastapi_pagination.utils import disable_installed_extensions_check
+
 from fastapi_pagination import Page, paginate
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import schemas, session, models
@@ -16,8 +19,11 @@ async def create_income_student(body:schemas.CreateIncomeStudent ,db:AsyncSessio
 
 @expense_income_handler.get('/list-income-student', response_model=Page[schemas.ShowIncomeStudent])
 async def get_list_income_student(db:AsyncSession=Depends(session.get_db),
+                                  start_date:datetime|None=None,
+                                  end_date:datetime|None=None,
                                   current_user:models.Employees=Depends(get_current_user_from_token)):
-    income_students = await income_expense._get_list_income_student(session=db)
+    income_students = await income_expense._get_list_income_student(session=db,start_date=start_date,end_date=end_date)
+    disable_installed_extensions_check()
     return paginate(income_students)
 
 @expense_income_handler.delete('/delete-income-student')
@@ -39,8 +45,10 @@ async def create_income_project(body:schemas.CreateIncomeProject, db:AsyncSessio
 
 @expense_income_handler.get('/get-list-income-project', response_model=Page[schemas.ShowIncomeProject])
 async def get_list_income_project(db:AsyncSession=Depends(session.get_db),
+                                  start_date:datetime|None=None,
+                                  end_date:datetime|None=None,
                                   current_user:models.Employees=Depends(get_current_user_from_token)):
-    income_projects = await income_expense._get_list_income_project(session=db)
+    income_projects = await income_expense._get_list_income_project(session=db,start_date=start_date,end_date=end_date)
     return paginate(income_projects)
 
 @expense_income_handler.delete('/delete-income-project')
@@ -76,8 +84,11 @@ async def update_expense(update_params:schemas.UpdateExpenseByType, expense_id:i
 @expense_income_handler.get('/list-expense-type', response_model = Page[schemas.ShowExpenseType],
                             description="Bu yerda shu status lar keladi (for_office, smm_service, other_expense,renting)")
 async def get_list_expense_type(type:str, db:AsyncSession=Depends(session.get_db),
+                                start_date:datetime|None=None,
+                                end_date:datetime|None=None,
                                  current_user:models.Employees=Depends(get_current_user_from_token)):
-    expesne_types = await income_expense._get_expence_type_list(session=db, status=type)
+    expesne_types = await income_expense._get_expence_type_list(session=db, status=type,
+                                                                start_date=start_date,end_date=end_date)
     return paginate(expesne_types)
 
 @expense_income_handler.delete('/delete-expense')
@@ -93,8 +104,10 @@ async def create_expense_employee(body:schemas.CreatingExepnseEmployee, db:Async
 
 @expense_income_handler.get('/list-expense-employee', response_model=Page[schemas.ShowExpenseEmployee])
 async def get_list_expense_employee(db:AsyncSession=Depends(session.get_db),
+                                    start_date:datetime|None=None,
+                                    end_date:datetime|None=None,
                                      current_user:models.Employees=Depends(get_current_user_from_token)):
-    user_expences = await income_expense._list_expense_employee(session=db)
+    user_expences = await income_expense._list_expense_employee(session=db, start_date=start_date, end_date=end_date)
     return paginate(user_expences)
 
 @expense_income_handler.patch('/update-expense-salary-employee')
@@ -126,3 +139,12 @@ async def get_line_graph_expense(year:Optional[int|None]=None, db:AsyncSession=D
 @expense_income_handler.get('/get-main-dashboard')
 async def get_main_dashboard(db:AsyncSession=Depends(session.get_db)):
     return await income_expense._get_main_dashboard(session=db)
+
+@expense_income_handler.get('/projects-done-bar-chart')
+async def get_projects_done_chart(year:int=None, db:AsyncSession=Depends(session.get_db)):
+    return await income_expense._get_projects_done_chart(session=db, year=year)
+
+@expense_income_handler.get('/project-status-pie-chart')
+async def get_project_status_pie_chart(db:AsyncSession=Depends(session.get_db)):
+    return await income_expense._get_project_done_pie_chart(session=db)
+
