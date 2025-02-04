@@ -159,7 +159,6 @@ async def create_project(
         end_date=end_date,
         programmer_ids=programmer_ids,
         price=price
-
     )
     return await employee._create_project(session=db, body=body,image=f'projects/{image.filename}')
 

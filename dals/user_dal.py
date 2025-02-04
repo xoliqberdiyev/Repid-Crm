@@ -155,8 +155,6 @@ class EmployeeDal:
 
         await self.db_session.commit()
 
-        await self.db_session.refresh(new_project)
-
         return new_project
     
     async def get_programmers_by_project_id(self, project_id: int):
