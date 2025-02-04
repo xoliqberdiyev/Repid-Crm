@@ -58,11 +58,12 @@ async def delete_income_project(income_project_id:int, db:AsyncSession=Depends(s
                                                        session=db)
 
 @expense_income_handler.patch('/update-income-project')
-async def update_income_project(update_params:schemas.UpdateIncomeProject,session:AsyncSession=Depends(session.get_db),
+async def update_income_project(income_project_id:int,update_params:schemas.UpdateIncomeProject,session:AsyncSession=Depends(session.get_db),
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
     body = update_params.model_dump()
     return await income_expense._update_income_project(body=body,
-                                                       session=session)
+                                                       session=session,
+                                                       income_project_id=income_project_id)
 
 @expense_income_handler.get('/get-pie-chart-income')
 async def get_income_chiechart(db:AsyncSession=Depends(session.get_db),
@@ -111,10 +112,10 @@ async def get_list_expense_employee(db:AsyncSession=Depends(session.get_db),
     return paginate(user_expences)
 
 @expense_income_handler.patch('/update-expense-salary-employee')
-async def update_expense_employee(update_params: schemas.UpdateExpenseSalary,db:AsyncSession=Depends(session.get_db),
+async def update_expense_employee(income_employee_id:int,update_params: schemas.UpdateExpenseSalary,db:AsyncSession=Depends(session.get_db),
                                    current_user:models.Employees=Depends(get_current_user_from_token)):
     body = update_params.model_dump()
-    return await income_expense._update_expense_employee(session=db, body=body)
+    return await income_expense._update_expense_employee(session=db, body=body,income_employee_id=income_employee_id)
 
 @expense_income_handler.get('/get-expense-pie-chart')
 async def get_expense_pie_chart(db:AsyncSession=Depends(session.get_db),

@@ -140,7 +140,7 @@ async def create_project(
     ):
 
     try:
-        programmer_ids = [int(x) for x in progemmer_list[0] if x.isdigit()]
+        programmer_ids = [int(x) for x in progemmer_list[0].split(',')]
     except ValueError:
         raise HTTPException(
                 status_code=400, detail="All elements in progemmer_list must be valid integers."

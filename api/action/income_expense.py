@@ -172,13 +172,13 @@ async def _delete_income_project(session:AsyncSession, income_project_id:int):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
         
-async def _update_income_project(session:AsyncSession, body:dict):
+async def _update_income_project(session:AsyncSession, body:dict,income_project_id:int):
     try:
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
             empl_dal = user_dal.EmployeeDal(session)
 
-            income_project = await in_ex_dal.update_income_project(body)
+            income_project = await in_ex_dal.update_income_project(body,income_project_id)
 
             project_with_id = await empl_dal.get_project_id(project_id=income_project.project_id)
 
@@ -324,12 +324,12 @@ async def _create_expense_employee(body:schemas.CreatingExepnseEmployee, session
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
     
-async def _update_expense_employee(body:dict,session:AsyncSession):
+async def _update_expense_employee(body:dict,session:AsyncSession,income_employee_id:int):
     try:
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            update_expense_employee = await in_ex_dal.update_expense_employee(body)
+            update_expense_employee = await in_ex_dal.update_expense_employee(body,income_employee_id)
             if update_expense_employee:
                 return {'success':True,
                         'message':'Successfully updated'}

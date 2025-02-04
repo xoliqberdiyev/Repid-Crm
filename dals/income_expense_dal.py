@@ -87,9 +87,9 @@ class IncomeExepnseDal:
             return True
         return False
     
-    async def update_income_project(self, body):
+    async def update_income_project(self, body,income_project_id):
 
-        query = (update(models.IncomeData).where(and_(models.IncomeData.type=='from_project'),(models.IncomeData.id==body['income_project_id']))
+        query = (update(models.IncomeData).where(and_(models.IncomeData.type=='from_project'),(models.IncomeData.id==income_project_id))
                  .values(pay_price=body['pay_price'],
                          project_id=body['project_id']
                  ).returning(models.IncomeData))
@@ -188,10 +188,10 @@ class IncomeExepnseDal:
         employee = result.scalars().first()  
         return employee
 
-    async def update_expense_employee(self, body:schemas.UpdateExpenseSalary):
-        query = update(models.ExpenseData).where(models.ExpenseData.id==body['income_studetn_id']).values(
+    async def update_expense_employee(self, body:schemas.UpdateExpenseSalary,income_employee_id:int):
+        query = update(models.ExpenseData).where(models.ExpenseData.id==income_employee_id).values(
             price_paid=body['price_paid'],
-            employee_salary_id=body['employee_salary_id']
+            employee_salary_id=body['user_id']
         ).returning(models.ExpenseData)
 
         result = await self.db_session.execute(query)

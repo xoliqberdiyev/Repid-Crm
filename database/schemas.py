@@ -317,10 +317,8 @@ class UpdateLoginPassword(BaseModel):
 
 class UpdateExpenseSalary(BaseModel):
     price_paid:str|None=None
-    income_studetn_id:int|None=None
-    employee_salary_id:int|None=None
+    user_id:int|None=None
     
 class UpdateIncomeProject(BaseModel):
-    income_project_id:int|None=None
     pay_price:str|None=None
     project_id:int|None=None
