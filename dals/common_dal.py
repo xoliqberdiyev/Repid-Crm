@@ -196,8 +196,9 @@ class CommonDal:
 
         return employees, projects
     
-    async def create_login_password(self, login:str, password:str):
+    async def create_login_password(self, login:str, password:str, name:str):
             result = models.LoginPasswordNote(
+                name=name,
                 login=login,
                 password=password
             )   

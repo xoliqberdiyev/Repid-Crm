@@ -56,7 +56,7 @@ class CreateProject(BaseModel):
 class ProgrammerSchema(BaseModel):
     id: int
     first_name: str
-    image: str|None
+    image: str|None=None
     last_name: str
 
     class Config:
@@ -225,8 +225,6 @@ class UpdateStudentIncome(BaseModel):
     date_paied:datetime= None
     position:str= None
     
-class UpdateIncomeProject(BaseModel):
-    pay_price:str
 
 class UpdateEmployeeDetail(BaseModel):
     name:Optional[str]=None
@@ -308,9 +306,21 @@ class BaseFilterProject(BaseModel):
 
 class ShowLoginPassword(BaseModel):
     id:int
+    name:str
     login:str
     password:str
 
 class UpdateLoginPassword(BaseModel):
+    name:str|None=None
     login:str|None = None
     password:str|None = None
+
+class UpdateExpenseSalary(BaseModel):
+    price_paid:str|None=None
+    income_studetn_id:int|None=None
+    employee_salary_id:int|None=None
+    
+class UpdateIncomeProject(BaseModel):
+    income_project_id:int|None=None
+    pay_price:str|None=None
+    project_id:int|None=None

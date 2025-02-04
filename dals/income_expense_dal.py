@@ -87,9 +87,12 @@ class IncomeExepnseDal:
             return True
         return False
     
-    async def update_income_project(self, income_project_id:int, pay_price:str):
+    async def update_income_project(self, body):
 
-        query = update(models.IncomeData).where(and_(models.IncomeData.type=='from_project'),(models.IncomeData.id==income_project_id)).values(pay_price=pay_price).returning(models.IncomeData)
+        query = (update(models.IncomeData).where(and_(models.IncomeData.type=='from_project'),(models.IncomeData.id==body['income_project_id']))
+                 .values(pay_price=body['pay_price'],
+                         project_id=body['project_id']
+                 ).returning(models.IncomeData))
 
         res = await self.db_session.execute(query)
 
@@ -185,8 +188,11 @@ class IncomeExepnseDal:
         employee = result.scalars().first()  
         return employee
 
-    async def update_expense_employee(self, expense_id:int, pay_price:str):
-        query = update(models.ExpenseData).where(models.ExpenseData.id==expense_id).values(price_paid=pay_price).returning(models.ExpenseData)
+    async def update_expense_employee(self, body:schemas.UpdateExpenseSalary):
+        query = update(models.ExpenseData).where(models.ExpenseData.id==body['income_studetn_id']).values(
+            price_paid=body['price_paid'],
+            employee_salary_id=body['employee_salary_id']
+        ).returning(models.ExpenseData)
 
         result = await self.db_session.execute(query)
         updated_expense = result.fetchone()  
@@ -203,7 +209,6 @@ class IncomeExepnseDal:
                     and_(
                         models.ExpenseData.type == 'employee_salary',
                         models.Employees.is_active == True,
-                        models.ExpenseData.date_paied.between(start_date, end_date)
                     )
                 )
                 .options(
@@ -211,6 +216,25 @@ class IncomeExepnseDal:
                     selectinload(models.ExpenseData.employee_salary).selectinload(models.Employees.position)  # Nested relationship
                 )
             )
+        
+        if start_date and end_date:
+            query = (
+                select(models.ExpenseData)
+                .join(models.Employees)  # Ensure Employees is joined correctly
+                .join(models.Position)  # Ensure Position is joined correctly
+                .where(
+                    and_(
+                        models.ExpenseData.type == 'employee_salary',
+                        models.Employees.is_active == True,
+                        models.ExpenseData.date_paied.between(start_date, end_date)       
+                    )
+                )
+                .options(
+                    selectinload(models.ExpenseData.employee_salary),  # From root entity
+                    selectinload(models.ExpenseData.employee_salary).selectinload(models.Employees.position)  # Nested relationship
+                )
+            )
+
 
         result = await self.db_session.execute(query)
         all_user =  result.scalars().all()

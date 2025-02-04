@@ -224,14 +224,15 @@ async def _search_position_project(session:AsyncSession, query:str):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
-async def _create_login_password_note(session:AsyncSession, login:str, password:str):
+async def _create_login_password_note(session:AsyncSession, login:str, password:str, name:str):
     try:
         async with session.begin():
             com_dal = common_dal.CommonDal(session)
-            login_password = await com_dal.create_login_password(login, password)
+            login_password = await com_dal.create_login_password(name, login, password)
 
             return {
                 'id':login_password.id,
+                'name':login_password.name,
                 'login':login_password.login,
                 'password':login_password.password
             }
@@ -248,6 +249,7 @@ async def _get_all_login_password(session:AsyncSession):
             return [
                 schemas.ShowLoginPassword(
                     id=login_note.id,
+                    name=login_note.name,
                     login=login_note.login,
                     password=login_note.password
                 )
@@ -265,6 +267,7 @@ async def _update_login_password_note(session:AsyncSession, body:dict,login_note
 
             return schemas.ShowLoginPassword(
                 id=login_password.id,
+                name=login_password.name,
                 login=login_password.login,
                 password=login_password.password
             )

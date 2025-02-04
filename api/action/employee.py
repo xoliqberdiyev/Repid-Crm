@@ -9,7 +9,7 @@ from dals import user_dal
 
 import os
 
-UPLOAD_USER = "uploalganda position ozgarish kerakds"
+UPLOAD_USER = "uploads"
 UPLOAD_PROJETC='projects'
 
 async def _create_new_employee(body: schemas.EmployeeCreate, 

@@ -220,6 +220,7 @@ class LoginPasswordNote(Base):
     __tablename__ = 'login_pass_note'
 
     id:Mapped[int] = mapped_column(primary_key=True)
+    name:Mapped[str] = mapped_column(String(150))
     login:Mapped[str] = mapped_column(String(100))
     password:Mapped[str] = mapped_column(String(100))
 
