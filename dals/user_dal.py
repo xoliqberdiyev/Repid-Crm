@@ -16,15 +16,13 @@ class EmployeeDal:
     def __init__(self, db_session: AsyncSession):
         self.db_session = db_session
 
-    async def get_all_employee(self, position_id,current_user):
+    async def get_all_employee(self, position_id):
         query = select(models.Employees).join(models.Position).where(models.Employees.is_active==True, 
-                                                                     models.Employees.username!=current_user, 
                                                                      models.Employees.user_type!=models.UserType.super_admin).options(
                         selectinload(models.Employees.position))
         if position_id:
             query = select(models.Employees).join(models.Position).where(and_(models.Employees.is_active==True, 
                                                                             models.Employees.position_id == position_id,
-                                                                            models.Employees.username!=current_user,
                                                                             models.Employees.user_type!=models.UserType.super_admin)).options(
                         selectinload(models.Employees.position))
         res = await self.db_session.execute(query)

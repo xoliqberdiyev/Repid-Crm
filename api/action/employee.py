@@ -58,7 +58,7 @@ async def _get_all_employee(session:AsyncSession,
         async with session.begin():
 
             emp_dal = user_dal.EmployeeDal(session)
-            all_users = await emp_dal.get_all_employee(position_id,current_user)  # Ensure this is an async call
+            all_users = await emp_dal.get_all_employee(position_id)  # Ensure this is an async call
             return [
                 schemas.ShowEmployee(
                     id=user.id,
