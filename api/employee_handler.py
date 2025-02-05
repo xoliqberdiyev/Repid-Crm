@@ -6,6 +6,7 @@ from fastapi_pagination import paginate
 from fastapi_pagination import Page
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi_pagination.utils import disable_installed_extensions_check
 
 from api.action import employee
 from api.login_handler import get_current_user_from_token
@@ -125,6 +126,8 @@ async def get_list_projects(start_date:datetime=None,
                                                  start_date=start_date, 
                                                  end_date=end_date,
                                                  status=status)
+    
+    disable_installed_extensions_check()
     return paginate(projects)
 
 @emp_router.post('/create_project',response_model=schemas.ShowProject)
