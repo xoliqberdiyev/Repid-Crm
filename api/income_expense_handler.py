@@ -125,12 +125,12 @@ async def get_expense_pie_chart(start_date:datetime|None = None, end_date:dateti
     return await income_expense._expense_pie_chart(session=db,start_date=start_date, end_date=end_date)
 
 @expense_income_handler.get('/get-line-graph-month-expense')
-async def get_line_graph_expense(month:Optional[int|None]=None, db:AsyncSession=Depends(session.get_db)):
-    return await income_expense._get_line_graph_month_expense(month=month, session=db)
+async def get_line_graph_expense(month:Optional[int|None]=None, year:Optional[int|None]=None,db:AsyncSession=Depends(session.get_db)):
+    return await income_expense._get_line_graph_month_expense(month=month, session=db,year=year)
 
 @expense_income_handler.get('/get-line-graph-month-income')
-async def get_line_graph_expense(month:Optional[int|None]=None, db:AsyncSession=Depends(session.get_db)):
-    return await income_expense._get_line_graph_month_income(month=month, session=db)
+async def get_line_graph_expense(month:Optional[int|None]=None, year:Optional[int|None]=None,db:AsyncSession=Depends(session.get_db)):
+    return await income_expense._get_line_graph_month_income(month=month, session=db,year=year)
 
 @expense_income_handler.get('/get-line-graph-year-income')
 async def get_line_graph_income(year:Optional[int|None]=None, db:AsyncSession=Depends(session.get_db)):

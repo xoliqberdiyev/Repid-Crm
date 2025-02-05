@@ -3,7 +3,7 @@ import asyncio
 from datetime import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, and_, delete, or_
+from sqlalchemy import select, update, and_, delete, or_, func, cast, Integer
 from sqlalchemy.orm import joinedload
 
 from database import models, schemas
@@ -235,4 +235,19 @@ class CommonDal:
             select(models.LoginPasswordNote)
         )
         return result.scalars().all()
+    
+    async def get_cash_income(self):
+        result_income = await self.db_session.execute(
+            select(
+                func.sum(cast(models.IncomeData.pay_price,Integer)
+                )))
+        result_expense = await self.db_session.execute(
+            select(
+                func.sum(cast(models.ExpenseData.price_paid,Integer)
+                )))
+        
+
+
+        return (result_income.scalar_one(),result_expense.scalar_one())
+    
    

@@ -289,6 +289,21 @@ async def _delete_login_password(session:AsyncSession, login_note_id:int):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
+async def _get_cash_income(session:AsyncSession):
+    try:
+        com_dal = common_dal.CommonDal(session)
+        cash_income, cash_expense = await com_dal.get_cash_income()
+
+        return {
+            "total_income_cash":cash_income-cash_expense
+        }
+
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+
+
+
+
 
 
 

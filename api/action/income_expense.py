@@ -105,6 +105,7 @@ async def _create_income_project(session:AsyncSession, body:schemas.CreateIncome
             return schemas.ShowIncomeProject(
                 id=income_project.id,
                 name=project_with_id.name,
+                project_id=project_with_id.id,
                 real_price=project_with_id.price,
                 date_start=project_with_id.start_date,
                 pay_price=income_project.pay_price,
@@ -316,6 +317,7 @@ async def _create_expense_employee(body:schemas.CreatingExepnseEmployee, session
             id=create_expense.id,
             pay_paied=create_expense.price_paid,
             type=create_expense.type,
+            user_id = get_employee.id,
             date_last_paied=create_expense.date_paied,
             remainder_price=int(get_employee.salary) - int(create_expense.price_paid),
             first_name=get_employee.first_name,
@@ -392,9 +394,9 @@ async def _expense_pie_chart(session:AsyncSession, start_date, end_date):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")    
 
-async def _get_line_graph_month_expense(month:int, session:AsyncSession):
+async def _get_line_graph_month_expense(month:int, session:AsyncSession,year:int):
     try:
-        if month == None:
+        if month == None or year == None:
             month = datetime.utcnow().month
 
         if month > 12:
@@ -403,7 +405,7 @@ async def _get_line_graph_month_expense(month:int, session:AsyncSession):
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            line_graph = await in_ex_dal.line_graph_month_expense(month=month)
+            line_graph = await in_ex_dal.line_graph_month_expense(month=month, year=year)
 
             monthly_data = {
                 day: total_real_price
@@ -414,9 +416,9 @@ async def _get_line_graph_month_expense(month:int, session:AsyncSession):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")    
     
-async def _get_line_graph_month_income(month:int, session:AsyncSession):
+async def _get_line_graph_month_income(month:int, session:AsyncSession,year:int):
     try:
-        if month == None:
+        if month == None or year==None:
             month = datetime.utcnow().month
 
         if month > 12:
@@ -425,7 +427,7 @@ async def _get_line_graph_month_income(month:int, session:AsyncSession):
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            line_graph = await in_ex_dal.line_graph_month_income(month=month)
+            line_graph = await in_ex_dal.line_graph_month_income(month=month,year=year)
 
             monthly_data = {
                 day: total_real_price

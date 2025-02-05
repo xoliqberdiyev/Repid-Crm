@@ -347,8 +347,12 @@ class IncomeExepnseDal:
 
         return stats
     
-    async def line_graph_month_expense(self, month):
-        current_year = datetime.utcnow().year
+    async def line_graph_month_expense(self,month,year):
+        if year == None:
+            current_year = datetime.utcnow().year
+        elif year:
+            current_year = year
+
         if month == 12:
               month_for = month - 1 
         else:
@@ -382,8 +386,12 @@ class IncomeExepnseDal:
         # Convert dictionary back to list sorted by day
         return sorted(days_dict.items())
     
-    async def line_graph_month_income(self, month):
-        current_year = datetime.utcnow().year
+    async def line_graph_month_income(self,month,year):
+        if year==None:
+            current_year = datetime.utcnow().year
+        elif year:
+            current_year = year
+
         if month == 12:
               month_for = month - 1 
         else:

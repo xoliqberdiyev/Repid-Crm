@@ -106,3 +106,7 @@ async def update_login_password(update_params:schemas.UpdateLoginPassword,
 @common_router.delete('/login-password-note')
 async def delete_login_password(login_note_id:int, db:AsyncSession=Depends(session.get_db)):
     return await common_action._delete_login_password(login_note_id=login_note_id, session=db)
+
+@common_router.get('/get-cash-income')
+async def get_cash_income(db:AsyncSession=Depends(session.get_db)):
+    return await common_action._get_cash_income(session=db)
