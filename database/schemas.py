@@ -209,6 +209,7 @@ class ShowIncomeStudent(BaseModel):
 class ShowIncomeProject(BaseModel):
     id:int
     name:str
+    project_id:int
     date_start:datetime
     date_end:datetime
     real_price:str
@@ -282,6 +283,7 @@ class CreatingExepnseEmployee(BaseModel):
 class ShowExpenseEmployee(BaseModel):
     id:int
     pay_paied:str
+    user_id:int
     remainder_price:int
     date_last_paied:datetime
     first_name:str

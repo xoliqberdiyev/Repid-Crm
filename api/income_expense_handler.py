@@ -66,9 +66,10 @@ async def update_income_project(income_project_id:int,update_params:schemas.Upda
                                                        income_project_id=income_project_id)
 
 @expense_income_handler.get('/get-pie-chart-income')
-async def get_income_chiechart(db:AsyncSession=Depends(session.get_db),
+async def get_income_chiechart(start_date:datetime|None=None, end_date:datetime|None=None,
+                                db:AsyncSession=Depends(session.get_db),
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await income_expense._get_income_piechart(session=db)
+    return await income_expense._get_income_piechart(session=db, start_date=start_date, end_date=end_date)
 
 @expense_income_handler.post('/create-expense-type',
                              description="Bu yerda shu status lar keladi (for_office, smm_service, other_expense, renting)")
@@ -118,9 +119,10 @@ async def update_expense_employee(income_employee_id:int,update_params: schemas.
     return await income_expense._update_expense_employee(session=db, body=body,income_employee_id=income_employee_id)
 
 @expense_income_handler.get('/get-expense-pie-chart')
-async def get_expense_pie_chart(db:AsyncSession=Depends(session.get_db),
+async def get_expense_pie_chart(start_date:datetime|None = None, end_date:datetime|None=None,
+                            db:AsyncSession=Depends(session.get_db),
                                  current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await income_expense._expense_pie_chart(session=db)
+    return await income_expense._expense_pie_chart(session=db,start_date=start_date, end_date=end_date)
 
 @expense_income_handler.get('/get-line-graph-month-expense')
 async def get_line_graph_expense(month:Optional[int|None]=None, db:AsyncSession=Depends(session.get_db)):
@@ -139,8 +141,9 @@ async def get_line_graph_expense(year:Optional[int|None]=None, db:AsyncSession=D
     return await income_expense._get_line_graph_year_expense(year=year, session=db)
 
 @expense_income_handler.get('/get-main-dashboard')
-async def get_main_dashboard(db:AsyncSession=Depends(session.get_db)):
-    return await income_expense._get_main_dashboard(session=db)
+async def get_main_dashboard(start_date:datetime|None = None, end_date:datetime|None=None,
+                                db:AsyncSession=Depends(session.get_db)):
+    return await income_expense._get_main_dashboard(session=db, start_date=start_date, end_date=end_date)
 
 @expense_income_handler.get('/projects-done-bar-chart')
 async def get_projects_done_chart(year:int=None, db:AsyncSession=Depends(session.get_db)):

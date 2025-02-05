@@ -145,14 +145,16 @@ async def create_project(
         raise HTTPException(
                 status_code=400, detail="All elements in progemmer_list must be valid integers."
             )
+    if image != None:
+        imagefile_name = image.filename
+        try:
+            file_path = os.path.join(UPLOAD_DIRECTORY1, image.filename)
+            with open(file_path, 'wb') as buffer:
+                shutil.copyfileobj(image.file, buffer)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail="Error saving the file.")
+    imagefile_name = None
         
-    try:
-        file_path = os.path.join(UPLOAD_DIRECTORY1, image.filename)
-        with open(file_path, 'wb') as buffer:
-            shutil.copyfileobj(image.file, buffer)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail="Error saving the file.")
-    
     body = schemas.CreateProject(
         name=name,
         start_date=start_date,
@@ -160,7 +162,7 @@ async def create_project(
         programmer_ids=programmer_ids,
         price=price
     )
-    return await employee._create_project(session=db, body=body,image=f'projects/{image.filename}')
+    return await employee._create_project(session=db, body=body,image=f'projects/{imagefile_name}')
 
 @emp_router.delete('/delete-created-project')
 async def delete_created_project(project_id:int, db:AsyncSession = Depends(session.get_db),

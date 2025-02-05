@@ -30,6 +30,7 @@ class StatusTask(str, enum.Enum):
     to_do = 'to_do'
     in_progres = 'in_progres'
     done = 'done'
+    code_review = 'code_review'
     success = 'success'
 
 class StatusExpectedVAlue(str, enum.Enum):
@@ -42,6 +43,9 @@ class ExpenseType(str, enum.Enum):
     smm_service='smm_service'
     renting='renting'
     other_expense='other_expense'
+    office_item = 'office_item'
+    tax = 'tax'
+
 
 class IncomeType(str, enum.Enum):
     from_student = 'from_student'
@@ -75,7 +79,7 @@ class Employees(Base):
     date_of_jobstarted: Mapped[datetime.datetime | None]
     position_id: Mapped[int] = mapped_column(ForeignKey('positions.id',onupdate='CASCADE'))
     image: Mapped[str | None] = mapped_column(String,index=True)
-    salary: Mapped[int | None]
+    salary: Mapped[int | None] = mapped_column(BigInteger)
     user_type: Mapped[UserType] = mapped_column(Enum(UserType), default=UserType.custom)
     password: Mapped[str] = mapped_column(String)
     is_active: Mapped[bool] = mapped_column(default=True)

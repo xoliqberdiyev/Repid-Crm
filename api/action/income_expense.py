@@ -142,6 +142,7 @@ async def _get_list_income_project(session: AsyncSession,start_date,end_date):
                         schemas.ShowIncomeProject(
                             id=income_project.id,
                             name=project_with_id.name,
+                            project_id=project_with_id.id,
                             real_price=project_with_id.price,
                             date_start=project_with_id.start_date,
                             pay_price=income_project.pay_price,
@@ -198,11 +199,15 @@ async def _update_income_project(session:AsyncSession, body:dict,income_project_
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
-async def _get_income_piechart(session:AsyncSession):
+async def _get_income_piechart(session:AsyncSession, start_date, end_date):
+    if start_date and end_date or (start_date is None  and end_date is None):
+        pass
+    else:
+        raise HTTPException(status_code=422, detail='Bro you need to fill both of them')
     try:
         in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-        total = await in_ex_dal.get_income_statistics()
+        total = await in_ex_dal.get_income_statistics(start_date, end_date)
 
         return {
             'total_income_student':total.total_from_student,
@@ -348,6 +353,7 @@ async def _list_expense_employee(session: AsyncSession,start_date, end_date):
                     id=expense_employee.id,
                     pay_paied=expense_employee.price_paid,
                     type=expense_employee.type,
+                    user_id=expense_employee.employee_salary.id,
                     date_last_paied=expense_employee.date_paied,
                     remainder_price=int(expense_employee.employee_salary.salary) - int(expense_employee.price_paid),
                     first_name=expense_employee.employee_salary.first_name,
@@ -363,12 +369,16 @@ async def _list_expense_employee(session: AsyncSession,start_date, end_date):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")    
     
-async def _expense_pie_chart(session:AsyncSession):
+async def _expense_pie_chart(session:AsyncSession, start_date, end_date):
+    if start_date and end_date or (start_date is None  and end_date is None):
+        pass
+    else:
+        raise HTTPException(status_code=422, detail='Bro you need to fill both of them')
     try:
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            pie_chart_expesne = await in_ex_dal.get_pie_chart_expense()
+            pie_chart_expesne = await in_ex_dal.get_pie_chart_expense(start_date, end_date)
             return {
                 'salary':pie_chart_expesne.total_from_student,
                 'office':pie_chart_expesne.total_for_office,
@@ -451,14 +461,14 @@ async def _get_line_graph_year_expense(year:int, session:AsyncSession):
         }
         return yearly_data
     
-async def _get_main_dashboard(session:AsyncSession):
+async def _get_main_dashboard(session:AsyncSession, start_date, end_date):
     async with session.begin():
         in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-        only_income = await in_ex_dal.get_only_income()
-        only_expense = await in_ex_dal.get_only_expense()
-        only_employee = await in_ex_dal.get_only_employee_count()
-        only_project = await in_ex_dal.gef_only_project_count()
+        only_income = await in_ex_dal.get_only_income(start_date, end_date)
+        only_expense = await in_ex_dal.get_only_expense(start_date, end_date)
+        only_employee = await in_ex_dal.get_only_employee_count(start_date, end_date)
+        only_project = await in_ex_dal.gef_only_project_count(start_date, end_date)
 
         return {
             'last_month_income': only_income,

@@ -98,29 +98,55 @@ class IncomeExepnseDal:
 
         return res.scalar_one_or_none()
     
-    async def get_income_statistics(self):
+    async def get_income_statistics(self,start_date, end_date):
         query = (
-            select(
-                func.sum(
-                    case(
-                        (models.IncomeData.type == "from_student", cast(models.IncomeData.pay_price, Integer)),
-                        else_=0,
-                    )
-                ).label("total_from_student"),
-                func.sum(
-                    case(
-                        (models.IncomeData.type == "from_project", cast(models.IncomeData.pay_price, Integer)),
-                        else_=0,
-                    )
-                ).label("total_from_project"),
-                func.sum(cast(models.IncomeData.pay_price, Integer)).label("grand_total")
+                select(
+                    func.sum(
+                        case(
+                            (models.IncomeData.type == "from_student", cast(models.IncomeData.pay_price, Integer)),
+                            else_=0,
+                        )
+                    ).label("total_from_student"),
+                    func.sum(
+                        case(
+                            (models.IncomeData.type == "from_project", cast(models.IncomeData.pay_price, Integer)),
+                            else_=0,
+                        )
+                    ).label("total_from_project"),
+                    func.sum(cast(models.IncomeData.pay_price, Integer)).label("grand_total")
+                )
+            ).where(
+                or_(
+                            models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
+                            models.IncomeData.project_id.is_(None)  # Include from_student (no project)
+                        )
+                
             )
-        ).where(
-            or_(
-                        models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
-                        models.IncomeData.project_id.is_(None)  # Include from_student (no project)
-                    )
-        )
+        if start_date and end_date:
+            query = (
+                select(
+                    func.sum(
+                        case(
+                            (models.IncomeData.type == "from_student", cast(models.IncomeData.pay_price, Integer)),
+                            else_=0,
+                        )
+                    ).label("total_from_student"),
+                    func.sum(
+                        case(
+                            (models.IncomeData.type == "from_project", cast(models.IncomeData.pay_price, Integer)),
+                            else_=0,
+                        )
+                    ).label("total_from_project"),
+                    func.sum(cast(models.IncomeData.pay_price, Integer)).label("grand_total")
+                )
+            ).where(
+                or_(
+                            models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
+                            models.IncomeData.project_id.is_(None)  # Include from_student (no project)
+                        ),
+                models.IncomeData.date_paied.between(start_date, end_date)
+                
+            )
 
         result = await self.db_session.execute(query)
         stats = result.one()
@@ -240,7 +266,7 @@ class IncomeExepnseDal:
         all_user =  result.scalars().all()
         return all_user
         
-    async def get_pie_chart_expense(self):
+    async def get_pie_chart_expense(self,start_date, end_date):
         query = (
             select(
                 func.sum(
@@ -274,6 +300,45 @@ class IncomeExepnseDal:
                     )
                 ).label("total_other_expense"),
                 func.sum(cast(models.ExpenseData.price_paid, Integer)).label("grand_total")
+            )
+        )
+        if start_date and end_date:
+            query = (
+            select(
+                func.sum(
+                    case(
+                        (models.ExpenseData.type == "employee_salary", cast(models.ExpenseData.price_paid, Integer)),
+                        else_=0,
+                    )
+                ).label("total_from_student"),
+                func.sum(
+                    case(
+                        (models.ExpenseData.type == "for_office", cast(models.ExpenseData.price_paid, Integer)),
+                        else_=0,
+                    )
+                ).label("total_for_office"),
+                func.sum(
+                    case(
+                        (models.ExpenseData.type == "smm_service", cast(models.ExpenseData.price_paid, Integer)),
+                        else_=0,
+                    )
+                ).label("total_smm_service"),
+                func.sum(
+                    case(
+                        (models.ExpenseData.type == "renting", cast(models.ExpenseData.price_paid, Integer)),
+                        else_=0,
+                    )
+                ).label("total_renting"),
+                func.sum(
+                    case(
+                        (models.ExpenseData.type == "other_expense", cast(models.ExpenseData.price_paid, Integer)),
+                        else_=0,
+                    )
+                ).label("total_other_expense"),
+                func.sum(cast(models.ExpenseData.price_paid, Integer)).label("grand_total")
+            )
+            .where(
+                models.ExpenseData.date_paied.between(start_date, end_date)
             )
         )
 
@@ -411,7 +476,7 @@ class IncomeExepnseDal:
         return sorted(months_dict.items()) 
 
 
-    async def get_only_expense(self):
+    async def get_only_expense(self, start_date, end_date):
         thirty_days_ago = datetime.utcnow() - timedelta(days=30)  # Get the date 30 days ago
 
         result = await self.db_session.execute(
@@ -419,11 +484,19 @@ class IncomeExepnseDal:
                 models.ExpenseData.date_paied >= thirty_days_ago  # Filter only last 30 days
             )
         )
+
+        if start_date and end_date:
+            result = await self.db_session.execute(
+            select(func.sum(cast(models.ExpenseData.price_paid, Integer))).where(
+                models.ExpenseData.date_paied.between(start_date, end_date)  
+            )
+        )
+
         total_expense = result.scalar() or 0  # Handle case where no expenses exist
 
         return total_expense
     
-    async def get_only_income(self):
+    async def get_only_income(self,start_date, end_date):
         thirty_days_ago = datetime.utcnow() - timedelta(days=30)  # Get the date 30 days ago
 
         result = await self.db_session.execute(
@@ -436,20 +509,42 @@ class IncomeExepnseDal:
                     )
             )
         )
+        if start_date and end_date:
+            result = await self.db_session.execute(
+            select(func.sum(cast(models.IncomeData.pay_price, Integer))).where(
+        
+                models.IncomeData.date_paied.between(start_date, end_date),
+                or_(
+                        models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
+                        models.IncomeData.project_id.is_(None)  # Include from_student (no project)
+                    )
+            )
+        )
+
         total_expense = result.scalar() or 0  # Handle case where no expenses exist
 
         return total_expense
     
-    async def get_only_employee_count(self):
+    async def get_only_employee_count(self,start_date, end_date):
         result = await self.db_session.execute(
             select(func.count()).where(and_(models.Employees.is_active==True))
+        )
+        if start_date and end_date:
+            result = await self.db_session.execute(
+            select(func.count()).where(and_(models.Employees.is_active==True,
+                                            models.Employees.created_time.between(start_date, end_date)))
         )
 
         return result.scalar() or 0 
     
-    async def gef_only_project_count(self):
+    async def gef_only_project_count(self, start_date, end_date):
         result = await self.db_session.execute(
             select(func.count()).where(models.Project.is_deleted==False)
+        )
+        if start_date and end_date:
+            result = await self.db_session.execute(
+            select(func.count()).where(and_(models.Project.is_deleted==False,
+                                            models.Project.start_date.between(start_date, end_date)))
         )
 
         return result.scalar() or 0
