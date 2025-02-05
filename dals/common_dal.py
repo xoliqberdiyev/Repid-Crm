@@ -240,7 +240,12 @@ class CommonDal:
         result_income = await self.db_session.execute(
             select(
                 func.sum(cast(models.IncomeData.pay_price,Integer)
-                )))
+                ))
+                .where(
+                    or_(
+                        models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
+                        models.IncomeData.project_id.is_(None)  # Include from_student (no project)
+                    )))
         result_expense = await self.db_session.execute(
             select(
                 func.sum(cast(models.ExpenseData.price_paid,Integer)

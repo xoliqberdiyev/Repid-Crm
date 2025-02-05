@@ -412,7 +412,7 @@ class IncomeExepnseDal:
                 and_(
                     extract('year', models.IncomeData.date_paied) == current_year,  # Filter by current year
                     extract('month', models.IncomeData.date_paied) == month,
-                    or_(
+                    and_(
                         models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
                         models.IncomeData.project_id.is_(None)  # Include from_student (no project)
                     )
