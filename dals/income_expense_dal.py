@@ -213,7 +213,6 @@ class IncomeExepnseDal:
             employee_salary_id=body.employee_id,
             type='employee_salary',
             price_paid=body.price_paied,
-            from_whom = body.from_whom
         )
 
         self.db_session.add(query)

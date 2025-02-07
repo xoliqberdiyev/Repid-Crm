@@ -341,7 +341,7 @@ async def _create_expense_employee(body:schemas.CreatingExepnseEmployee, session
             salary=get_employee.salary,
             img=f'uploads/{get_employee.image}',
             phone_number=get_employee.phone_number,
-            from_whom=create_expense.from_whom
+
         )
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
