@@ -162,6 +162,7 @@ class IncomeExepnseDal:
             description=body.description,
             price_paid=body.price_paid,
             date_paied=body.date_paied,
+            from_whom=body.from_whom,
             real_price=body.real_price,
             type=body.type
         )
