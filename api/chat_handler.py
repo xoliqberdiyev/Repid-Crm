@@ -24,10 +24,10 @@ async def get_current_user_from_token(
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")  # Get the user from the token
         if username is None:
-            raise HTTPException(status_code=HTTPException, detail="Invalid token")
+            raise HTTPException(status_code=400, detail="Invalid token")
         return username
     except JWTError:
-        raise HTTPException(status_code=HTTPException, detail="Invalid token")
+        raise HTTPException(status_code=400, detail="Invalid token")
     
 
 @chat_handler.websocket('/ws/{room_id}')
