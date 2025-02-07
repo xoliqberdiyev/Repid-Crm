@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional, List,Generic, TypeVar
 
 from pydantic import BaseModel, constr, field_validator, Field
+from database import models
 
 
 class EmployeeCreate(BaseModel):
@@ -161,6 +162,7 @@ class ShowNewTask(BaseModel):
     id:int
     name:str
     start_date:datetime
+    image_task:str|None
     end_date:datetime
     programmer_ids:List[ProgrammerSchema]
     description:str
@@ -186,22 +188,26 @@ class ShowCurrentUser(BaseModel):
     
 class CreateIncomeStudent(BaseModel):
     name:str
-    real_price:str
+    real_price:str|None=None
     pay_price:str
+    type:str
     date_paid:datetime
+    description:str
     position:str
 
 
 class CreateIncomeProject(BaseModel):
     pay_price:str
     project_id:int
+    description:str
     
 class ShowIncomeStudent(BaseModel):
     id:int
     name:str
-    real_price:str
+    real_price:str|None=None
     pay_price:str
     left_price:int
+    description:str|None=None
     date_paied:datetime
     position:str
     type:str
@@ -212,6 +218,7 @@ class ShowIncomeProject(BaseModel):
     project_id:int
     date_start:datetime
     date_end:datetime
+    description:str|None=None
     real_price:str
     pay_price:str
     left_price:int
@@ -223,6 +230,7 @@ class UpdateStudentIncome(BaseModel):
     name:str = None
     real_price:str= None
     pay_price:str= None
+    description:str = None
     date_paied:datetime= None
     position:str= None
     
@@ -249,6 +257,7 @@ class CreateNewExpence(BaseModel):
     real_price:Optional[str|None]=None
     description:str
     date_paied:datetime
+    from_whom:str
     type:str
 
 class ShowExpenseType(BaseModel):
@@ -258,6 +267,7 @@ class ShowExpenseType(BaseModel):
     description:str
     date_paied:datetime
     real_price:str|None
+    from_whom:str|None
     remainder_price:int|None
     type:str
 
@@ -279,6 +289,7 @@ class ShowExepnseUser(BaseModel):
 class CreatingExepnseEmployee(BaseModel):
     employee_id:int
     price_paied:str
+    from_whom:str
 
 class ShowExpenseEmployee(BaseModel):
     id:int
@@ -293,6 +304,7 @@ class ShowExpenseEmployee(BaseModel):
     salary:int
     phone_number:str
     img:str|None
+    from_whom:str
 
 class UpdateExpenseByType(BaseModel):
     name:Optional[str|None]=None
@@ -300,6 +312,7 @@ class UpdateExpenseByType(BaseModel):
     description:Optional[str|None] = None
     date_paied:Optional[datetime|None] = None
     real_price:Optional[str|None] = None
+    from_whom:str|None = None
 
 class BaseFilterProject(BaseModel):
     start_date:datetime=None
@@ -324,3 +337,4 @@ class UpdateExpenseSalary(BaseModel):
 class UpdateIncomeProject(BaseModel):
     pay_price:str|None=None
     project_id:int|None=None
+    description:str|None=None

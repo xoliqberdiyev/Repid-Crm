@@ -59,7 +59,7 @@ class CommonDal:
         res = await self.db_session.execute(query)
         await self.db_session.commit()
 
-        if res.rowcount >0:
+        if res.rowcount > 0:
             return True
         return False
     
@@ -69,9 +69,10 @@ class CommonDal:
         )
         return result.scalars().all()
     
-    async def create_new_task(self, body:schemas.CreateNewTask):
+    async def create_new_task(self, body:schemas.CreateNewTask,image_task:str):
         new_task = models.Task(
             name=body.name,
+            image_task=image_task,
             start_date=body.start_date,
             end_date=body.end_date,
             description=body.description,
@@ -121,7 +122,7 @@ class CommonDal:
         res = await self.db_session.execute(query)
         return res.scalar_one_or_none()
     
-    async def update_new_task(self, task_id: int, body: schemas.UpdateNewTask):
+    async def update_new_task(self, task_id: int, body: schemas.UpdateNewTask,image_task:str):
         task_query = (
             update(models.Task)
             .where(models.Task.id == task_id)
@@ -130,6 +131,7 @@ class CommonDal:
                 start_date=body.start_date,
                 end_date=body.end_date,
                 description=body.description,
+                image_task=image_task
             )
             .returning(models.Task)
         )

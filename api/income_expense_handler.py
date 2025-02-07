@@ -12,26 +12,28 @@ from api.login_handler import get_current_user_from_token
 
 expense_income_handler = APIRouter()
 
-@expense_income_handler.post('/create_income_student')
+@expense_income_handler.post('/create_income_student_and_investor',description='Buyerda faqat qouvchilar va investordan kirim keladi (from_student, investor) kiriintg')
 async def create_income_student(body:schemas.CreateIncomeStudent ,db:AsyncSession = Depends(session.get_db),
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
     return await income_expense._create_income_student(body=body, session=db)
 
-@expense_income_handler.get('/list-income-student', response_model=Page[schemas.ShowIncomeStudent])
-async def get_list_income_student(db:AsyncSession=Depends(session.get_db),
-                                  start_date:datetime|None=None,
-                                  end_date:datetime|None=None,
-                                  current_user:models.Employees=Depends(get_current_user_from_token)):
-    income_students = await income_expense._get_list_income_student(session=db,start_date=start_date,end_date=end_date)
+@expense_income_handler.get('/list-income-student-investor', response_model=Page[schemas.ShowIncomeStudent])
+async def get_list_income_student(
+                                type:str,
+                                db:AsyncSession=Depends(session.get_db),
+                                start_date:datetime|None=None,
+                                end_date:datetime|None=None,
+                                current_user:models.Employees=Depends(get_current_user_from_token)):
+    income_students = await income_expense._get_list_income_student(session=db,start_date=start_date,end_date=end_date,type=type)
     disable_installed_extensions_check()
     return paginate(income_students)
 
-@expense_income_handler.delete('/delete-income-student')
+@expense_income_handler.delete('/delete-income-student-investor')
 async def delete_create_income(income_student_id:int, db:AsyncSession=Depends(session.get_db),
                                current_user:models.Employees=Depends(get_current_user_from_token)):
     return await income_expense._delete_income_student(income_student_id=income_student_id, session=db)
 
-@expense_income_handler.patch('/update-income-student')
+@expense_income_handler.patch('/update-income-student-investor')
 async def update_income_student(income_student_id:int, update_params:schemas.UpdateStudentIncome, db:AsyncSession=Depends(session.get_db),
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
     body = update_params.model_dump(exclude_none=True)
@@ -84,13 +86,20 @@ async def update_expense(update_params:schemas.UpdateExpenseByType, expense_id:i
     return await income_expense._update_expense_by_type(body=body, session=db, expense_id=expense_id)
 
 @expense_income_handler.get('/list-expense-type', response_model = Page[schemas.ShowExpenseType],
-                            description="Bu yerda shu status lar keladi (for_office, smm_service, other_expense,renting)")
-async def get_list_expense_type(type:str, db:AsyncSession=Depends(session.get_db),
+                            description="Bu yerda shu status lar keladi (for_office, smm_service, other_expense,renting)"
+                            "Agar filter qilganda (new,old) kiriting orderga iltimos Mavlon aka etibor bering",
+                            )
+async def get_list_expense_type(type:str, 
+                                from_whom:str|None=None,
+                                order:str='new',
+                                db:AsyncSession=Depends(session.get_db),
                                 start_date:datetime|None=None,
                                 end_date:datetime|None=None,
-                                 current_user:models.Employees=Depends(get_current_user_from_token)):
-    expesne_types = await income_expense._get_expence_type_list(session=db, status=type,
-                                                                start_date=start_date,end_date=end_date)
+                                 current_user:models.Employees=Depends(get_current_user_from_token),
+                    ):
+    expesne_types = await income_expense._get_expence_type_list(session=db, status=type,order=order,
+                                                                start_date=start_date,end_date=end_date,
+                                                                from_whom=from_whom)
     return paginate(expesne_types)
 
 @expense_income_handler.delete('/delete-expense')
@@ -105,11 +114,13 @@ async def create_expense_employee(body:schemas.CreatingExepnseEmployee, db:Async
     return await income_expense._create_expense_employee(session=db, body=body)
 
 @expense_income_handler.get('/list-expense-employee', response_model=Page[schemas.ShowExpenseEmployee])
-async def get_list_expense_employee(db:AsyncSession=Depends(session.get_db),
+async def get_list_expense_employee(
+                                    order:str='new',
+                                    db:AsyncSession=Depends(session.get_db),
                                     start_date:datetime|None=None,
                                     end_date:datetime|None=None,
                                      current_user:models.Employees=Depends(get_current_user_from_token)):
-    user_expences = await income_expense._list_expense_employee(session=db, start_date=start_date, end_date=end_date)
+    user_expences = await income_expense._list_expense_employee(session=db, start_date=start_date, end_date=end_date,order=order)
     return paginate(user_expences)
 
 @expense_income_handler.patch('/update-expense-salary-employee')

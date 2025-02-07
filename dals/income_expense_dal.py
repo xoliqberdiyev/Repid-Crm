@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import select, update, delete, and_, func, case, cast, Integer, extract, or_
+from sqlalchemy import select, update, delete, and_, func, case, cast, Integer, extract, or_ ,desc, asc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
@@ -19,7 +19,8 @@ class IncomeExepnseDal:
             pay_price=body.pay_price,
             date_paied=body.date_paid,
             position=body.position,
-            type='from_student'
+            type=body.type,
+            description=body.description
         )
 
         self.db_session.add(query)
@@ -28,9 +29,9 @@ class IncomeExepnseDal:
 
         return query
     
-    async def get_list_income_student(self,start_date,end_date):
+    async def get_list_income_student(self,start_date,end_date,type):
 
-        query = select(models.IncomeData).where(models.IncomeData.type=='from_student')
+        query = select(models.IncomeData).where(models.IncomeData.type==type)
         if start_date and end_date:
             query = select(models.IncomeData).where(and_(models.IncomeData.type=='from_student',
                                                          models.IncomeData.date_paied.between(start_date,end_date)))
@@ -59,7 +60,8 @@ class IncomeExepnseDal:
         query = models.IncomeData(
             project_id = body.project_id,
             pay_price=body.pay_price,
-            type='from_project'
+            type='from_project',
+            description=body.description,
         )
 
 
@@ -91,7 +93,8 @@ class IncomeExepnseDal:
 
         query = (update(models.IncomeData).where(and_(models.IncomeData.type=='from_project'),(models.IncomeData.id==income_project_id))
                  .values(pay_price=body['pay_price'],
-                         project_id=body['project_id']
+                         project_id=body['project_id'],
+                         description=body['description']
                  ).returning(models.IncomeData))
 
         res = await self.db_session.execute(query)
@@ -168,8 +171,20 @@ class IncomeExepnseDal:
 
         return query
     
-    async def get_list_expense(self,status,start_date, end_date):
-        query = select(models.ExpenseData).where(and_(models.ExpenseData.type==status, models.ExpenseData.type!='employee_salary'))
+    async def get_list_expense(self,status,start_date, end_date, order,from_whom):
+        query = (select(models.ExpenseData)
+                    .where(and_(models.ExpenseData.type==status, models.ExpenseData.type!='employee_salary'))
+                    .order_by(desc(models.ExpenseData.date_paied)))
+        
+        if order == 'old':
+            query = (select(models.ExpenseData)
+                    .where(and_(models.ExpenseData.type==status, models.ExpenseData.type!='employee_salary'))
+                    .order_by(asc(models.ExpenseData.date_paied)))
+        if from_whom:
+            query = (select(models.ExpenseData)
+                    .where(and_(models.ExpenseData.type==status, models.ExpenseData.type!='employee_salary',
+                                models.ExpenseData.from_whom==from_whom))
+                    .order_by(desc(models.ExpenseData.date_paied)))
         if start_date and end_date:
             query = select(models.ExpenseData).where(and_(models.ExpenseData.type==status, 
                                                           models.ExpenseData.type!='employee_salary',
@@ -197,7 +212,8 @@ class IncomeExepnseDal:
         query = models.ExpenseData(
             employee_salary_id=body.employee_id,
             type='employee_salary',
-            price_paid=body.price_paied
+            price_paid=body.price_paied,
+            from_whom = body.from_whom
         )
 
         self.db_session.add(query)
@@ -226,7 +242,7 @@ class IncomeExepnseDal:
         await self.db_session.commit()
         return updated_expense
 
-    async def get_list_expense_employee(self,start_date, end_date):
+    async def get_list_expense_employee(self,start_date, end_date,order):
         query = (
                 select(models.ExpenseData)
                 .join(models.Employees)  # Ensure Employees is joined correctly
@@ -241,6 +257,24 @@ class IncomeExepnseDal:
                     selectinload(models.ExpenseData.employee_salary),  # From root entity
                     selectinload(models.ExpenseData.employee_salary).selectinload(models.Employees.position)  # Nested relationship
                 )
+                .order_by(desc(models.ExpenseData.date_paied))
+            )
+        if order=='old':
+            query = (
+                select(models.ExpenseData)
+                .join(models.Employees)  # Ensure Employees is joined correctly
+                .join(models.Position)  # Ensure Position is joined correctly
+                .where(
+                    and_(
+                        models.ExpenseData.type == 'employee_salary',
+                        models.Employees.is_active == True,
+                    )
+                )
+                .options(
+                    selectinload(models.ExpenseData.employee_salary),  # From root entity
+                    selectinload(models.ExpenseData.employee_salary).selectinload(models.Employees.position)  # Nested relationship
+                )
+                .order_by(asc(models.ExpenseData.date_paied))
             )
         
         if start_date and end_date:
@@ -412,10 +446,6 @@ class IncomeExepnseDal:
                 and_(
                     extract('year', models.IncomeData.date_paied) == current_year,  # Filter by current year
                     extract('month', models.IncomeData.date_paied) == month,
-                    and_(
-                        models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
-                        models.IncomeData.project_id.is_(None)  # Include from_student (no project)
-                    )
                 )
                 
             )
@@ -443,11 +473,7 @@ class IncomeExepnseDal:
             )
             .where(
                 and_(
-                    extract('year', models.IncomeData.date_paied) == year,
-                    or_(
-                        models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
-                        models.IncomeData.project_id.is_(None)  # Include from_student (no project)
-                    )
+                    extract('year', models.IncomeData.date_paied) == year
                 )
             )
             .group_by(extract('month', models.IncomeData.date_paied))

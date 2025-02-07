@@ -1,5 +1,9 @@
+import shutil
+import os
+from datetime import datetime
+
 from typing import Optional, List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Form
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -47,13 +51,50 @@ async def get_new_task(task_id:Optional[int]=None ,status:Optional[str]=None,db:
 @common_router.get('/get-all-new-task', response_model=List[schemas.ShowNewTask])
 async def create_new_task(task_id:Optional[int]=None ,status:Optional[str]=None,db:AsyncSession = Depends(session.get_db),
                           current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await common_action._get_all_tasks(status=status, session=db,task_id=task_id)
+    return await common_action._get_all_tasks(status=status, session=db,task_id=task_id, current_user=current_user)
   
+UPLOAD_DIRECTORY='media/tasks'
+os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)
 
 @common_router.post('/create-new-task', response_model=schemas.ShowNewTask)
-async def create_new_task(body:schemas.CreateNewTask, db:AsyncSession = Depends(session.get_db),
-                          current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await common_action._create_new_task(body=body, session=db)
+async def create_new_task(
+                        name:str = Form(),
+                        start_date:datetime = Form(),
+                        end_date:datetime = Form(),
+                        programmer_ids:List[str] = Form(),
+                        description:str = Form(),
+                        status:str = Form(default=models.StatusTask.to_do),
+                        image_task: Optional[UploadFile] = File(default=None),
+                        db:AsyncSession = Depends(session.get_db),
+                        current_user:models.Employees=Depends(get_current_user_from_token)):
+    try:
+        programmer_list = [int(x) for x in programmer_ids[0].split(',')]
+    except ValueError:
+        raise HTTPException(
+                status_code=400, detail="All elements in progemmer_list must be valid integers."
+            )
+    
+    imagefile_name = None
+
+    if image_task != None:
+        imagefile_name = image_task.filename
+        try:
+            file_path = os.path.join(UPLOAD_DIRECTORY, image_task.filename)
+            with open(file_path, 'wb') as buffer:
+                shutil.copyfileobj(image_task.file, buffer)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail="Error saving the file.")
+    
+    body = schemas.CreateNewTask(
+        name=name,
+        start_date=start_date,
+        end_date=end_date,
+        programmer_ids=programmer_list,
+        description=description,
+        status=status
+    )
+
+    return await common_action._create_new_task(body=body, session=db, image_task=imagefile_name)
 
 @common_router.delete('/delete-task')
 async def delete_task_by_id(task_id:int, db:AsyncSession = Depends(session.get_db),
@@ -66,10 +107,43 @@ async def update_task_status(task_id:int, status:str, db:AsyncSession = Depends(
     return await common_action._update_status_task(task_id=task_id, status=status, session=db)
 
 @common_router.patch('/update_new_task')
-async def update_task_status(task_id:int, update_new_task:schemas.UpdateNewTask, db:AsyncSession = Depends(session.get_db),
-                             current_user:models.Employees=Depends(get_current_user_from_token)):
-    body = update_new_task.model_dump(exclude_none=True)
-    return await common_action._update_new_task(task_id=task_id,body=update_new_task, session=db)
+async def update_task_status(
+                        task_id:int,
+                        name:str = Form(),
+                        start_date:datetime = Form(),
+                        end_date:datetime = Form(),
+                        programmer_ids:List[str] = Form(),
+                        description:str = Form(),
+                        image_task: Optional[UploadFile] = File(default=None),
+                        db:AsyncSession = Depends(session.get_db),
+                        current_user:models.Employees=Depends(get_current_user_from_token)):
+    try:
+        programmer_list = [int(x) for x in programmer_ids[0].split(',')]
+    except ValueError:
+        raise HTTPException(
+                status_code=400, detail="All elements in progemmer_list must be valid integers."
+            )
+    
+    imagefile_name = None
+
+    if image_task != None:
+        imagefile_name = image_task.filename
+        try:
+            file_path = os.path.join(UPLOAD_DIRECTORY, image_task.filename)
+            with open(file_path, 'wb') as buffer:
+                shutil.copyfileobj(image_task.file, buffer)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail="Error saving the file.")
+    
+    body = schemas.UpdateNewTask(
+        name=name,
+        start_date=start_date,
+        end_date=end_date,
+        programmer_ids=programmer_list,
+        description=description
+    )
+
+    return await common_action._update_new_task(task_id=task_id,body=body, session=db,image_task=imagefile_name)
 
 @common_router.get('/list-operator-type', response_model=List[schemas.ShowPosition])
 async def get_list_operator_type(db:AsyncSession = Depends(session.get_db),

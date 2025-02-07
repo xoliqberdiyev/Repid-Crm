@@ -10,6 +10,7 @@ from api.employee_handler import emp_router
 from api.income_expense_handler import expense_income_handler
 from api.login_handler import login_user
 from api.common_handler import common_router
+from api.chat_handler import chat_handler
 
 app = FastAPI(
     title="Repid CRM API",
@@ -36,6 +37,7 @@ main_api_router.include_router(emp_router, prefix='/employee',tags=['employee'])
 main_api_router.include_router(expense_income_handler, prefix='/income-expence',tags=['income_expence'])
 main_api_router.include_router(login_user, prefix='/login', tags=['login'])
 main_api_router.include_router(common_router, prefix='/common', tags=['common'])
+main_api_router.include_router(chat_handler, prefix='/chat',tags=['chat'])
 
 app.include_router(main_api_router)
 

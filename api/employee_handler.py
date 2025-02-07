@@ -179,7 +179,7 @@ async def update_created_project(projec_id:int,
                                 end_date: datetime = Form(...),
                                 progemmer_list: list[str] = Form(...),
                                 price: str = Form(...),
-                                image: Optional[UploadFile] = File(default=None),
+                                image: Optional[UploadFile|None] = File(default=None),
                                 db:AsyncSession = Depends(session.get_db),
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
     
@@ -189,12 +189,15 @@ async def update_created_project(projec_id:int,
         raise HTTPException(
                 status_code=400, detail="All elements in progemmer_list must be valid integers."
             )
-    try:
-        file_path = os.path.join(UPLOAD_DIRECTORY, image.filename)
-        with open(file_path, 'wb') as buffer:
-            shutil.copyfileobj(image.file, buffer)
-    except Exception as e:
-            raise HTTPException(status_code=500, detail="Error saving the file.")
+    if image != None:
+        image_filename = image.filename
+        try:
+            file_path = os.path.join(UPLOAD_DIRECTORY, image_filename)
+            with open(file_path, 'wb') as buffer:
+                shutil.copyfileobj(image_filename, buffer)
+        except Exception as e:
+                raise HTTPException(status_code=500, detail="Error saving the file.")
+    image_filename = None
         
     body = schemas.UpdateProject(
         name=name,
@@ -203,7 +206,7 @@ async def update_created_project(projec_id:int,
         programmers=programmer_ids,
         price=price
     )
-    return await employee._update_created_project(session=db,project_id=projec_id, body=body,image=image.filename)
+    return await employee._update_created_project(session=db,project_id=projec_id, body=body,image=f'project/{image_filename}')
 
 @emp_router.patch('/update-proejct-status')
 async def update_project_status(project_id:int, status:str, db:AsyncSession = Depends(session.get_db),

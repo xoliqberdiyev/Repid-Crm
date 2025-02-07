@@ -21,7 +21,8 @@ async def _create_income_student(session:AsyncSession, body:schemas.CreateIncome
                 name=income_student.name,
                 real_price=income_student.real_price,
                 pay_price=income_student.pay_price,
-                left_price=int(income_student.real_price) - int(income_student.pay_price),
+                description=income_student.description  ,
+                left_price=int(income_student.real_price) - int(income_student.pay_price) if income_student.real_price else 0 ,
                 date_paied=income_student.date_paied,
                 position=income_student.position,
                 type=income_student.type
@@ -29,7 +30,7 @@ async def _create_income_student(session:AsyncSession, body:schemas.CreateIncome
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
     
-async def _get_list_income_student(session:AsyncSession,start_date,end_date):
+async def _get_list_income_student(session:AsyncSession,start_date,end_date,type):
     if start_date is None and end_date is None:
         pass
     elif start_date and end_date:
@@ -40,7 +41,7 @@ async def _get_list_income_student(session:AsyncSession,start_date,end_date):
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            income_students = await in_ex_dal.get_list_income_student(start_date,end_date)
+            income_students = await in_ex_dal.get_list_income_student(start_date,end_date,type)
 
             return [
                 schemas.ShowIncomeStudent(
@@ -48,7 +49,8 @@ async def _get_list_income_student(session:AsyncSession,start_date,end_date):
                 name=income_student.name,
                 real_price=income_student.real_price,
                 pay_price=income_student.pay_price,
-                left_price=int(income_student.real_price) - int(income_student.pay_price),
+                description=income_student.description,
+                left_price=int(income_student.real_price) - int(income_student.pay_price) if income_student.real_price else 0,
                 date_paied=income_student.date_paied,
                 position=income_student.position,
                 type=income_student.type
@@ -84,6 +86,7 @@ async def _update_income_student(session:AsyncSession, income_student_id:int, bo
                 name=income_student.name,
                 real_price=income_student.real_price,
                 pay_price=income_student.real_price,
+                description=income_student.description,
                 left_price=int(income_student.real_price) - int(income_student.real_price),
                 date_paied=income_student.date_paied,
                 position=income_student.position,
@@ -108,6 +111,7 @@ async def _create_income_project(session:AsyncSession, body:schemas.CreateIncome
                 project_id=project_with_id.id,
                 real_price=project_with_id.price,
                 date_start=project_with_id.start_date,
+                description=income_project.description,
                 pay_price=income_project.pay_price,
                 date_end=project_with_id.end_date,
                 type=income_project.type,
@@ -146,6 +150,7 @@ async def _get_list_income_project(session: AsyncSession,start_date,end_date):
                             project_id=project_with_id.id,
                             real_price=project_with_id.price,
                             date_start=project_with_id.start_date,
+                            description=income_project.description,
                             pay_price=income_project.pay_price,
                             date_end=project_with_id.end_date,
                             type=income_project.type,
@@ -189,8 +194,10 @@ async def _update_income_project(session:AsyncSession, body:dict,income_project_
                 name=project_with_id.name,
                 real_price=project_with_id.price,
                 date_start=project_with_id.start_date,
+                project_id=project_with_id.id,
                 pay_price=income_project.pay_price,
                 date_end=project_with_id.end_date,
+                description=income_project.description,
                 type=income_project.type,
                 left_price=int(project_with_id.price) - int(income_project.pay_price),
                 date_paied=income_project.date_paied,
@@ -235,6 +242,7 @@ async def _create_expence_type(session:AsyncSession,
                 description=create_expense.description,
                 date_paied=create_expense.date_paied,
                 real_price=create_expense.real_price,
+                from_whom=create_expense.from_whom,
                 remainder_price=int(create_expense.real_price) - int(create_expense.price_paid) if create_expense.real_price!=None else None,
                 type=create_expense.type
             )
@@ -253,6 +261,7 @@ async def _update_expense_by_type(session:AsyncSession, expense_id:int ,body:dic
                 price_paid=update_expese.price_paid,
                 description=update_expese.description,
                 date_paied=update_expese.date_paied,
+                from_whom=update_expese.from_whom,
                 real_price=update_expese.real_price,
                 remainder_price=int(update_expese.real_price) - int(update_expese.price_paid) if update_expese.real_price!=None else None,
                 type=update_expese.type
@@ -261,12 +270,16 @@ async def _update_expense_by_type(session:AsyncSession, expense_id:int ,body:dic
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
-async def _get_expence_type_list(session:AsyncSession,status:str,start_date,end_date):
+async def _get_expence_type_list(session:AsyncSession,status:str,
+                                 start_date,end_date, order:str,
+                                 from_whom:str):
     try:
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            expense_list = await in_ex_dal.get_list_expense(status=status,start_date=start_date,end_date=end_date)
+            expense_list = await in_ex_dal.get_list_expense(status=status,start_date=start_date,
+                                                            end_date=end_date,order=order,
+                                                            from_whom=from_whom)
 
             
             return [
@@ -277,6 +290,7 @@ async def _get_expence_type_list(session:AsyncSession,status:str,start_date,end_
                         description=expense_.description,
                         date_paied=expense_.date_paied,
                         real_price=expense_.real_price,
+                        from_whom=expense_.from_whom,
                         remainder_price=int(expense_.real_price) - int(expense_.price_paid) if expense_.real_price!=None else None,
                         type=expense_.type
                     )
@@ -327,6 +341,7 @@ async def _create_expense_employee(body:schemas.CreatingExepnseEmployee, session
             salary=get_employee.salary,
             img=f'uploads/{get_employee.image}',
             phone_number=get_employee.phone_number,
+            from_whom=create_expense.from_whom
         )
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
@@ -343,12 +358,12 @@ async def _update_expense_employee(body:dict,session:AsyncSession,income_employe
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
-async def _list_expense_employee(session: AsyncSession,start_date, end_date):
+async def _list_expense_employee(session: AsyncSession,start_date, end_date,order):
     try:
         async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
-            list_expense_employee = await in_ex_dal.get_list_expense_employee(start_date, end_date)
+            list_expense_employee = await in_ex_dal.get_list_expense_employee(start_date, end_date,order)
 
             return [
                 schemas.ShowExpenseEmployee(

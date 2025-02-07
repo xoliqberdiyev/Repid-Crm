@@ -4,6 +4,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from typing import Optional
 
+from database import models
 from database import schemas
 from dals import common_dal
 
@@ -95,17 +96,18 @@ async def _update_expected_value(session:AsyncSession,expected_avl_id:int, body:
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
     
-async def _create_new_task(session:AsyncSession, body:schemas.CreateNewTask):
+async def _create_new_task(session:AsyncSession, body:schemas.CreateNewTask,image_task:str):
         try:
             com_dal = common_dal.CommonDal(session)
 
-            new_task = await com_dal.create_new_task(body=body)
+            new_task = await com_dal.create_new_task(body=body, image_task=image_task)
 
             programmers = await com_dal.get_programmers_by_task_id(new_task.id)
 
             return schemas.ShowNewTask(
                 id=new_task.id,
                 name=new_task.name,
+                image_task=f'https://crmm.repid.uz/media/tasks/{image_task}' if image_task != None else None,
                 start_date=new_task.start_date,
                 end_date=new_task.end_date,
                 programmer_ids=[schemas.ProgrammerSchema.model_validate(programmer) for programmer in programmers],
@@ -115,25 +117,36 @@ async def _create_new_task(session:AsyncSession, body:schemas.CreateNewTask):
         except SQLAlchemyError as e:
             raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
-async def _get_all_tasks(session:AsyncSession, task_id:Optional[int],status:Optional[str]=None):
-        try:
-            com_dal = common_dal.CommonDal(session)
+async def _get_all_tasks(current_user,
+                         session: AsyncSession, 
+                         task_id: Optional[int], status: Optional[str] = None):
+    try:
+        com_dal = common_dal.CommonDal(session)
+        new_tasks = await com_dal.get_all_tasks(status=status, task_id=task_id)
 
-            new_tasks = await com_dal.get_all_tasks(status=status, task_id=task_id)
+        filtered_tasks = []
+        for new_task in new_tasks:
+            # Get programmers assigned to the task
+            programmers = await com_dal.get_programmers_by_task_id(new_task.id)
+            programmer_schemas = [schemas.ProgrammerSchema.model_validate(programmer) for programmer in programmers]
+            
+            # Check if current_user.id is in the assigned programmers
+            if any(programmer.id == current_user.id for programmer in programmers) or (current_user.user_type == models.UserType.super_admin):
+                filtered_tasks.append(schemas.ShowNewTask(
+                    id=new_task.id,
+                    name=new_task.name,
+                    image_task=f'https://crmm.repid.uz/media/tasks/{new_task.image_task}' if new_task.image_task else None,
+                    start_date=new_task.start_date,
+                    end_date=new_task.end_date,
+                    programmer_ids=programmer_schemas,
+                    status=new_task.status,
+                    description=new_task.description
+                ))
 
-            return [ schemas.ShowNewTask(
-                id=new_task.id,
-                name=new_task.name,
-                start_date=new_task.start_date,
-                end_date=new_task.end_date,
-                programmer_ids=[schemas.ProgrammerSchema.model_validate(programmer) for programmer in await com_dal.get_programmers_by_task_id(new_task.id)],
-                status=new_task.status,
-                description=new_task.description
-                
-            ) for new_task in new_tasks
-            ]
-        except SQLAlchemyError as e:
-            raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+        return filtered_tasks
+
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch tasks: {str(e)}")
 
 async def _delete_new_task_by_id(session:AsyncSession,task_id:int):
     try:
@@ -161,12 +174,12 @@ async def _update_status_task(session:AsyncSession, task_id:int, status:str):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
         
-async def _update_new_task(session:AsyncSession, body:schemas.UpdateNewTask, task_id:int):
+async def _update_new_task(session:AsyncSession, body:schemas.UpdateNewTask, task_id:int, image_task:str):
     try:
 
         com_dal = common_dal.CommonDal(session)
 
-        task_update = await com_dal.update_new_task(task_id=task_id, body=body)
+        task_update = await com_dal.update_new_task(task_id=task_id, body=body,image_task=image_task)
 
         programmers = await com_dal.get_programmers_by_task_id(task_update.id)
 
@@ -174,6 +187,7 @@ async def _update_new_task(session:AsyncSession, body:schemas.UpdateNewTask, tas
             return schemas.ShowNewTask(
                 id=task_update.id,
                 name=task_update.name,
+                image_task=f'https://crmm.repid.uz/media/tasks/{task_update.image_task}' if task_update.image_task != None else None,
                 start_date=task_update.start_date,
                 end_date=task_update.end_date,
                 programmer_ids=[schemas.ProgrammerSchema.model_validate(programmer) for programmer in programmers],

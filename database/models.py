@@ -46,10 +46,15 @@ class ExpenseType(str, enum.Enum):
     office_item = 'office_item'
     tax = 'tax'
 
+class ExpenseFromWhom(str, enum.Enum):
+    oybek='oybek'
+    bahrom='bahrom'
+    income='income'
 
 class IncomeType(str, enum.Enum):
     from_student = 'from_student'
     from_project='from_project'
+    investor='investor'
 
 class ProjectProgrammer(Base):
     __tablename__ = 'project_programmer'
@@ -176,6 +181,7 @@ class Task(Base):
     name: Mapped[int] = mapped_column(String(100))
     start_date: Mapped[datetime.datetime]
     end_date: Mapped[datetime.datetime]
+    image_task:Mapped[str|None] = mapped_column(String(100),default=None)
     status: Mapped[StatusTask] = mapped_column(Enum(StatusTask), default=StatusTask.to_do)
     is_deleted:Mapped[bool|None] = mapped_column(Boolean, nullable=True ,default=False)
     description: Mapped[str]
@@ -193,6 +199,7 @@ class IncomeData(Base):
     name:Mapped[int|None] = mapped_column(String(100), default=None)
     real_price: Mapped[str|None] = mapped_column(String(100),default=None)
     pay_price:Mapped[str|None] = mapped_column(String(100))
+    description:Mapped[str|None] = mapped_column(default=None)
     date_paied:Mapped[datetime.datetime|None] = mapped_column(
          default=datetime.datetime.now
     )
@@ -214,6 +221,7 @@ class ExpenseData(Base):
     date_paied:Mapped[datetime.datetime] = mapped_column(
          default=datetime.datetime.now
     )
+    from_whom:Mapped[ExpenseFromWhom|None] = mapped_column(Enum(ExpenseFromWhom), default=None)
     employee_salary_id:Mapped[int|None] = mapped_column(ForeignKey('employees.id',onupdate='CASCADE'))
     type:Mapped[ExpenseType] = mapped_column(Enum(ExpenseType))
 
