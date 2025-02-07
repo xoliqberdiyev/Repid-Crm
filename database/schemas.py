@@ -289,7 +289,6 @@ class ShowExepnseUser(BaseModel):
 class CreatingExepnseEmployee(BaseModel):
     employee_id:int
     price_paied:str
-    from_whom:str
 
 class ShowExpenseEmployee(BaseModel):
     id:int
@@ -304,7 +303,6 @@ class ShowExpenseEmployee(BaseModel):
     salary:int
     phone_number:str
     img:str|None
-    from_whom:str
 
 class UpdateExpenseByType(BaseModel):
     name:Optional[str|None]=None

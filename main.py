@@ -20,6 +20,9 @@ app = FastAPI(
     redoc_url="/redoc/api/v1",    # Optionally, change the URL for ReDoc documentation
     openapi_url="/openapi.json"
 )
+
+from fastapi.openapi.utils import get_openapi
+
 add_pagination(app)
 main_api_router = APIRouter()
 app.mount("/media", StaticFiles(directory="./media"), name="media")
