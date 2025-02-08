@@ -41,7 +41,7 @@ class IncomeExepnseDal:
         return res.scalars().all()
     
     async def delete_income_student(self, income_student_id:int):
-        query = delete(models.IncomeData).where(and_(models.IncomeData.type=='from_student'),(models.IncomeData.id==income_student_id))
+        query = delete(models.IncomeData).where(models.IncomeData.id==income_student_id)
 
         res = await self.db_session.execute(query)
 
@@ -537,7 +537,6 @@ class IncomeExepnseDal:
             months_dict[int(row.month)] = row.total_real_price
 
         return sorted(months_dict.items()) 
-
 
     async def get_only_expense(self, start_date, end_date):
         thirty_days_ago = datetime.utcnow() - timedelta(days=30)  # Get the date 30 days ago
