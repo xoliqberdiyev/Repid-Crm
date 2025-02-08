@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from sqlalchemy import select, update, delete, and_, func, case, cast, Integer, extract, or_ ,desc, asc
+from sqlalchemy import select, update, delete, and_, func, case, cast, BigInteger, extract, or_ ,desc, asc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload
 
@@ -62,6 +62,7 @@ class IncomeExepnseDal:
             pay_price=body.pay_price,
             type='from_project',
             description=body.description,
+            date_paied=body.date_paid
         )
 
 
@@ -94,7 +95,8 @@ class IncomeExepnseDal:
         query = (update(models.IncomeData).where(and_(models.IncomeData.type=='from_project'),(models.IncomeData.id==income_project_id))
                  .values(pay_price=body['pay_price'],
                          project_id=body['project_id'],
-                         description=body['description']
+                         description=body['description'],
+                         date_paied=body['date_paid']
                  ).returning(models.IncomeData))
 
         res = await self.db_session.execute(query)
@@ -106,49 +108,50 @@ class IncomeExepnseDal:
                 select(
                     func.sum(
                         case(
-                            (models.IncomeData.type == "from_student", cast(models.IncomeData.pay_price, Integer)),
+                            (models.IncomeData.type == "from_student", cast(models.IncomeData.pay_price, BigInteger)),
                             else_=0,
                         )
                     ).label("total_from_student"),
                     func.sum(
                         case(
-                            (models.IncomeData.type == "from_project", cast(models.IncomeData.pay_price, Integer)),
+                            (models.IncomeData.type == "from_project", cast(models.IncomeData.pay_price, BigInteger)),
                             else_=0,
                         )
                     ).label("total_from_project"),
-                    func.sum(cast(models.IncomeData.pay_price, Integer)).label("grand_total")
-                )
-            ).where(
-                or_(
-                            models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
-                            models.IncomeData.project_id.is_(None)  # Include from_student (no project)
+                    func.sum(
+                        case(
+                            (models.IncomeData.type == "investor", cast(models.IncomeData.pay_price, BigInteger)),
+                            else_=0,
                         )
-                
+                    ).label("total_investor"),
+                    func.sum(cast(models.IncomeData.pay_price, BigInteger)).label("grand_total")
+                )
             )
         if start_date and end_date:
             query = (
                 select(
                     func.sum(
                         case(
-                            (models.IncomeData.type == "from_student", cast(models.IncomeData.pay_price, Integer)),
+                            (models.IncomeData.type == "from_student", cast(models.IncomeData.pay_price, BigInteger)),
                             else_=0,
                         )
                     ).label("total_from_student"),
                     func.sum(
                         case(
-                            (models.IncomeData.type == "from_project", cast(models.IncomeData.pay_price, Integer)),
+                            (models.IncomeData.type == "from_project", cast(models.IncomeData.pay_price, BigInteger)),
                             else_=0,
                         )
                     ).label("total_from_project"),
-                    func.sum(cast(models.IncomeData.pay_price, Integer)).label("grand_total")
+                    func.sum(
+                        case(
+                            (models.IncomeData.type == "investor", cast(models.IncomeData.pay_price, BigInteger)),
+                            else_=0,
+                        )
+                    ).label("total_investor"),
+                    func.sum(cast(models.IncomeData.pay_price, BigInteger)).label("grand_total")
                 )
             ).where(
-                or_(
-                            models.IncomeData.project.has(models.Project.is_deleted == False),  # Include valid projects
-                            models.IncomeData.project_id.is_(None)  # Include from_student (no project)
-                        ),
                 models.IncomeData.date_paied.between(start_date, end_date)
-                
             )
 
         result = await self.db_session.execute(query)
@@ -214,6 +217,7 @@ class IncomeExepnseDal:
             employee_salary_id=body.employee_id,
             type='employee_salary',
             price_paid=body.price_paied,
+            date_paied=body.date_paid
         )
 
         self.db_session.add(query)
@@ -233,7 +237,8 @@ class IncomeExepnseDal:
     async def update_expense_employee(self, body:schemas.UpdateExpenseSalary,income_employee_id:int):
         query = update(models.ExpenseData).where(models.ExpenseData.id==income_employee_id).values(
             price_paid=body['price_paid'],
-            employee_salary_id=body['user_id']
+            employee_salary_id=body['user_id'],
+            date_paied=body['date_paid']
         ).returning(models.ExpenseData)
 
         result = await self.db_session.execute(query)
@@ -305,35 +310,47 @@ class IncomeExepnseDal:
             select(
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "employee_salary", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "employee_salary", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_from_student"),
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "for_office", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "for_office", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_for_office"),
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "smm_service", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "smm_service", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_smm_service"),
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "renting", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "renting", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_renting"),
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "other_expense", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "office_item", cast(models.ExpenseData.price_paid, BigInteger)),
+                        else_=0,
+                    )
+                ).label("total_office_item"),
+                func.sum(
+                    case(
+                        (models.ExpenseData.type == "tax", cast(models.ExpenseData.price_paid, BigInteger)),
+                        else_=0,
+                    )
+                ).label("total_tax"),
+                func.sum(
+                    case(
+                        (models.ExpenseData.type == "other_expense", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_other_expense"),
-                func.sum(cast(models.ExpenseData.price_paid, Integer)).label("grand_total")
+                func.sum(cast(models.ExpenseData.price_paid, BigInteger)).label("grand_total")
             )
         )
         if start_date and end_date:
@@ -341,35 +358,47 @@ class IncomeExepnseDal:
             select(
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "employee_salary", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "employee_salary", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_from_student"),
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "for_office", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "for_office", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_for_office"),
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "smm_service", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "smm_service", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_smm_service"),
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "renting", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "renting", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_renting"),
                 func.sum(
                     case(
-                        (models.ExpenseData.type == "other_expense", cast(models.ExpenseData.price_paid, Integer)),
+                        (models.ExpenseData.type == "other_expense", cast(models.ExpenseData.price_paid, BigInteger)),
                         else_=0,
                     )
                 ).label("total_other_expense"),
-                func.sum(cast(models.ExpenseData.price_paid, Integer)).label("grand_total")
+                func.sum(
+                    case(
+                        (models.ExpenseData.type == "office_item", cast(models.ExpenseData.price_paid, BigInteger)),
+                        else_=0,
+                    )
+                ).label("total_office_item"),
+                func.sum(
+                    case(
+                        (models.ExpenseData.type == "tax", cast(models.ExpenseData.price_paid, BigInteger)),
+                        else_=0,
+                    )
+                ).label("total_tax"),
+                func.sum(cast(models.ExpenseData.price_paid, BigInteger)).label("grand_total")
             )
             .where(
                 models.ExpenseData.date_paied.between(start_date, end_date)
@@ -401,7 +430,7 @@ class IncomeExepnseDal:
         result = await self.db_session.execute(
             select(
                 extract('day', models.ExpenseData.date_paied).label('day'),
-                func.sum(cast(models.ExpenseData.price_paid, Integer)).label('total_real_price')
+                func.sum(cast(models.ExpenseData.price_paid, BigInteger)).label('total_real_price')
             )
             .where(
                 and_(
@@ -440,7 +469,7 @@ class IncomeExepnseDal:
         result = await self.db_session.execute(
             select(
                 extract('day', models.IncomeData.date_paied).label('day'),
-                func.sum(cast(models.IncomeData.pay_price, Integer)).label('total_real_price')
+                func.sum(cast(models.IncomeData.pay_price, BigInteger)).label('total_real_price')
             )
             .where(
                 and_(
@@ -469,7 +498,7 @@ class IncomeExepnseDal:
         result = await self.db_session.execute(
             select(
                 extract('month', models.IncomeData.date_paied).label('month'),
-                func.sum(cast(models.IncomeData.pay_price, Integer)).label('total_real_price')
+                func.sum(cast(models.IncomeData.pay_price, BigInteger)).label('total_real_price')
             )
             .where(
                 and_(
@@ -496,7 +525,7 @@ class IncomeExepnseDal:
         result = await self.db_session.execute(
             select(
                 extract('month', models.ExpenseData.date_paied).label('month'),
-                func.sum(cast(models.ExpenseData.price_paid, Integer)).label('total_real_price')
+                func.sum(cast(models.ExpenseData.price_paid, BigInteger)).label('total_real_price')
             )
             .where(extract('year', models.ExpenseData.date_paied) == year)  # Filter by selected year
             .group_by(extract('month', models.ExpenseData.date_paied))
@@ -514,14 +543,14 @@ class IncomeExepnseDal:
         thirty_days_ago = datetime.utcnow() - timedelta(days=30)  # Get the date 30 days ago
 
         result = await self.db_session.execute(
-            select(func.sum(cast(models.ExpenseData.price_paid, Integer))).where(
+            select(func.sum(cast(models.ExpenseData.price_paid, BigInteger))).where(
                 models.ExpenseData.date_paied >= thirty_days_ago  # Filter only last 30 days
             )
         )
 
         if start_date and end_date:
             result = await self.db_session.execute(
-            select(func.sum(cast(models.ExpenseData.price_paid, Integer))).where(
+            select(func.sum(cast(models.ExpenseData.price_paid, BigInteger))).where(
                 models.ExpenseData.date_paied.between(start_date, end_date)  
             )
         )
@@ -534,7 +563,7 @@ class IncomeExepnseDal:
         thirty_days_ago = datetime.utcnow() - timedelta(days=30)  # Get the date 30 days ago
 
         result = await self.db_session.execute(
-            select(func.sum(cast(models.IncomeData.pay_price, Integer))).where(
+            select(func.sum(cast(models.IncomeData.pay_price, BigInteger))).where(
         
                 models.IncomeData.date_paied >= thirty_days_ago,
                 or_(
@@ -545,7 +574,7 @@ class IncomeExepnseDal:
         )
         if start_date and end_date:
             result = await self.db_session.execute(
-            select(func.sum(cast(models.IncomeData.pay_price, Integer))).where(
+            select(func.sum(cast(models.IncomeData.pay_price, BigInteger))).where(
         
                 models.IncomeData.date_paied.between(start_date, end_date),
                 or_(

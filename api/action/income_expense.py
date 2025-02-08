@@ -220,9 +220,11 @@ async def _get_income_piechart(session:AsyncSession, start_date, end_date):
         return {
             'total_income_student':total.total_from_student,
             'total_income_project':total.total_from_project,
+            'total_investor':total.total_investor,
             'total':total.grand_total,
             'percentage_income_student':(total.total_from_student/total.grand_total)*100,
             'percentage_income_project':(total.total_from_project/total.grand_total)*100,
+            'percentage_income_investor':(total.total_investor/total.grand_total)*100
         }
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
@@ -402,6 +404,8 @@ async def _expense_pie_chart(session:AsyncSession, start_date, end_date):
                 'smm':pie_chart_expesne.total_smm_service,
                 'renting':pie_chart_expesne.total_renting,
                 'other':pie_chart_expesne.total_other_expense,
+                'office_item':pie_chart_expesne.total_office_item,
+                'tax':pie_chart_expesne.total_tax,
                 'total_expenses':pie_chart_expesne.grand_total
 
             }

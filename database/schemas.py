@@ -200,6 +200,7 @@ class CreateIncomeProject(BaseModel):
     pay_price:str
     project_id:int
     description:str
+    date_paid:datetime
     
 class ShowIncomeStudent(BaseModel):
     id:int
@@ -289,6 +290,7 @@ class ShowExepnseUser(BaseModel):
 class CreatingExepnseEmployee(BaseModel):
     employee_id:int
     price_paied:str
+    date_paid:datetime
 
 class ShowExpenseEmployee(BaseModel):
     id:int
@@ -331,8 +333,10 @@ class UpdateLoginPassword(BaseModel):
 class UpdateExpenseSalary(BaseModel):
     price_paid:str|None=None
     user_id:int|None=None
+    date_paid:datetime|None=None
     
 class UpdateIncomeProject(BaseModel):
     pay_price:str|None=None
     project_id:int|None=None
     description:str|None=None
+    date_paid:datetime|None=None
