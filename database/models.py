@@ -76,10 +76,10 @@ class Employees(Base):
     __tablename__ = 'employees'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    first_name: Mapped[str] = mapped_column(String(100))
+    first_name: Mapped[str|None] = mapped_column(String(100), default=None)
     username: Mapped[str] = mapped_column(String(100),unique=True)
-    last_name: Mapped[str] = mapped_column(String(100))
-    phone_number: Mapped[str] = mapped_column(String(50))
+    last_name: Mapped[str|None] = mapped_column(String(100), default=None)
+    phone_number: Mapped[str|None] = mapped_column(String(50), default=None)
     date_of_birth: Mapped[datetime.datetime | None]
     date_of_jobstarted: Mapped[datetime.datetime | None]
     position_id: Mapped[int] = mapped_column(ForeignKey('positions.id',onupdate='CASCADE'))

@@ -1,17 +1,18 @@
 from datetime import datetime
 from typing import Optional, List,Generic, TypeVar
+from fastapi import HTTPException
 
-from pydantic import BaseModel, constr, field_validator, Field
-from database import models
+from pydantic import BaseModel, constr, field_validator, Field, model_validator
+from utils import security
 
 
 class EmployeeCreate(BaseModel):
-    last_name:str
-    first_name:str
+    last_name:str|None
+    first_name:str|None
     phone_number:str
     date_of_birth:Optional[datetime|None]=None
     date_of_jobstarted:datetime
-    salary:int
+    salary:int = Field(ge=0)
     username:str
     position_id:int
     password:str
@@ -19,16 +20,25 @@ class EmployeeCreate(BaseModel):
     class Config:
         orm_format = True
 
-    # @field_validator('date_of_birth', 'date_of_jobstarted')
-    # def make_datetimes_naive(cls, v):
-    #     if cls.tzinfo is not None:
-    #         v = v.replace(tzinfo=None)
-    #     return v
+    @field_validator('phone_number', mode='before')
+    @classmethod
+    def check_phone_number_validate(cls, phone_number):
+        if not security.is_valid_phone_number(phone_number):
+            return ValueError('Phone number is not valid form, please be sure')
+        return phone_number
+    
+    @field_validator('password', mode='before')
+    @classmethod
+    def check_password_validate(cls, password):
+        if len(password) < 6:
+            return ValueError('Your password must be more than 6 digit')
+        return password
+
     
 class ShowEmployee(BaseModel):
     id:int
-    last_name: str
-    first_name: str
+    last_name: str|None
+    first_name: str|None
     phone_number: str
     date_of_birth: Optional[datetime] = None
     date_of_jobstarted: datetime

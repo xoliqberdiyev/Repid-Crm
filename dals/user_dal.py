@@ -119,11 +119,27 @@ class EmployeeDal:
         if username is not None:
             return username[0]
         
+    async def get_user_phone_number(self, phone_number:str):
+        query = (
+            select(models.Employees).where(and_(models.Employees.phone_number==phone_number,models.Employees.is_active==True))
+        )
+        res = await self.db_session.execute(query)
+
+        return res.scalar_one_or_none()
+        
     async def get_by_user_id(self, user_id):
         res = await self.db_session.execute(
             select(models.Employees).where(and_(models.Employees.id == user_id, models.Employees.is_active==True))
         )
         return res.fetchone()
+    
+    async def change_password(self,user_id, new_password):
+        query = update(models.Employees).where(models.Employees.id==user_id).values(password=Hasher.get_password_hash(new_password)).returning(models.Employees)
+
+        res = await self.db_session.execute(query)
+        self.db_session.commit()
+
+        return res.scalar_one_or_none()
 
     async def create_project(self, name:str, 
                             start_date:datetime,

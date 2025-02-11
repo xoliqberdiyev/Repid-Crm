@@ -291,6 +291,16 @@ async def _update_status_project(session:AsyncSession, project_id:int, status:st
                     'status':project_status.status}
         return {'success':False,
                     'message':'Error occured'}
+    
+async def _get_phone_number(session:AsyncSession, phone_number:str):
+    async with session.begin():
+        emp_dal = user_dal.EmployeeDal(session)
+
+        user_phone_number = await emp_dal.get_user_phone_number(phone_number=phone_number)
+
+        if user_phone_number is None:
+            return False
+        return user_phone_number
         
 async def _get_list_position(session:AsyncSession):
     async with session.begin():
@@ -304,6 +314,16 @@ async def _get_list_position(session:AsyncSession):
             )
             for position in list_positions
         ]
+    
+async def _change_user_password(sesion:AsyncSession, user_id:int, new_password:str):
+    async with sesion.begin():
+        com_dal = user_dal.EmployeeDal(sesion)
+
+        new_user_password = await com_dal.change_password(user_id=user_id, new_password=new_password)
+
+        if new_user_password is not None:
+            return {'message':"User password changes successfully"}
+
     
 async def _create_position(session:AsyncSession, name:str):
     async with session.begin():

@@ -12,6 +12,8 @@ from utils.security import create_access_token
 from database.schemas import Token, ShowCurrentUser
 from database import models
 from utils import settings
+from tg_main import redis_client
+from api.action import employee
 
 from jose import jwt, JWTError
 
@@ -19,6 +21,8 @@ oauth_token = OAuth2PasswordBearer('/login/access_token')
 
 login_user = APIRouter()
 
+async def get_redis():
+    return redis_client
 
 async def _get_user_username_auth(username: str, session: AsyncSession):
     async with session.begin():
@@ -91,3 +95,15 @@ async def get_current_user(
         image=f'uploads/{current_user.image}',
         user_type=current_user.user_type
     )
+
+@login_user.post('/change-password')
+async def change_password(otp_code:str, your_new_password:str,redis=Depends(get_redis),
+                          current_user: models.Employees = Depends(get_current_user_from_token),
+                          db: AsyncSession = Depends(get_db)):
+    valid_phone_number = await redis.get(f"user:{current_user.phone_number}:phone")
+    print(valid_phone_number)
+
+    if valid_phone_number == otp_code:
+        return await employee._change_user_password(sesion=db,new_password=your_new_password,user_id=current_user.id)
+
+    return {'message':'Something is wrong'}

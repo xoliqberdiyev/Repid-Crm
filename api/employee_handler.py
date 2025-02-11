@@ -1,4 +1,5 @@
 import shutil
+import json
 import os
 from typing import Optional, List
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Form, Query
@@ -11,6 +12,7 @@ from fastapi_pagination.utils import disable_installed_extensions_check
 from api.action import employee
 from api.login_handler import get_current_user_from_token
 from datetime import datetime
+from pydantic import ValidationError
 
 from database import schemas, session, models
 
@@ -39,10 +41,10 @@ async def create_employee(
     date_of_birth: Optional[datetime] = Form(default=None),
     salary: int = Form(...),
     position_id: int = Form(...),
-    last_name: str = Form(...),
+    last_name: str|None = Form(default=None),
     username: str = Form(...),
-    first_name: str = Form(...),
-    phone_number: str = Form(...),
+    first_name: str|None = Form(default=None),
+    phone_number: str = Form(default=None),
     password: str = Form(...),
     date_of_jobstarted: datetime = Form(...),
     db: AsyncSession = Depends(session.get_db),
@@ -56,19 +58,26 @@ async def create_employee(
             shutil.copyfileobj(file.file, buffer)
     else:
         file_name = None
+
+    try:
         
-    employee_data = schemas.EmployeeCreate(
-        date_of_birth=date_of_birth,
-        salary=salary,
-        position_id=position_id,
-        last_name=last_name,
-        username=username,
-        first_name=first_name,
-        phone_number=phone_number,
-        password=password,
-        date_of_jobstarted=date_of_jobstarted
-    )
-    return await employee._create_new_employee(body=employee_data, session=db, file_name=file_name)
+        employee_data = schemas.EmployeeCreate(
+            date_of_birth=date_of_birth,
+            salary=salary,
+            position_id=position_id,
+            last_name=last_name,
+            username=username,
+            first_name=first_name,
+            phone_number=phone_number,
+            password=password,
+            date_of_jobstarted=date_of_jobstarted
+        )
+        return await employee._create_new_employee(body=employee_data, session=db, file_name=file_name)
+    except ValidationError as e:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Validation error: {e.errors()}"
+            )
 
 @emp_router.patch('/update-employee')
 async def update_employee_detail(
