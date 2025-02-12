@@ -311,7 +311,7 @@ class EmployeeDal:
         return res.scalar_one_or_none()
 
     async def delete_created_project(self, project_id:int):
-        query = update(models.Project).where(models.Project.id == project_id).values(is_deleted=True)
+        query = delete(models.Project).where(models.Project.id == project_id)
 
         res = await self.db_session.execute(query)
         self.db_session.commit()

@@ -60,8 +60,8 @@ class ProjectProgrammer(Base):
     __tablename__ = 'project_programmer'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    project_id:Mapped[int] = mapped_column(ForeignKey('projects.id'))
-    programmer_id: Mapped[int] = mapped_column(ForeignKey('employees.id'))
+    project_id:Mapped[int] = mapped_column(ForeignKey('projects.id',ondelete='CASCADE'))
+    programmer_id: Mapped[int] = mapped_column(ForeignKey('employees.id',ondelete='CASCADE'))
 
 
 class TaskProgrammer(Base):
@@ -82,7 +82,7 @@ class Employees(Base):
     phone_number: Mapped[str|None] = mapped_column(String(50), default=None)
     date_of_birth: Mapped[datetime.datetime | None]
     date_of_jobstarted: Mapped[datetime.datetime | None]
-    position_id: Mapped[int] = mapped_column(ForeignKey('positions.id',onupdate='CASCADE'))
+    position_id: Mapped[int] = mapped_column(ForeignKey('positions.id',ondelete='CASCADE'))
     image: Mapped[str | None] = mapped_column(String,index=True)
     salary: Mapped[int | None] = mapped_column(BigInteger)
     user_type: Mapped[UserType] = mapped_column(Enum(UserType), default=UserType.custom)
@@ -93,13 +93,15 @@ class Employees(Base):
     projects = relationship(
         "Project",
         secondary="project_programmer",
-        back_populates="programmers"
+        back_populates="programmers",
+        cascade="all, delete"
     )
 
     tasks = relationship(
         "Task",
         secondary="task_programmer",
-        back_populates="programmers"
+        back_populates="programmers",
+        cascade="all, delete"
     )
 
     position: Mapped['Position'] = relationship(back_populates='user')
@@ -136,9 +138,10 @@ class Project(Base):
     programmers = relationship(
         "Employees",
         secondary="project_programmer",
-        back_populates="projects"
+        back_populates="projects",
+        cascade="all, delete"
     )
-    income_data:Mapped['IncomeData'] = relationship(back_populates='project')
+    income_data:Mapped['IncomeData'] = relationship(back_populates='project',cascade="all, delete")
 
 
 class Operator(Base):
@@ -149,7 +152,7 @@ class Operator(Base):
     phone_number: Mapped[str] = mapped_column(String(100))
     description: Mapped[str]
     status:Mapped[StatusOperator] = mapped_column(Enum(StatusOperator), default=StatusOperator.in_progres)
-    operator_type_id: Mapped[int] = mapped_column(ForeignKey('operator_type.id', onupdate='CASCADE'))
+    operator_type_id: Mapped[int] = mapped_column(ForeignKey('operator_type.id', ondelete='CASCADE'))
 
     operator_type: Mapped['OperatorType'] = relationship(back_populates='operator')
 
@@ -189,7 +192,8 @@ class Task(Base):
     programmers = relationship(
         "Employees",
         secondary="task_programmer",
-        back_populates="tasks"
+        back_populates="tasks",
+        cascade="all, delete"
     )
 
 class IncomeData(Base):
@@ -204,10 +208,10 @@ class IncomeData(Base):
          default=datetime.datetime.now
     )
     position:Mapped[str|None] = mapped_column(default=None)
-    project_id:Mapped[int|None] = mapped_column(ForeignKey('projects.id',onupdate='CASCADE'),default=None)
+    project_id:Mapped[int|None] = mapped_column(ForeignKey('projects.id',ondelete='CASCADE'),default=None)
     type:Mapped[IncomeType] = mapped_column(Enum(IncomeType))
 
-    project:Mapped['Project'] = relationship(back_populates='income_data')
+    project:Mapped['Project'] = relationship(back_populates='income_data',cascade="all, delete")
 
 
 class ExpenseData(Base):
@@ -222,7 +226,7 @@ class ExpenseData(Base):
          default=datetime.datetime.now
     )
     from_whom:Mapped[ExpenseFromWhom|None] = mapped_column(Enum(ExpenseFromWhom), default=None)
-    employee_salary_id:Mapped[int|None] = mapped_column(ForeignKey('employees.id',onupdate='CASCADE'))
+    employee_salary_id:Mapped[int|None] = mapped_column(ForeignKey('employees.id',ondelete='CASCADE'))
     type:Mapped[ExpenseType] = mapped_column(Enum(ExpenseType))
 
     employee_salary:Mapped['Employees'] = relationship(back_populates='expense')
