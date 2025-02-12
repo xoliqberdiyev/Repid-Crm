@@ -47,6 +47,7 @@ class ShowEmployee(BaseModel):
     user_type: str
     image: Optional[str|None] = None
     position:str
+    is_active:bool
 
     class Config:
         orm_format = True
@@ -256,6 +257,7 @@ class UpdateEmployeeDetail(BaseModel):
     phone_number:Optional[str]=None
     date_of_jobstarted:Optional[datetime]=None
     position_id:Optional[int]=None
+    is_active:bool
 
 class UpdateOperator(BaseModel):
     full_name:str=None
@@ -322,6 +324,7 @@ class UpdateExpenseByType(BaseModel):
     description:Optional[str|None] = None
     date_paied:Optional[datetime|None] = None
     real_price:Optional[str|None] = None
+    type:str
     from_whom:str|None = None
 
 class BaseFilterProject(BaseModel):

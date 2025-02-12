@@ -8,6 +8,7 @@ class ConnectionManager:
     def __init__(self):
         # Store room_id -> List of (username, WebSocket)
         self.room: Dict[str, List[Tuple[str, WebSocket]]] = {}
+        self.active_connection: List[WebSocket] = []
 
     async def connect(self, websocket: WebSocket, room_id: str, username: str):
         await websocket.accept()
@@ -25,6 +26,9 @@ class ConnectionManager:
             self.room[room_id] = [(user, ws) for user, ws in self.room[room_id] if ws != websocket]
             if not self.room[room_id]:
                 del self.room[room_id]
+
+    async def disconnect_client(self, websocket: WebSocket):
+        pass
 
     async def send_message(self, sender_ws: WebSocket, message: str, room_id: str):
         if room_id in self.room:
@@ -46,6 +50,7 @@ class ConnectionManager:
                     "message": message
                 })
                 await receiver_ws.send_text(json_message)
+
 
 
 

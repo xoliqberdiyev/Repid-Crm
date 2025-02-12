@@ -47,7 +47,8 @@ async def _create_new_employee(body: schemas.EmployeeCreate,
                 username=new_employee.username,
                 salary=new_employee.salary,
                 user_type=new_employee.user_type,
-                image=f"{UPLOAD_USER}/{new_employee.image}"
+                image=f"{UPLOAD_USER}/{new_employee.image}",
+                is_active=new_employee.is_active,
             )
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
@@ -71,7 +72,8 @@ async def _get_all_employee(session:AsyncSession,
                     position=user.position.name,
                     salary=user.salary,
                     user_type=user.user_type,
-                    image=f"{UPLOAD_USER}/{user.image}"
+                    image=f"{UPLOAD_USER}/{user.image}",
+                    is_active=user.is_active
                 )
                 for user in all_users
             ]
@@ -351,7 +353,8 @@ async def _update_employee_detail(user_id:int, session:AsyncSession, body:schema
                 salary=body.salary,
                 image=image,
                 user_id=user_id,
-                position_id=body.position_id
+                position_id=body.position_id,
+                is_active=body.is_active
             )
 
             # Return the employee details
@@ -366,7 +369,8 @@ async def _update_employee_detail(user_id:int, session:AsyncSession, body:schema
                 username=new_employee.username,
                 salary=new_employee.salary,
                 user_type=new_employee.user_type,
-                image=f"{UPLOAD_USER}/{new_employee.image}"
+                image=f"{UPLOAD_USER}/{new_employee.image}",
+                is_active=new_employee.is_active
             )
         except SQLAlchemyError as e:
             raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")

@@ -93,6 +93,7 @@ async def update_employee_detail(
     file: Optional[UploadFile] = File(None),
     image_remove: Optional[bool] = Form(default=False),
     position_id:Optional[int] = Form(default=None),
+    is_active:Optional[bool] = Form(default=True),
     current_user:models.Employees=Depends(get_current_user_from_token)
 ):
     if file:  
@@ -114,7 +115,8 @@ async def update_employee_detail(
         first_name=first_name,
         phone_number=phone_number,
         date_of_jobstarted=date_of_jobstarted,
-        position_id=position_id
+        position_id=position_id,
+        is_active=is_active
     )
     return await employee._update_employee_detail(session=db, body=employee_data,
                                                   image=file_name, user_id=user_id)

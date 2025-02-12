@@ -8,3 +8,5 @@ ACCESS_TOKEN_EXPIRE_MINUTES: int = env.int("ACCESS_TOKEN_EXPIRE_MINUTES", defaul
 
 
 DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost/repid_crm_d"
+
+DATABASE_URL_TEST = "postgresql+asyncpg://postgres:admin123@localhost/crm_repid_test_db"

@@ -17,11 +17,11 @@ class EmployeeDal:
         self.db_session = db_session
 
     async def get_all_employee(self, position_id):
-        query = select(models.Employees).join(models.Position).where(models.Employees.is_active==True, 
+        query = select(models.Employees).join(models.Position).where( 
                                                                      models.Employees.user_type!=models.UserType.super_admin).options(
                         selectinload(models.Employees.position))
         if position_id:
-            query = select(models.Employees).join(models.Position).where(and_(models.Employees.is_active==True, 
+            query = select(models.Employees).join(models.Position).where(and_(
                                                                             models.Employees.position_id == position_id,
                                                                             models.Employees.user_type!=models.UserType.super_admin)).options(
                         selectinload(models.Employees.position))
@@ -64,12 +64,12 @@ class EmployeeDal:
     async def update_employee(self, first_name: str, last_name: str, user_id: int,
                           phone_number: str, date_of_birth: datetime,
                           date_of_jobstarted: datetime, salary: int, username: str,
-                          image: str,position_id:int):
+                          image: str,position_id:int, is_active:bool):
         try:
             # Update the employee record
             query = (
                 update(models.Employees)
-                .where(and_(models.Employees.id == user_id, models.Employees.is_active == True))
+                .where(and_(models.Employees.id == user_id))
                 .values(
                     first_name=first_name,
                     last_name=last_name,
@@ -77,6 +77,7 @@ class EmployeeDal:
                     date_of_birth=date_of_birth,
                     salary=salary,
                     username=username,
+                    is_active=is_active,
                     date_of_jobstarted=date_of_jobstarted,
                     image=image,
                     position_id=position_id
@@ -93,7 +94,7 @@ class EmployeeDal:
 
             res_query = (
                 select(models.Employees)
-                .where(and_(models.Employees.id == user_.id, models.Employees.is_active == True))
+                .where(and_(models.Employees.id == user_.id))
                 .join(models.Position)
                 .options(joinedload(models.Employees.position))
             )
