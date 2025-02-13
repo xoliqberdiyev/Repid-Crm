@@ -50,7 +50,7 @@ class IncomeExepnseDal:
         return False
     
     async def update_income_student(self, income_student_id:int, **kwargs):
-        query = update(models.IncomeData).where(and_(models.IncomeData.type=='from_student'),(models.IncomeData.id==income_student_id)).values(**kwargs).returning(models.IncomeData)
+        query = update(models.IncomeData).where(models.IncomeData.id==income_student_id).values(**kwargs).returning(models.IncomeData)
 
         res = await self.db_session.execute(query)
 

@@ -1,6 +1,5 @@
 from datetime import datetime
 from fastapi import File, UploadFile, HTTPException
-from typing import Optional
 
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -209,7 +208,7 @@ class EmployeeDal:
         return all_projects
         
     async def get_project_id(self, project_id):
-        query = select(models.Project).where(and_(models.Project.is_deleted==False),(models.Project.id == project_id))
+        query = select(models.Project).where(models.Project.id == project_id)
         res = await self.db_session.execute(query)
         all_projects = res.scalar_one_or_none()
 
