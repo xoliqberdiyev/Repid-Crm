@@ -196,31 +196,40 @@ class IncomeDal:
         return sorted(days_dict.items())
 
     async def line_graph_year_income(self,year):
+        now = datetime.utcnow()
+        current_month = now.month
+        current_year = now.year
+
         if year is None:
-            year = datetime.utcnow().year
+            start_date = now.replace(year=current_year - 1, month=current_month, day=1)
+            end_date = now
+        else:
+            start_date = datetime(year, 1, 1)
+            end_date = datetime(year, 12, 31)
 
-        months_dict = {month: 0 for month in range(1, 13)}
+        months_order = [(current_month - 1 + i) % 12 + 1 for i in range(13)]
 
-        # Fetch income data for the given year
+        # Initialize dictionary with zero values
+        months_dict = {month: 0 for month in months_order}
+
         result = await self.db_session.execute(
             select(
                 extract('month', models.IncomeData.date_paied).label('month'),
                 func.sum(cast(models.IncomeData.pay_price, BigInteger)).label('total_real_price')
             )
-            .where(
-                and_(
-                    extract('year', models.IncomeData.date_paied) == year
-                )
-            )
+            .where(models.IncomeData.date_paied.between(start_date, end_date))
             .group_by(extract('month', models.IncomeData.date_paied))
             .order_by(extract('month', models.IncomeData.date_paied))
         )
 
-        # Update dictionary with actual values from the database
-        for row in result.fetchall():
+        fetched_data = result.fetchall()
+        print("Fetched Data:", fetched_data) 
+
+        for row in fetched_data:
             months_dict[int(row.month)] = row.total_real_price
 
-        return sorted(months_dict.items())    
+        sorted_result = [(month, months_dict[month]) for month in months_order]
+        return sorted_result    
     
     async def get_only_income(self,start_date, end_date):
         thirty_days_ago = datetime.utcnow() - timedelta(days=30)  # Get the date 30 days ago

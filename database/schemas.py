@@ -331,7 +331,7 @@ class CreateIncomeStudent(BaseModel):
     def check_price_validation(cls, value):
         real_price = value.get('real_price')
         pay_price = value.get('pay_price')
-        if not real_price.is_digit() or not pay_price.isdigit():
+        if not real_price.isdigit() or not pay_price.isdigit():
             return 'Please enter valid int for price field'
         elif real_price == None:
             pass

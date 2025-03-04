@@ -526,28 +526,49 @@ class IncomeExepnseDal:
 
         return sorted(months_dict.items())    
     
-    async def line_graph_year_expense(self,year):
+    async def line_graph_year_expense(self, year=None):
+        now = datetime.utcnow()
+        current_month = now.month
+        current_year = now.year
+
         if year is None:
-            year = datetime.utcnow().year
+            start_date = now.replace(year=current_year - 1, month=current_month, day=1)
+            end_date = now
+        else:
+            start_date = datetime(year, 1, 1)
+            end_date = datetime(year, 12, 31)
 
-        months_dict = {month: 0 for month in range(1, 13)}
+        print(f"Fetching data from {start_date} to {end_date}")  # Debugging print
 
-        # Fetch income data for the given year
+        # Create months order: last month → this month last year
+        months_order = [(current_month - 1 + i) % 12 + 1 for i in range(13)]
+
+        # Initialize dictionary with zero values
+        months_dict = {month: 0 for month in months_order}
+
+        # Fetch data from DB
         result = await self.db_session.execute(
             select(
                 extract('month', models.ExpenseData.date_paied).label('month'),
                 func.sum(cast(models.ExpenseData.price_paid, BigInteger)).label('total_real_price')
             )
-            .where(extract('year', models.ExpenseData.date_paied) == year)  # Filter by selected year
+            .where(models.ExpenseData.date_paied.between(start_date, end_date))
             .group_by(extract('month', models.ExpenseData.date_paied))
             .order_by(extract('month', models.ExpenseData.date_paied))
         )
 
-        # Update dictionary with actual values from the database
-        for row in result.fetchall():
+        fetched_data = result.fetchall()
+        print("Fetched Data:", fetched_data)  # Debugging print
+
+        # Update dictionary with actual values
+        for row in fetched_data:
+            print(f"Updating month {int(row.month)} with value {row.total_real_price}")  # Debugging print
             months_dict[int(row.month)] = row.total_real_price
 
-        return sorted(months_dict.items()) 
+        # Return data in correct order
+        sorted_result = [(month, months_dict[month]) for month in months_order]
+        print("Final Sorted Result:", sorted_result)  # Debugging print
+        return sorted_result
 
     async def get_only_expense(self, start_date, end_date):
         thirty_days_ago = datetime.utcnow() - timedelta(days=30)  # Get the date 30 days ago
