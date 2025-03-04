@@ -1,52 +1,50 @@
+from datetime import datetime, date
 import shutil
-import json
 import os
+
 from typing import Optional, List
-from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Form, Query
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, Form
 from fastapi_pagination import paginate
 from fastapi_pagination import Page
-
 from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import ValidationError
 from fastapi_pagination.utils import disable_installed_extensions_check
 
 from api.action import employee
 from api.login_handler import get_current_user_from_token
-from datetime import datetime
-from pydantic import ValidationError
-
 from database import schemas, session, models
-
 
 emp_router = APIRouter()
 
-UPLOAD_DIRECTORY = "media/uploads"  # Directory to store uploaded files
-os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)  # Ensure the directory exists
+UPLOAD_DIRECTORY = "media/uploads"  
+os.makedirs(UPLOAD_DIRECTORY, exist_ok=True)
 UPLOAD_DIRECTORY1 = 'media/projects'
 
-@emp_router.get('/list',response_model=Page[schemas.ShowEmployee])
+@emp_router.get('',response_model=Page[schemas.ShowEmployee])
 async def get_all_employee(position_id:Optional[int]=None ,
                            db:AsyncSession = Depends(session.get_db),
                            current_user:models.Employees=Depends(get_current_user_from_token),
                             ):
     users = await employee._get_all_employee(db, position_id,current_user.username)
+    disable_installed_extensions_check()
     return paginate(users)
 
-@emp_router.delete('/delete-employee')
+@emp_router.delete('')
 async def delete_employee(user_id:int, db:AsyncSession = Depends(session.get_db),
                           current_user:models.Employees=Depends(get_current_user_from_token)):
     return await employee._delete_employee(user_id=user_id, session=db)
 
-@emp_router.post('/create_user', response_model=schemas.ShowEmployee)
+@emp_router.post('', response_model=schemas.ShowEmployee)
 async def create_employee(
-    date_of_birth: Optional[datetime] = Form(default=None),
-    salary: int = Form(...),
-    position_id: int = Form(...),
-    last_name: str|None = Form(default=None),
-    username: str = Form(...),
-    first_name: str|None = Form(default=None),
-    phone_number: str = Form(default=None),
-    password: str = Form(...),
-    date_of_jobstarted: datetime = Form(...),
+    last_name: str|None = Form(default=None,examples=["Nimadir"]),
+    first_name: str|None = Form(default=None, examples=['Kimdir']),
+    username: str = Form(examples=['just_boy']),
+    phone_number: str = Form(default=None,examples=['+998949252945']),
+    password: str = Form(examples=['supersecure']),
+    date_of_jobstarted: datetime = Form(examples=[date(2024,1,1)]),
+    date_of_birth: Optional[datetime] = Form(default=None,examples=[date(2024,1,1)]),
+    salary: int = Form(examples=[100000]),
+    position_id: int = Form(examples=[1]),
     db: AsyncSession = Depends(session.get_db),
     file: Optional[UploadFile] = File(None),
     ):
@@ -79,7 +77,7 @@ async def create_employee(
                 detail=f"Validation error: {e.errors()}"
             )
 
-@emp_router.patch('/update-employee')
+@emp_router.patch('', response_model=schemas.ShowEmployee)
 async def update_employee_detail(
     user_id:int,
     date_of_birth: Optional[datetime] = Form(default=None),
@@ -94,6 +92,7 @@ async def update_employee_detail(
     image_remove: Optional[bool] = Form(default=False),
     position_id:Optional[int] = Form(default=None),
     is_active:Optional[bool] = Form(default=True),
+    password:Optional[str] = Form(default=None),
     current_user:models.Employees=Depends(get_current_user_from_token)
 ):
     if file:  
@@ -116,17 +115,18 @@ async def update_employee_detail(
         phone_number=phone_number,
         date_of_jobstarted=date_of_jobstarted,
         position_id=position_id,
-        is_active=is_active
+        is_active=is_active,
+        password=password
     )
     return await employee._update_employee_detail(session=db, body=employee_data,
                                                   image=file_name, user_id=user_id)
 
-@emp_router.get('/detail-employee', response_model=schemas.ShowEmployeeDetail)
+@emp_router.get('/detail', response_model=schemas.ShowEmployeeDetail)
 async def get_detail_employee(user_id:int, db:AsyncSession = Depends(session.get_db),
                               current_user:models.Employees=Depends(get_current_user_from_token)):
     return await employee._get_detail_employee(user_id,db)
 
-@emp_router.get('/list-projects', response_model=Page[schemas.ShowProject])
+@emp_router.get('/projects', response_model=Page[schemas.ShowProject])
 async def get_list_projects(start_date:datetime=None,
                             end_date:datetime=None,
                             status:str=None,
@@ -141,18 +141,17 @@ async def get_list_projects(start_date:datetime=None,
     disable_installed_extensions_check()
     return paginate(projects)
 
-@emp_router.post('/create_project',response_model=schemas.ShowProject)
+@emp_router.post('/project',response_model=schemas.ShowProject)
 async def create_project(
-    name: str = Form(...),
-    start_date: datetime = Form(...),
-    end_date: datetime = Form(...),
-    progemmer_list: list[str] = Form(...),
-    price: str = Form(...),
-    db: AsyncSession = Depends(session.get_db),
+    name: str = Form(examples=['Google']),
+    start_date: datetime = Form(examples=[date(2024,1,1)]),
+    end_date: datetime = Form(examples=[date(2024,1,1)]),
+    price: str = Form(examples=['100000']),
+    progemmer_list: list[str] = Form(examples=[["1","2"]]),
     image: Optional[UploadFile] = File(None),
-    current_user:models.Employees=Depends(get_current_user_from_token)
+    current_user:models.Employees=Depends(get_current_user_from_token),
+    db: AsyncSession = Depends(session.get_db),
     ):
-
     try:
         programmer_ids = [int(x) for x in progemmer_list[0].split(',')]
     except ValueError:
@@ -168,28 +167,35 @@ async def create_project(
         except Exception as e:
             raise HTTPException(status_code=500, detail="Error saving the file.")
     imagefile_name = None
-        
-    body = schemas.CreateProject(
-        name=name,
-        start_date=start_date,
-        end_date=end_date,
-        programmer_ids=programmer_ids,
-        price=price
-    )
+
+    try:
+        body = schemas.CreateProject(
+            name=name,
+            start_date=start_date,
+            end_date=end_date,
+            programmer_ids=programmer_ids,
+            price=price
+        )
+    except ValidationError as e:
+        raise HTTPException(
+                status_code=422,
+                detail=f"Validation error: {e.errors()[0]}"
+            )
+
     return await employee._create_project(session=db, body=body,image=f'projects/{imagefile_name}')
 
-@emp_router.delete('/delete-created-project')
+@emp_router.delete('/project')
 async def delete_created_project(project_id:int, db:AsyncSession = Depends(session.get_db),
                                  current_user:models.Employees=Depends(get_current_user_from_token)):
     return await employee._delete_created_project(session=db, project_id=project_id)
 
-@emp_router.patch('/update-created-proejct', response_model=schemas.ShowProject)
-async def update_created_project(projec_id:int,
-                                name: str = Form(...),
-                                start_date: datetime = Form(...),
-                                end_date: datetime = Form(...),
-                                progemmer_list: list[str] = Form(...),
-                                price: str = Form(...),
+@emp_router.patch('/project', response_model=schemas.ShowProject)
+async def update_created_project(project_id:int,
+                                name: str = Form(examples=['Google']),
+                                start_date: datetime = Form(examples=[date(2024,1,1)]),
+                                end_date: datetime = Form(examples=[date(2024,1,1)]),
+                                progemmer_list: list[str] = Form(examples=[["1","2"]]),
+                                price: str = Form("1000000"),
                                 image: Optional[UploadFile|None] = File(default=None),
                                 db:AsyncSession = Depends(session.get_db),
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
@@ -209,56 +215,34 @@ async def update_created_project(projec_id:int,
         except Exception as e:
                 raise HTTPException(status_code=500, detail="Error saving the file.")
     image_filename = None
-        
-    body = schemas.UpdateProject(
-        name=name,
-        start_date=start_date,
-        end_date=end_date,
-        programmers=programmer_ids,
-        price=price
-    )
-    return await employee._update_created_project(session=db,project_id=projec_id, body=body,image=f'project/{image_filename}')
+    try:
+        body = schemas.UpdateProject(
+            name=name,
+            start_date=start_date,
+            end_date=end_date,
+            programmers=programmer_ids,
+            price=price
+        )
+        return await employee._update_created_project(session=db,project_id=project_id, body=body,image=f'project/{image_filename}')
+    except ValidationError as e:
+        raise HTTPException(
+            status_code=422,
+            detail=f'Error occured:{e.errors()}'
+        )
 
-@emp_router.patch('/update-proejct-status')
+@emp_router.patch('/project-status')
 async def update_project_status(project_id:int, status:str, db:AsyncSession = Depends(session.get_db),
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
     return await employee._update_status_project(session=db, project_id=project_id, status=status)
 
-@emp_router.post('/create_operator', response_model=schemas.ShowOperator)
-async def create_new_operator(body:schemas.CreateOperator, db:AsyncSession = Depends(session.get_db),
-                              current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await employee._create_new_operatoe(session=db, body=body)
-
-@emp_router.get('/list-operator', response_model=Page[schemas.ShowOperator])
-async def get_all_operators(oper_type_id:Optional[int]=None, status:Optional[str]=None, db:AsyncSession = Depends(session.get_db),
-                            current_user:models.Employees=Depends(get_current_user_from_token)):
-    operator_list = await employee._get_all_operators(operator_type_id=oper_type_id, session=db, status=status)
-    return paginate(operator_list)
-
-@emp_router.post('/change-status-operator')
-async def change_operator_status(oper_id:int, status:str, db:AsyncSession = Depends(session.get_db),
-                                 current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await employee._change_operator_status(oper_id=oper_id,status=status, session=db)
-
-@emp_router.patch('/update-operator')
-async def update_operator(oper_id:int, update_params:schemas.UpdateOperator, db:AsyncSession=Depends(session.get_db),
-                          current_user:models.Employees=Depends(get_current_user_from_token)):
-    body = update_params.model_dump(exclude_none=True)
-    return await employee._update_operator(oper_id=oper_id,
-                                           body=body, session=db)
-
-@emp_router.delete('/delete-operator')
-async def delete_operator(oper_id:int, db:AsyncSession=Depends(session.get_db),
-                          current_user:models.Employees=Depends(get_current_user_from_token)):
-    return await employee._delete_oper_by_id(oper_id=oper_id, session=db)
-
-@emp_router.get('/position-list', response_model=List[schemas.ShowPosition])
+@emp_router.get('/position', response_model=List[schemas.ShowPosition])
 async def get_list_positions(db:AsyncSession = Depends(session.get_db),
-                             current_user:models.Employees=Depends(get_current_user_from_token)):
+                             current_user:models.Employees=Depends(get_current_user_from_token)
+                            ):
     return await employee._get_list_position(session=db)
 
-@emp_router.post('/create_position',response_model=schemas.ShowPosition)
+@emp_router.post('/position',response_model=schemas.ShowPosition)
 async def create_position(name:str, db:AsyncSession = Depends(session.get_db),
                           current_user:models.Employees=Depends(get_current_user_from_token)):
     return await employee._create_position(session=db, name=name)
-   
+

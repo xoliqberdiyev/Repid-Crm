@@ -1,13 +1,9 @@
-from fastapi import UploadFile, File, HTTPException
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
 
-from typing import Optional
 from database import schemas
-from datetime import datetime
 from dals import user_dal
-
-import os
 
 UPLOAD_USER = "uploads"
 UPLOAD_PROJETC='projects'
@@ -47,7 +43,7 @@ async def _create_new_employee(body: schemas.EmployeeCreate,
                 username=new_employee.username,
                 salary=new_employee.salary,
                 user_type=new_employee.user_type,
-                image=f"{UPLOAD_USER}/{new_employee.image}",
+                image=f"https://crmm.repid.uz/media//{new_employee.image}" if new_employee.image else None,
                 is_active=new_employee.is_active,
             )
     except SQLAlchemyError as e:
@@ -72,7 +68,7 @@ async def _get_all_employee(session:AsyncSession,
                     position=user.position.name,
                     salary=user.salary,
                     user_type=user.user_type,
-                    image=f"{UPLOAD_USER}/{user.image}",
+                    image=f"https://crmm.repid.uz/media/uploads/{user.image}" if user.image else None,
                     is_active=user.is_active
                 )
                 for user in all_users
@@ -101,7 +97,9 @@ async def _create_project(session:AsyncSession,
                 status=new_project.status,
                 price=new_project.price,
                 image=new_project.image,
-                programmers=[schemas.ProgrammerSchema.model_validate(programmer) for programmer in programmers]
+                programmers=[schemas.ProgrammerSchema(id=programmer.id,
+                                                      first_name=programmer.first_name,
+                                                      last_name=programmer.last_name) for programmer in programmers]
             )
         except SQLAlchemyError as e:
             raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
@@ -178,69 +176,106 @@ async def _get_detail_employee(user_id:int,
             )
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
-
-async def _create_new_operatoe(session:AsyncSession, 
-                               body:schemas.CreateOperator):
-    try:
-        async with session.begin():
-            emp_dal = user_dal.EmployeeDal(session)
-            oper_user = await emp_dal.create_operator(
-                full_name=body.full_name,
-                phone_number=body.phone_number,
-                description=body.description,
-                operator_type_id=body.operator_type_id
-            )
-            operator = await emp_dal.get_operator_type_by_id(oper_user.operator_type_id)
-
-            return schemas.ShowOperator(
-                id=oper_user.id,
-                full_name=oper_user.full_name,
-                phone_number=oper_user.phone_number,
-                description=oper_user.description,
-                operator_type_id= oper_user.operator_type_id,
-                operator_type=operator,
-                status=oper_user.status
-            )
-    except SQLAlchemyError as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
-
-async def _get_all_operators(session:AsyncSession,
-                                operator_type_id:int,
-                                status:str):
-    try:
-        async with session.begin():
-            emp_user = user_dal.EmployeeDal(session)
-            operator_all = await emp_user.get_all_operator(oper_type_id=operator_type_id,status=status)
-
-            return [
-                schemas.ShowOperator(
-                    id = oper_user.id,
-                    full_name= oper_user.full_name,
-                    phone_number = oper_user.phone_number,
-                    description = oper_user.description,
-                    operator_type_id = oper_user.operator_type_id,
-                    operator_type = oper_user.operator_type.name,
-                    status =  oper_user.status,
-                    )
-                    for oper_user in operator_all 
-            ]
-    except SQLAlchemyError as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
     
-async def _change_operator_status(session:AsyncSession,
-                                  oper_id:int,
-                                  status:str):
+async def _get_phone_number(session:AsyncSession, phone_number:str):
+    async with session.begin():
+        emp_dal = user_dal.EmployeeDal(session)
+
+        user_phone_number = await emp_dal.get_user_phone_number(phone_number=phone_number)
+
+        if user_phone_number is None:
+            return False
+        return user_phone_number
+        
+async def _get_list_position(session:AsyncSession):
+    async with session.begin():
+        emp_dal = user_dal.EmployeeDal(session)
+        list_positions = await emp_dal.get_list_position()
+
+        return [
+            schemas.ShowPosition(
+                id=position.id,
+                name=position.name
+            )
+            for position in list_positions
+        ]
+    
+async def _change_user_password(sesion:AsyncSession, user_id:int, new_password:str):
+    async with sesion.begin():
+        com_dal = user_dal.EmployeeDal(sesion)
+
+        new_user_password = await com_dal.change_password(user_id=user_id, new_password=new_password)
+
+        if new_user_password is not None:
+            return {'message':"User password changes successfully"}
+ 
+async def _create_position(session:AsyncSession, name:str):
+    async with session.begin():
+        emp_dal = user_dal.EmployeeDal(session)
+        position = await emp_dal.create_position(name=name)
+
+        return schemas.ShowPosition(
+            id=position.id,
+            name=position.name
+        )
+    
+async def _update_employee_detail(user_id:int, session:AsyncSession, body:schemas.UpdateEmployeeDetail,
+                                  image:str):
+        try:
+            emp_dal = user_dal.EmployeeDal(session)
+
+            # Create a new employee via DAL
+            new_employee = await emp_dal.update_employee(
+                first_name=body.first_name,
+                last_name=body.last_name,
+                phone_number=body.phone_number,
+                date_of_jobstarted=body.date_of_jobstarted,
+                date_of_birth=body.date_of_birth,
+                username=body.username,
+                salary=body.salary,
+                image=image,
+                user_id=user_id,
+                position_id=body.position_id,
+                is_active=body.is_active,
+                password=body.password,
+            )
+
+            # Return the employee details
+            return schemas.ShowEmployee(
+                id=new_employee.id,
+                last_name=new_employee.last_name,
+                first_name=new_employee.first_name,
+                phone_number=new_employee.phone_number,
+                date_of_birth=new_employee.date_of_birth,
+                position=new_employee.position.name,
+                date_of_jobstarted=new_employee.date_of_jobstarted,
+                username=new_employee.username,
+                salary=new_employee.salary,
+                user_type=new_employee.user_type,
+                image=f"https://crmm.repid.uz/media/uploads/{new_employee.image}" if new_employee.image else None,
+                is_active=new_employee.is_active
+            )
+        except SQLAlchemyError as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+    
+async def _delete_employee(session:AsyncSession, user_id:int):
     try:
         async with session.begin():
-            dal_user = user_dal.EmployeeDal(session)
-            change_status = await dal_user.change_operator_status(oper_id=oper_id,
-                                                                status=status)
-            if change_status:
-                return {'success':True,
-                        'message':'Muvafaqiyatli ozgartirildi'}
-            
-            return {'success':False,
-                        'message':'Muvafaqiyatli ozgartirildi'}
+            empl_dal = user_dal.EmployeeDal(session)
+
+            delelted_user = await empl_dal.delete_employee(user_id=user_id)
+
+            return {'success':True} if delelted_user else {'success':False}
+    except SQLAlchemyError as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+
+async def _get_image_by_user(session:AsyncSession, user_id:int):
+    try:
+        emp_dal = user_dal.EmployeeDal(session)
+
+        user_image = await emp_dal.get_employee_image(user_id=user_id)
+
+        return user_image
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
@@ -293,133 +328,3 @@ async def _update_status_project(session:AsyncSession, project_id:int, status:st
                     'status':project_status.status}
         return {'success':False,
                     'message':'Error occured'}
-    
-async def _get_phone_number(session:AsyncSession, phone_number:str):
-    async with session.begin():
-        emp_dal = user_dal.EmployeeDal(session)
-
-        user_phone_number = await emp_dal.get_user_phone_number(phone_number=phone_number)
-
-        if user_phone_number is None:
-            return False
-        return user_phone_number
-        
-async def _get_list_position(session:AsyncSession):
-    async with session.begin():
-        emp_dal = user_dal.EmployeeDal(session)
-        list_positions = await emp_dal.get_list_position()
-
-        return [
-            schemas.ShowPosition(
-                id=position.id,
-                name=position.name
-            )
-            for position in list_positions
-        ]
-    
-async def _change_user_password(sesion:AsyncSession, user_id:int, new_password:str):
-    async with sesion.begin():
-        com_dal = user_dal.EmployeeDal(sesion)
-
-        new_user_password = await com_dal.change_password(user_id=user_id, new_password=new_password)
-
-        if new_user_password is not None:
-            return {'message':"User password changes successfully"}
-
-    
-async def _create_position(session:AsyncSession, name:str):
-    async with session.begin():
-        emp_dal = user_dal.EmployeeDal(session)
-        position = await emp_dal.create_position(name=name)
-
-        return schemas.ShowPosition(
-            id=position.id,
-            name=position.name
-        )
-    
-async def _update_employee_detail(user_id:int, session:AsyncSession, body:schemas.UpdateEmployeeDetail,
-                                  image:str):
-        try:
-            emp_dal = user_dal.EmployeeDal(session)
-
-            # Create a new employee via DAL
-            new_employee = await emp_dal.update_employee(
-                first_name=body.first_name,
-                last_name=body.last_name,
-                phone_number=body.phone_number,
-                date_of_jobstarted=body.date_of_jobstarted,
-                date_of_birth=body.date_of_birth,
-                username=body.username,
-                salary=body.salary,
-                image=image,
-                user_id=user_id,
-                position_id=body.position_id,
-                is_active=body.is_active
-            )
-
-            # Return the employee details
-            return schemas.ShowEmployee(
-                id=new_employee.id,
-                last_name=new_employee.last_name,
-                first_name=new_employee.first_name,
-                phone_number=new_employee.phone_number,
-                date_of_birth=new_employee.date_of_birth,
-                position=new_employee.position.name,
-                date_of_jobstarted=new_employee.date_of_jobstarted,
-                username=new_employee.username,
-                salary=new_employee.salary,
-                user_type=new_employee.user_type,
-                image=f"{UPLOAD_USER}/{new_employee.image}",
-                is_active=new_employee.is_active
-            )
-        except SQLAlchemyError as e:
-            raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
-    
-async def _delete_employee(session:AsyncSession, user_id:int):
-    try:
-        async with session.begin():
-            empl_dal = user_dal.EmployeeDal(session)
-
-            delelted_user = await empl_dal.delete_employee(user_id=user_id)
-
-            return {'success':True} if delelted_user else {'success':False}
-    except SQLAlchemyError as e:
-            raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
-
-async def _update_operator(session:AsyncSession, oper_id:int, body:dict):
-    try:
-        emp_dal = user_dal.EmployeeDal(session)
-
-        update_oper = await emp_dal.update_operator_by_type(oper_id=oper_id, **body)
-
-        return schemas.ShowOperator(
-                id = update_oper.id,
-                full_name= update_oper.full_name,
-                phone_number = update_oper.phone_number,
-                description = update_oper.description,
-                operator_type_id = update_oper.operator_type_id,
-                operator_type = update_oper.operator_type.name,
-                status =  update_oper.status,
-                )
-    except SQLAlchemyError as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
-
-async def _delete_oper_by_id(session:AsyncSession, oper_id:int):
-    try:
-        empl_dal = user_dal.EmployeeDal(session)
-
-        delete_user = await empl_dal.delete_operator_by_type(oper_id=oper_id)
-
-        return {'success':True} if delete_user else {'success':False}
-    except SQLAlchemyError as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
-
-async def _get_image_by_user(session:AsyncSession, user_id:int):
-    try:
-        emp_dal = user_dal.EmployeeDal(session)
-
-        user_image = await emp_dal.get_employee_image(user_id=user_id)
-
-        return user_image
-    except SQLAlchemyError as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")

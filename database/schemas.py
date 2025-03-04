@@ -1,24 +1,20 @@
-from datetime import datetime
-from typing import Optional, List,Generic, TypeVar
-from fastapi import HTTPException
+from datetime import datetime, date
+from typing import Optional, List
 
-from pydantic import BaseModel, constr, field_validator, Field, model_validator
+from pydantic import BaseModel, field_validator, Field, model_validator, ValidationError
 from utils import security
 
 
 class EmployeeCreate(BaseModel):
-    last_name:str|None
-    first_name:str|None
-    phone_number:str
+    last_name:str|None=Field(examples=["Kimdir"])
+    first_name:str|None=Field(examples=["Nimadir"])
+    phone_number:str=Field(examples=["+998949234565"])
     date_of_birth:Optional[datetime|None]=None
-    date_of_jobstarted:datetime
-    salary:int = Field(ge=0)
-    username:str
-    position_id:int
-    password:str
-
-    class Config:
-        orm_format = True
+    date_of_jobstarted:datetime=Field(examples=['2025-01-01'])
+    salary:int = Field(ge=0,examples=[100000])
+    username:str=Field(examples=["just_boy"])
+    position_id:int=Field(examples=[1])
+    password:str=Field(examples=["superhard"])
 
     @field_validator('phone_number', mode='before')
     @classmethod
@@ -49,8 +45,28 @@ class ShowEmployee(BaseModel):
     position:str
     is_active:bool
 
-    class Config:
-        orm_format = True
+    model_config = {
+        "json_schema_extra": {
+            "example": [
+            {
+                "id":1,
+                "last_name": "KImdir",
+                "first_name": "Nimadir",
+                "phone_number": "+998901234567",
+                "date_of_birth": "2000-01-01",
+                "date_of_jobstarted": "2024-01-01",
+                "salary": 30000,
+                "username": "kachokboy",
+                "position_id": 1,
+                "password": "securepassword",
+                "position":True,
+                "image":"https://repid-crm.vercel.app/repid.jpg",
+                "user_type":"Custom",
+
+            }
+            ]
+        }
+    }
 
 class Token(BaseModel):
     access_token:str
@@ -64,15 +80,47 @@ class CreateProject(BaseModel):
     programmer_ids:List[int]
     price:str
 
+    @field_validator('price',mode='before' )
+    @classmethod
+    def check_price_validate(cls, price):
+        if not price.isdigit():
+            return ValueError('Phone number is not valid form, please be sure')
+        return price
+    
+    @model_validator(mode='before')
+    @classmethod
+    def check_start_end_dates(cls, values):
+        start_date = values.get("start_date")
+        end_date = values.get("end_date")
+
+        if start_date and end_date and start_date >= end_date:
+            raise ValueError('Start date must be less than end date')
+
+        return values
+
+
 
 class ProgrammerSchema(BaseModel):
     id: int
     first_name: str
-    image: str|None=None
     last_name: str
+    image: str|None=None
 
     class Config:
         from_attributes = True
+    
+        model_config = {
+            "json_schema_extra": {
+                "example": [
+                {
+                    'id':1,
+                    'first_name':"Shahzod",
+                    'last_name':"Abdashev",
+                    'image':"https://repid-crm.vercel.app/repid.jpg",
+                }
+                ]
+            }
+        }
 
 
 class ShowProject(BaseModel):
@@ -81,12 +129,37 @@ class ShowProject(BaseModel):
     start_date: datetime
     end_date: datetime
     image: str
-    programmers: List[ProgrammerSchema]
     status:str
     price:str | None
+    programmers: List[ProgrammerSchema]
 
     class Config:
         from_attributes = True
+
+        model_config = {
+        "json_schema_extra": {
+            "example": [
+            {
+                "id":1,
+                "name": "OnePC",
+                "start_date":date(2024,1,1),
+                "end_date":date(2024,1,1),
+                "image":"Fuck no image",
+                "status":"to_do",
+                "price":'100000',
+                "programmers":{
+                    'id':1,
+                    'first_name':"Shahzod",
+                    'last_name':"Abdashev",
+                    'image':"https://repid-crm.vercel.app/repid.jpg",
+                }
+            }
+            ]
+        }
+    }
+
+
+    
 
 class UpdateProject(BaseModel):
     name: str
@@ -94,6 +167,24 @@ class UpdateProject(BaseModel):
     end_date: datetime
     programmers: List[int]
     price:str | None
+
+    @field_validator('price',mode='before' )
+    @classmethod
+    def check_price_validate(cls, price):
+        if not price.isdigit():
+            raise ValueError('Phone number is not valid form, please be sure')
+        return price
+    
+    @model_validator(mode='before')
+    @classmethod
+    def check_start_end_dates(cls, values):
+        start_date = values.get("start_date")
+        end_date = values.get("end_date")
+
+        if start_date and end_date and start_date >= end_date:
+            raise ValueError('Start date must be less than end date')
+
+        return values
 
     class Config:
         from_attributes = True
@@ -111,7 +202,7 @@ class ShowEmployeeDetail(BaseModel):
     salary: int
     user_type: str
     image: Optional[str] = None
-    projects: List[ShowProject] = []
+    projects: List[ShowProject] 
 
     class Config:
         from_attributes = True
@@ -122,6 +213,13 @@ class CreateOperator(BaseModel):
     phone_number:str
     description:str
     operator_type_id:int
+
+    @field_validator('phone_number', mode='before')
+    @classmethod
+    def check_phone_number_validate(cls, phone_number):
+        if not security.is_valid_phone_number(phone_number):
+            return ValueError('Phone number is not valid form, please be sure')
+        return phone_number
 
 
 class ShowOperator(BaseModel):
@@ -154,6 +252,7 @@ class CreateExpectedValue(BaseModel):
     type:str
     price:int
 
+
 class UpdateExpectedValue(BaseModel):
     name:Optional[str] = None
     date:Optional[datetime] = None
@@ -169,6 +268,17 @@ class CreateNewTask(BaseModel):
     description:str
     status:str
 
+    @model_validator(mode='before')
+    @classmethod
+    def check_start_end_validation(cls, values):
+        start_date = values.get('start_date')
+        end_date = values.get('end_date')
+
+        if start_date > end_date:
+            raise ValueError('Start date must be less than end date')
+        
+        return values
+    
 class ShowNewTask(BaseModel):
     id:int
     name:str
@@ -185,6 +295,16 @@ class UpdateNewTask(BaseModel):
     end_date:Optional[datetime] = None
     programmer_ids:List[int]
     description:Optional[str] = None
+
+    @model_validator(mode='before')
+    @classmethod
+    def check_start_end_validation(cls, value):
+        start_date = value.get('start_date')
+        end_date = value.get('end_date')
+
+        if start_date > end_date:
+            return ValidationError('Please enter valid start and end date')
+        return value
 
 class ShowPosition(BaseModel):
     id:int
@@ -206,6 +326,16 @@ class CreateIncomeStudent(BaseModel):
     description:str
     position:str
 
+    @model_validator(mode='before')
+    @classmethod
+    def check_price_validation(cls, value):
+        real_price = value.get('real_price')
+        pay_price = value.get('pay_price')
+        if not real_price.is_digit() or not pay_price.isdigit():
+            return 'Please enter valid int for price field'
+        elif real_price == None:
+            pass
+        return value
 
 class CreateIncomeProject(BaseModel):
     pay_price:str
@@ -257,6 +387,7 @@ class UpdateEmployeeDetail(BaseModel):
     phone_number:Optional[str]=None
     date_of_jobstarted:Optional[datetime]=None
     position_id:Optional[int]=None
+    password:Optional[str]=None
     is_active:bool
 
 class UpdateOperator(BaseModel):
@@ -272,6 +403,20 @@ class CreateNewExpence(BaseModel):
     date_paied:datetime
     from_whom:str
     type:str
+
+    model_config = {
+        "json_schema_extra": {
+            "example": 
+            {
+                "name":"Komputer",
+                "price_paid":"100000",
+                "description":"Someting",
+                "date_paied":date(2024,1,1),
+                'from_whom':"oybek",
+                "type":"for_office"
+                }
+        }
+    }
 
 class ShowExpenseType(BaseModel):
     id:int
@@ -304,6 +449,13 @@ class CreatingExepnseEmployee(BaseModel):
     price_paied:str
     date_paid:datetime
 
+    @field_validator('price_paied', mode='before')
+    @classmethod
+    def check_price_validation(cls,price_paied):
+        if not price_paied.isdigit():
+            raise ValueError('Price must be as int, enter valid one')
+        return price_paied
+
 class ShowExpenseEmployee(BaseModel):
     id:int
     pay_paied:str
@@ -327,6 +479,15 @@ class UpdateExpenseByType(BaseModel):
     type:str
     from_whom:str|None = None
 
+    @field_validator('price_paid', mode='before')
+    @classmethod
+    def check_price_validation(cls, price_paid):
+        if price_paid is None:
+            pass
+        elif price_paid.isdigit():
+            raise ValueError('Price must be as integer')
+        return price_paid
+
 class BaseFilterProject(BaseModel):
     start_date:datetime=None
     end_date:datetime=None
@@ -347,9 +508,27 @@ class UpdateExpenseSalary(BaseModel):
     price_paid:str|None=None
     user_id:int|None=None
     date_paid:datetime|None=None
+
+    @field_validator('price_paid', mode='before')
+    @classmethod
+    def check_price_validation(cls, price_paid):
+        if price_paid is None:
+            pass
+        elif price_paid.isdigit():
+            raise ValueError('Price must be as integer')
+        return price_paid
     
 class UpdateIncomeProject(BaseModel):
     pay_price:str|None=None
     project_id:int|None=None
     description:str|None=None
     date_paid:datetime|None=None
+
+    @field_validator('pay_price', mode='before')
+    @classmethod
+    def check_price_validation(cls, pay_price):
+        if pay_price is None:
+            pass
+        elif pay_price.isdigit():
+            raise ValueError('Price must be as integer')
+        return pay_price

@@ -1,4 +1,4 @@
-from fastapi import UploadFile, File, HTTPException
+from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -89,10 +89,17 @@ async def _update_expected_value(session:AsyncSession,expected_avl_id:int, body:
             update_val = await com_dal.update_expected_val(expected_avl_id=expected_avl_id, **body)
 
             if update_val:
-                return {'succes':True,
-                        'message':"Updated successfully"}
+                return schemas.ShowExpectedValue(
+                    id=update_val.id,
+                    name=update_val.name,
+                    date=update_val.date,
+                    description=update_val.description,
+                    type=update_val.type,
+                    price=update_val.price
+                )
             return {'succes':False,
-                        'message':"Error occured"}
+                        'message':"Product not found"}
+        
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
     

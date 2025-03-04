@@ -2,10 +2,9 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import select, update, delete, and_, func, case, cast, BigInteger, extract, or_ ,desc, asc
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy.orm import selectinload
 
 from database import models, schemas
-
 
 
 class IncomeExepnseDal:
@@ -243,9 +242,22 @@ class IncomeExepnseDal:
 
         result = await self.db_session.execute(query)
         updated_expense = result.fetchone()  
+        returnigng_query = (select(models.ExpenseData)
+                .join(models.Employees)  # Ensure Employees is joined correctly
+                .join(models.Position)  # Ensure Position is joined correctly
+                .where(
+                    and_(
+                        models.ExpenseData.type == 'employee_salary',
+                    )
+                )
+                .options(
+                    selectinload(models.ExpenseData.employee_salary),  # From root entity
+                    selectinload(models.ExpenseData.employee_salary).selectinload(models.Employees.position)  # Nested relationship
+                ))
         
         await self.db_session.commit()
-        return updated_expense
+        result = await self.db_session.execute(returnigng_query)
+        return result.scalar_one_or_none()
 
     async def get_list_expense_employee(self,start_date, end_date,order):
         query = (
@@ -255,7 +267,6 @@ class IncomeExepnseDal:
                 .where(
                     and_(
                         models.ExpenseData.type == 'employee_salary',
-                        models.Employees.is_active == True,
                     )
                 )
                 .options(

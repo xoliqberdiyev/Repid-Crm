@@ -82,7 +82,7 @@ class Employees(Base):
     phone_number: Mapped[str|None] = mapped_column(String(50), default=None)
     date_of_birth: Mapped[datetime.datetime | None]
     date_of_jobstarted: Mapped[datetime.datetime | None]
-    position_id: Mapped[int] = mapped_column(ForeignKey('positions.id',ondelete='CASCADE'))
+    position_id: Mapped[int|None] = mapped_column(ForeignKey('positions.id',ondelete='CASCADE'))
     image: Mapped[str | None] = mapped_column(String,index=True)
     salary: Mapped[int | None] = mapped_column(BigInteger)
     user_type: Mapped[UserType] = mapped_column(Enum(UserType), default=UserType.custom)

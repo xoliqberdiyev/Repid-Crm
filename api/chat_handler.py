@@ -1,12 +1,7 @@
-import json
-
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends,  Query, HTTPException
 from websocket.manager import ConnectionManager 
 from utils.settings import SECRET_KEY, ALGORITHM
 from jose import jwt, JWTError
-from database import session
-from sqlalchemy.ext.asyncio import AsyncSession
-from dals import common_dal
 
 from typing import Optional
 
@@ -27,20 +22,19 @@ async def get_current_user_from_token(
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")  # Get the user from the token
+        username: str = payload.get("sub")
         if username is None:
             raise HTTPException(status_code=400, detail="Invalid token")
         return username
     except JWTError:
         raise HTTPException(status_code=400, detail="Invalid token")
     
-
 @chat_handler.websocket('/ws/{room_id}')
 async def websocket_endpoint(
     websocket: WebSocket, 
     room_id: str, 
-    username: str = Depends(get_current_user_from_token)
-):
+    username: str = Depends(get_current_user_from_token)):
+
     await manager.connect(websocket, room_id, username)
     try:
         while True:

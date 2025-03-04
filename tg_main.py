@@ -1,17 +1,15 @@
 import asyncio
 import logging
 import sys
-from os import getenv
 import random
 
-from aiogram import Bot, Dispatcher, html, F
+from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
-from sqlalchemy.ext.asyncio import AsyncSession
 import redis.asyncio as redis
 
 redis_client = redis.Redis(host="localhost", port=6379, decode_responses=True)
@@ -22,8 +20,6 @@ from database import session as syc
 TOKEN = "8180671290:AAEbM5zZp7W_tTZrllAaN0TW3YQI-gY9Tjw"
 
 dp = Dispatcher()
-
-
 
 class ForgotPasswordState(StatesGroup):
     waiting_for_phone = State()

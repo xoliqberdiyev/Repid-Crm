@@ -1,11 +1,7 @@
 import asyncio
 
-from datetime import datetime
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, and_, delete, or_, func, cast, BigInteger
-from sqlalchemy.orm import joinedload
-
 from database import models, schemas
 
 
@@ -54,14 +50,12 @@ class CommonDal:
         return False
         
     async def update_expected_val(self, expected_avl_id:int, **kwargs):
-        query = update(models.ExcpectedValue).where(models.ExcpectedValue.id == expected_avl_id).values(kwargs)
+        query = update(models.ExcpectedValue).where(models.ExcpectedValue.id == expected_avl_id).values(kwargs).returning(models.ExcpectedValue)
 
         res = await self.db_session.execute(query)
         await self.db_session.commit()
 
-        if res.rowcount > 0:
-            return True
-        return False
+        return res.scalar_one_or_none()
     
     async def get_programmers_by_task_id(self,task_id):
         result = await self.db_session.execute(
