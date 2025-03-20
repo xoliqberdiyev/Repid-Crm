@@ -97,3 +97,4 @@ async def get_line_graph_expense(month:Optional[int|None]=None, year:Optional[in
 async def get_line_graph_income(year:Optional[int|None]=None, db:AsyncSession=Depends(session.get_db),
                                 current_user:models.Employees=Depends(get_current_user_from_token)):
     return await income_action._get_line_graph_year_income(year=year, session=db)
+    

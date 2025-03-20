@@ -254,10 +254,5 @@ async def _get_line_graph_year_income(year:int,session:AsyncSession):
         in_ex_dal = income_dal.IncomeDal(session)
 
         line_graph = await in_ex_dal.line_graph_year_income(year=year)
-
-        monthly_data = {
-            month: total_real_price
-            for month, total_real_price in line_graph
-        }
-
-        return monthly_data
+        
+        return line_graph

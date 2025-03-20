@@ -207,11 +207,15 @@ class IncomeDal:
             start_date = datetime(year, 1, 1)
             end_date = datetime(year, 12, 31)
 
-        months_order = [(current_month - 1 + i) % 12 + 1 for i in range(13)]
+        print(f"Fetching data from {start_date} to {end_date}")  # Debugging print
 
+        # Create months order: last month → this month last year
+        months_order = [((current_month - 1 + i) % 12 + 1) for i in range(13)]
+        print(months_order)
         # Initialize dictionary with zero values
         months_dict = {month: 0 for month in months_order}
-
+        print(months_dict)
+        # Fetch data from DB
         result = await self.db_session.execute(
             select(
                 extract('month', models.IncomeData.date_paied).label('month'),
@@ -219,17 +223,18 @@ class IncomeDal:
             )
             .where(models.IncomeData.date_paied.between(start_date, end_date))
             .group_by(extract('month', models.IncomeData.date_paied))
-            .order_by(extract('month', models.IncomeData.date_paied))
+            # .order_by(extract('month', models.IncomeData.date_paied))
         )
 
         fetched_data = result.fetchall()
-        print("Fetched Data:", fetched_data) 
+        print("Fetched Data:", fetched_data)  # Debugging print
 
+        # Update dictionary with actual values
         for row in fetched_data:
-            months_dict[int(row.month)] = row.total_real_price
+            print(f"Updating month {int(row.month)} with value {row.total_real_price}")  # Debugging print
+            months_dict[row.month] = row.total_real_price
 
-        sorted_result = [(month, months_dict[month]) for month in months_order]
-        return sorted_result    
+        return {month:months_dict[month] for month in months_order}
     
     async def get_only_income(self,start_date, end_date):
         thirty_days_ago = datetime.utcnow() - timedelta(days=30)  # Get the date 30 days ago

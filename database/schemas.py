@@ -326,16 +326,16 @@ class CreateIncomeStudent(BaseModel):
     description:str
     position:str
 
-    @model_validator(mode='before')
-    @classmethod
-    def check_price_validation(cls, value):
-        real_price = value.get('real_price')
-        pay_price = value.get('pay_price')
-        if not real_price.isdigit() or not pay_price.isdigit():
-            return 'Please enter valid int for price field'
-        elif real_price == None:
-            pass
-        return value
+    # @model_validator(mode='before')
+    # @classmethod
+    # def check_price_validation(cls, value):
+    #     real_price = value.get('real_price')
+    #     pay_price = value.get('pay_price')
+    #     if not real_price.isdigit() or not pay_price.isdigit():
+    #         return 'Please enter valid int for price field'
+    #     elif real_price == None:
+    #         pass
+    #     return value
 
 class CreateIncomeProject(BaseModel):
     pay_price:str
