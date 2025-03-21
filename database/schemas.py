@@ -509,14 +509,14 @@ class UpdateExpenseSalary(BaseModel):
     user_id:int|None=None
     date_paid:datetime|None=None
 
-    @field_validator('price_paid', mode='before')
-    @classmethod
-    def check_price_validation(cls, price_paid):
-        if price_paid is None:
-            pass
-        elif price_paid.isdigit():
-            raise ValueError('Price must be as integer')
-        return price_paid
+    # @field_validator('price_paid', mode='before')
+    # @classmethod
+    # def check_price_validation(cls, price_paid):
+    #     if price_paid is None:
+    #         pass
+    #     elif price_paid.isdigit():
+    #         raise ValueError('Price must be as integer')
+    #     return price_paid
     
 class UpdateIncomeProject(BaseModel):
     pay_price:str|None=None

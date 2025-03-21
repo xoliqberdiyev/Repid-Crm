@@ -16,7 +16,8 @@ class EmployeeDal:
 
     async def get_all_employee(self, position_id):
         query = select(models.Employees).join(models.Position).where( 
-                                                                     models.Employees.user_type!=models.UserType.super_admin).options(
+                                                                     models.Employees.user_type!=models.UserType.super_admin,
+                                                                     models.Employees.is_active == True).options(
                         selectinload(models.Employees.position))
         if position_id:
             query = select(models.Employees).join(models.Position).where(and_(

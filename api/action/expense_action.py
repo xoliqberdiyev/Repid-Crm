@@ -128,7 +128,6 @@ async def _create_expense_employee(body:schemas.CreatingExepnseEmployee, session
     
 async def _update_expense_employee(body:dict,session:AsyncSession,income_employee_id:int):
     try:
-        async with session.begin():
             in_ex_dal = income_expense_dal.IncomeExepnseDal(session)
 
             update_expense_employee = await in_ex_dal.update_expense_employee(body,income_employee_id)

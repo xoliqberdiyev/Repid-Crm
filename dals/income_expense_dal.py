@@ -655,8 +655,12 @@ class IncomeExepnseDal:
                 extract('month', models.Project.start_date).label('month'),
                 func.count().label('count_project')
             )
-            .where(and_(models.Project.status==models.StatusProject.done, models.Project.is_deleted==False))
-            .group_by(extract('month', models.Project.start_date))
+            .where(
+                and_(models.Project.status==models.StatusProject.done, models.Project.is_deleted==False),
+                
+                )
+            .group_by(extract('month', models.Project.start_date),
+                    extract('year', models.Project.start_date))
             .order_by(extract('month', models.Project.start_date))
         )
         for row in resutl.fetchall():
