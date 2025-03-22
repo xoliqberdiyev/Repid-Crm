@@ -22,7 +22,7 @@ class StatusProject(str, enum.Enum):
     cancel = 'cancel'
 
 class StatusOperator(str, enum.Enum):
-    empty = '--'
+    empty = 'empty'
     in_progres = 'in_progres'
     done = 'done'
     cancel = 'cancel'
@@ -152,7 +152,7 @@ class Operator(Base):
     full_name: Mapped[str] = mapped_column(String(100))
     phone_number: Mapped[str] = mapped_column(String(100))
     description: Mapped[str]
-    status:Mapped[StatusOperator] = mapped_column(Enum(StatusOperator), default=StatusOperator.empty)
+    status:Mapped[StatusOperator] = mapped_column(Enum(StatusOperator), default=StatusOperator.empty.value)
     operator_type_id: Mapped[int] = mapped_column(ForeignKey('operator_type.id', ondelete='CASCADE'))
 
     operator_type: Mapped['OperatorType'] = relationship(back_populates='operator')
