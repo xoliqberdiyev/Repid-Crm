@@ -248,6 +248,7 @@ class IncomeExepnseDal:
                 .where(
                     and_(
                         models.ExpenseData.type == 'employee_salary',
+                        models.ExpenseData.id==income_employee_id
                     )
                 )
                 .options(
