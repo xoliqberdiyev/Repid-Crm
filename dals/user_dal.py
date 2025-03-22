@@ -22,6 +22,7 @@ class EmployeeDal:
         if position_id:
             query = select(models.Employees).join(models.Position).where(and_(
                                                                             models.Employees.position_id == position_id,
+                                                                            models.Employees.is_active == True,
                                                                             models.Employees.user_type!=models.UserType.super_admin)).options(
                         selectinload(models.Employees.position))
         res = await self.db_session.execute(query)
