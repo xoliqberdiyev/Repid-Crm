@@ -241,7 +241,8 @@ class IncomeExepnseDal:
         ).returning(models.ExpenseData)
 
         result = await self.db_session.execute(query)
-        updated_expense = result.fetchone()  
+        await self.db_session.commit()
+
         returnigng_query = (select(models.ExpenseData)
                 .join(models.Employees)  # Ensure Employees is joined correctly
                 .join(models.Position)  # Ensure Position is joined correctly
