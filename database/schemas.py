@@ -168,23 +168,23 @@ class UpdateProject(BaseModel):
     programmers: List[int]
     price:str | None
 
-    @field_validator('price',mode='before' )
-    @classmethod
-    def check_price_validate(cls, price):
-        if not price.isdigit():
-            raise ValueError('Phone number is not valid form, please be sure')
-        return price
+    # @field_validator('price',mode='before' )
+    # @classmethod
+    # def check_price_validate(cls, price):
+    #     if not price.isdigit():
+    #         raise ValueError('Phone number is not valid form, please be sure')
+    #     return price
     
-    @model_validator(mode='before')
-    @classmethod
-    def check_start_end_dates(cls, values):
-        start_date = values.get("start_date")
-        end_date = values.get("end_date")
+    # @model_validator(mode='before')
+    # @classmethod
+    # def check_start_end_dates(cls, values):
+    #     start_date = values.get("start_date")
+    #     end_date = values.get("end_date")
 
-        if start_date and end_date and start_date >= end_date:
-            raise ValueError('Start date must be less than end date')
+    #     if start_date and end_date and start_date >= end_date:
+    #         raise ValueError('Start date must be less than end date')
 
-        return values
+    #     return values
 
     class Config:
         from_attributes = True
@@ -268,16 +268,16 @@ class CreateNewTask(BaseModel):
     description:str
     status:str
 
-    @model_validator(mode='before')
-    @classmethod
-    def check_start_end_validation(cls, values):
-        start_date = values.get('start_date')
-        end_date = values.get('end_date')
+    # @model_validator(mode='before')
+    # @classmethod
+    # def check_start_end_validation(cls, values):
+    #     start_date = values.get('start_date')
+    #     end_date = values.get('end_date')
 
-        if start_date > end_date:
-            raise ValueError('Start date must be less than end date')
+    #     if start_date > end_date:
+    #         raise ValueError('Start date must be less than end date')
         
-        return values
+    #     return values
     
 class ShowNewTask(BaseModel):
     id:int
@@ -296,15 +296,15 @@ class UpdateNewTask(BaseModel):
     programmer_ids:List[int]
     description:Optional[str] = None
 
-    @model_validator(mode='before')
-    @classmethod
-    def check_start_end_validation(cls, value):
-        start_date = value.get('start_date')
-        end_date = value.get('end_date')
+    # @model_validator(mode='before')
+    # @classmethod
+    # def check_start_end_validation(cls, value):
+    #     start_date = value.get('start_date')
+    #     end_date = value.get('end_date')
 
-        if start_date > end_date:
-            return ValidationError('Please enter valid start and end date')
-        return value
+    #     if start_date > end_date:
+    #         return ValidationError('Please enter valid start and end date')
+    #     return value
 
 class ShowPosition(BaseModel):
     id:int
@@ -449,12 +449,12 @@ class CreatingExepnseEmployee(BaseModel):
     price_paied:str
     date_paid:datetime
 
-    @field_validator('price_paied', mode='before')
-    @classmethod
-    def check_price_validation(cls,price_paied):
-        if not price_paied.isdigit():
-            raise ValueError('Price must be as int, enter valid one')
-        return price_paied
+    # @field_validator('price_paied', mode='before')
+    # @classmethod
+    # def check_price_validation(cls,price_paied):
+    #     if not price_paied.isdigit():
+    #         raise ValueError('Price must be as int, enter valid one')
+    #     return price_paied
 
 class ShowExpenseEmployee(BaseModel):
     id:int
@@ -479,14 +479,14 @@ class UpdateExpenseByType(BaseModel):
     type:str
     from_whom:str|None = None
 
-    @field_validator('price_paid', mode='before')
-    @classmethod
-    def check_price_validation(cls, price_paid):
-        if price_paid is None:
-            pass
-        elif price_paid.isdigit():
-            raise ValueError('Price must be as integer')
-        return price_paid
+    # @field_validator('price_paid', mode='before')
+    # @classmethod
+    # def check_price_validation(cls, price_paid):
+    #     if price_paid is None:
+    #         pass
+    #     elif price_paid.isdigit():
+    #         raise ValueError('Price must be as integer')
+    #     return price_paid
 
 class BaseFilterProject(BaseModel):
     start_date:datetime=None
@@ -524,11 +524,11 @@ class UpdateIncomeProject(BaseModel):
     description:str|None=None
     date_paid:datetime|None=None
 
-    @field_validator('pay_price', mode='before')
-    @classmethod
-    def check_price_validation(cls, pay_price):
-        if pay_price is None:
-            pass
-        elif pay_price.isdigit():
-            raise ValueError('Price must be as integer')
-        return pay_price
+    # @field_validator('pay_price', mode='before')
+    # @classmethod
+    # def check_price_validation(cls, pay_price):
+    #     if pay_price is None:
+    #         pass
+    #     elif pay_price.isdigit():
+    #         raise ValueError('Price must be as integer')
+    #     return pay_price
