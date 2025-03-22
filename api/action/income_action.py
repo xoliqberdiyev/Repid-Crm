@@ -83,9 +83,9 @@ async def _update_income_student(session:AsyncSession, income_student_id:int, bo
                 id=income_student.id,
                 name=income_student.name,
                 real_price=income_student.real_price,
-                pay_price=income_student.real_price,
+                pay_price=income_student.pay_price,
                 description=income_student.description,
-                left_price=int(income_student.real_price) - int(income_student.real_price),
+                left_price=int(income_student.real_price) - int(income_student.pay_price) if income_student.real_price else 0,
                 date_paied=income_student.date_paied,
                 position=income_student.position,
                 type=income_student.type
