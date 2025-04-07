@@ -24,9 +24,9 @@ async def create_new_operator(body:schemas.CreateOperator, db:AsyncSession = Dep
         )
     
 @oper_router.get('', response_model=Page[schemas.ShowOperator])
-async def get_all_operators(oper_type_id:Optional[int]=None, status:Optional[str]=None, db:AsyncSession = Depends(session.get_db),
+async def get_all_operators(oper_type_id:Optional[int]=None, status:Optional[str]=None, db:AsyncSession = Depends(session.get_db), search: Optional[str]=None,
                             current_user:models.Employees=Depends(get_current_user_from_token)):
-    operator_list = await operator._get_all_operators(operator_type_id=oper_type_id, session=db, status=status)
+    operator_list = await operator._get_all_operators(operator_type_id=oper_type_id, session=db, status=status, search=search)
     return paginate(operator_list)
 
 @oper_router.post('/status')

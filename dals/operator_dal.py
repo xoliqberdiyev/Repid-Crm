@@ -3,7 +3,7 @@ from fastapi import HTTPException
 
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, and_, delete
+from sqlalchemy import select, update, and_, delete, or_
 from sqlalchemy.orm import joinedload, selectinload
 
 from database import models, schemas
@@ -39,7 +39,7 @@ class OperatorDal:
         operator_with_type = result.scalar_one()
         return operator_with_type.name
     
-    async def get_all_operator(self, oper_type_id:int,status:str):
+    async def get_all_operator(self, oper_type_id:int,status:str, search:str):
         query = select(models.Operator).join(models.OperatorType).options(joinedload(models.Operator.operator_type))
 
         if oper_type_id and status:
@@ -48,6 +48,8 @@ class OperatorDal:
             query = select(models.Operator).where(models.Operator.operator_type_id == oper_type_id).join(models.OperatorType).options(joinedload(models.Operator.operator_type))
         elif status:
             query = select(models.Operator).where(models.Operator.status == status).join(models.OperatorType).options(joinedload(models.Operator.operator_type))
+        elif search:
+            query = select(models.Operator).where(or_(models.Operator.full_name.ilike(f"%{search}%"), models.Operator.phone_number.ilike(f"%{search}%"))).join(models.OperatorType).options(joinedload(models.Operator.operator_type))
 
         res = await self.db_session.execute(query)
 

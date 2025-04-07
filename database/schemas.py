@@ -214,13 +214,6 @@ class CreateOperator(BaseModel):
     description:str
     operator_type_id:int
 
-    # @field_validator('phone_number', mode='before')
-    # @classmethod
-    # def check_phone_number_validate(cls, phone_number):
-    #     if not security.is_valid_phone_number(phone_number):
-    #         return ValueError('Phone number is not valid form, please be sure')
-    #     return phone_number
-
 
 class ShowOperator(BaseModel):
     id:int

@@ -33,11 +33,11 @@ async def _create_new_operatoe(session:AsyncSession,
 
 async def _get_all_operators(session:AsyncSession,
                                 operator_type_id:int,
-                                status:str):
+                                status:str, search:str):
     try:
         async with session.begin():
             emp_user = OperatorDal(session)
-            operator_all = await emp_user.get_all_operator(oper_type_id=operator_type_id,status=status)
+            operator_all = await emp_user.get_all_operator(oper_type_id=operator_type_id,status=status, search=search)
 
             return [
                 schemas.ShowOperator(
