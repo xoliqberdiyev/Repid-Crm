@@ -51,7 +51,7 @@ class OperatorDal:
         elif search:
             query = select(models.Operator).where(or_(models.Operator.full_name.ilike(f"%{search}%"), models.Operator.phone_number.ilike(f"%{search}%"))).join(models.OperatorType).options(joinedload(models.Operator.operator_type))
 
-        res = await self.db_session.execute(query)
+        res = await self.db_session.execute(query.order_by(models.Operator.id))
 
         return res.scalars().all()
     
