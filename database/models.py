@@ -105,6 +105,9 @@ class Employees(Base):
         cascade="all, delete"
     )
 
+    chat_rooms_as_user1: Mapped["ChatRoom"] = relationship("ChatRoom", foreign_keys="[ChatRoom.user1_id]", back_populates="user1")
+    chat_rooms_as_user2: Mapped["ChatRoom"] = relationship("ChatRoom", foreign_keys="[ChatRoom.user2_id]", back_populates="user2")
+    messages: Mapped["Message"] = relationship("Message", foreign_keys="[Message.sender_id]", back_populates="sender")
     position: Mapped['Position'] = relationship(back_populates='user')
     expense:Mapped['ExpenseData'] = relationship(back_populates='employee_salary')
 
@@ -152,7 +155,7 @@ class Operator(Base):
     full_name: Mapped[str] = mapped_column(String(100))
     phone_number: Mapped[str] = mapped_column(String(100))
     description: Mapped[str]
-    status:Mapped[StatusOperator] = mapped_column(Enum(StatusOperator), default=StatusOperator.empty.value)
+    status:Mapped[StatusOperator] = mapped_column(Enum(StatusOperator), default=StatusOperator.empty)
     operator_type_id: Mapped[int] = mapped_column(ForeignKey('operator_type.id', ondelete='CASCADE'))
 
     operator_type: Mapped['OperatorType'] = relationship(back_populates='operator')
@@ -241,7 +244,29 @@ class LoginPasswordNote(Base):
     login:Mapped[str] = mapped_column(String(100))
     password:Mapped[str] = mapped_column(String(100))
 
+
+class ChatRoom(Base):
+    __tablename__ = 'chat_room'
+
+    id:Mapped[int] = mapped_column(primary_key=True)
+    user1_id:Mapped[int] = mapped_column(ForeignKey('employees.id',ondelete='CASCADE'))
+    user2_id:Mapped[int] = mapped_column(ForeignKey('employees.id',ondelete='CASCADE'))
+    created_at:Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now)
+
+    user1: Mapped["Employees"] = relationship("Employees", foreign_keys=[user1_id], back_populates="chat_rooms_as_user1")
+    user2: Mapped["Employees"] = relationship("Employees", foreign_keys=[user2_id], back_populates="chat_rooms_as_user2")
     
+class Message(Base):
+    __tablename__ = 'message'
+
+    id:Mapped[int] = mapped_column(primary_key=True)
+    chat_id:Mapped[int] = mapped_column(ForeignKey('chat_room.id', ondelete='CASCADE'))
+    sender_id:Mapped[int] = mapped_column(ForeignKey('employees.id', ondelete='CASCADE'))
+    content:Mapped[str] = mapped_column(String(200))
+    created_at:Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now)
+
+    sender: Mapped["Employees"] = relationship("Employees", foreign_keys=[sender_id], back_populates="messages")
+
 
 
 

@@ -326,5 +326,60 @@ async def _update_status_project(session:AsyncSession, project_id:int, status:st
             return {'success':True,
                     'message':'Status created successfully',
                     'status':project_status.status}
-        return {'success':False,
+        return {'success':False,                
                     'message':'Error occured'}
+
+async def _create_chat_user(user1_id:int, user2_id:int,session:AsyncSession):
+    emp_dal = user_dal.EmployeeDal(session)
+
+    user_chat = await emp_dal.create_chat_user(user1_id=user1_id, user2_id=user2_id)
+
+    return {
+        'id':user_chat.id,
+        'user1_id':user_chat.user1_id,
+        'user2_id':user_chat.user2_id
+    }
+
+async def _start_messaging_create(data_chat:schemas.StartMessageCreate, sender_id:int, session:AsyncSession):
+    emp_dal = user_dal.EmployeeDal(session)
+
+    start_chat = await emp_dal.start_chat_create(data_chat=data_chat, sender_id=sender_id)
+
+    return {
+        'id':start_chat.id,
+        'chat_id':start_chat.chat_id,
+        'sender_id':start_chat.sender_id,
+        'content':start_chat.content
+    }
+
+async def _chat_room_users(user_id:int, session:AsyncSession):
+    emp_dal = user_dal.EmployeeDal(session)
+
+    chat_rooms = await emp_dal.get_chat_rooms_user(user_id=user_id)
+
+    data = [
+        {"id":chat_room.id,
+         "user1_id":chat_room.user1_id,
+         "user2_id":chat_room.user2_id}
+
+        for chat_room in chat_rooms
+    ]
+
+    return {"data":data}
+
+async def _chat_room_messages(chat_room_id:int, session:AsyncSession):
+    emp_dal = user_dal.EmployeeDal(session)
+
+    chat_messages = await emp_dal.get_messages_chat_room(chat_room_id=chat_room_id)
+
+    data = [
+        {'id':chat_message.id,
+         'sender_id':chat_message.sender_id,
+         'content':chat_message.content,
+         'created_at':chat_message.created_at
+         }
+
+        for chat_message in chat_messages
+    ]
+
+    return {'data':data}

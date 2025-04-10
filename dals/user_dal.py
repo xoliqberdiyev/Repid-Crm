@@ -331,3 +331,37 @@ class EmployeeDal:
         query = select(models.Employees.image).where(and_(models.Employees.id == user_id),(models.Employees.is_active==True)) 
         result = await self.db_session.execute(query)
         return result.scalar_one_or_none()
+    
+    async def create_chat_user(self,user1_id:int, user2_id:int):
+        query = models.ChatRoom(
+            user1_id=user1_id,
+            user2_id=user2_id
+        )
+
+        self.db_session.add(query)
+
+        await self.db_session.commit()
+
+        return query
+    
+    async def start_chat_create(self,data_chat:schemas.StartMessageCreate, sender_id:int):
+        query = models.Message(
+            chat_id=data_chat.chat_id,
+            sender_id=sender_id,
+            content=data_chat.content
+        )
+        self.db_session.add(query)
+        await self.db_session.commit()
+
+        return query
+    
+    async def get_chat_rooms_user(self, user_id:int):
+        query = await self.db_session.execute(select(models.ChatRoom)
+                                              .where((models.ChatRoom.user1_id == user_id)|(models.ChatRoom.user2_id==user_id)))
+
+        return query.scalars().all()
+    
+    async def get_messages_chat_room(self, chat_room_id:int):
+        query = await self.db_session.execute(select(models.Message).where(models.Message.chat_id==chat_room_id))
+
+        return query.scalars().all()

@@ -1,20 +1,22 @@
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi import WebSocket, WebSocketDisconnect
 
 from typing import Dict, Tuple, List
 
+import os
+import base64
 import json
+
+MEDIA_PATH = "media/messages"
 
 class ConnectionManager:
     def __init__(self):
-        # Store room_id -> List of (username, WebSocket)
         self.room: Dict[str, List[Tuple[str, WebSocket]]] = {}
-        self.active_connection: List[WebSocket] = []
 
     async def connect(self, websocket: WebSocket, room_id: str, username: str):
         await websocket.accept()
         if room_id not in self.room:
             self.room[room_id] = []
-        
+
         if len(self.room[room_id]) < 2:
             self.room[room_id].append((username, websocket))
         else:
@@ -27,31 +29,62 @@ class ConnectionManager:
             if not self.room[room_id]:
                 del self.room[room_id]
 
-    async def disconnect_client(self, websocket: WebSocket):
-        pass
+    async def send_message(self, sender_ws: WebSocket, data: dict, room_id: str):
+        if room_id not in self.room:
+            return
 
-    async def send_message(self, sender_ws: WebSocket, message: str, room_id: str):
-        if room_id in self.room:
-            sender_name = None
-            receiver_name = None
-            receiver_ws = None
+        sender_name = None
+        receiver_ws = None
+        receiver_name = None
 
-            for username, ws in self.room[room_id]:
-                if ws == sender_ws:
-                    sender_name = username
-                else:
-                    receiver_name = username
-                    receiver_ws = ws
+        for username, ws in self.room[room_id]:
+            if ws == sender_ws:
+                sender_name = username
+            else:
+                receiver_ws = ws
+                receiver_name = username
 
-            if receiver_ws:
-                json_message = json.dumps({
-                    "from": sender_name,
-                    "to": receiver_name,
-                    "message": message
-                })
-                await receiver_ws.send_text(json_message)
+        if not receiver_ws:
+            return
 
+        msg_type = data.get("type", "text")
 
+        if msg_type == "text":
+            content = data.get("message", "")
+            response = {
+                "type": "text",
+                "from": sender_name,
+                "to": receiver_name,
+                "message": content
+            }
+            await receiver_ws.send_text(json.dumps(response))
+
+        if msg_type == "file":
+            filename = data.get("filename")
+            filetype = data.get("filetype")
+            content = data.get("content")  # base64 string
+
+            if not all([filename, filetype, content]):
+                await sender_ws.send_text(json.dumps({"error": "Missing file data"}))
+                return
+
+            # 1. Decode and save file
+            os.makedirs(MEDIA_PATH, exist_ok=True)
+            file_path = os.path.join(MEDIA_PATH, filename)
+
+            with open(file_path, "wb") as f:
+                f.write(base64.b64decode(content))
+
+            # 2. Return file URL to receiver
+            file_url = f"/media/messages/{filename}"
+            await receiver_ws.send_text(json.dumps({
+                "type": "file",
+                "from": sender_name,
+                "to": receiver_name,
+                "filename": filename,
+                "filetype": filetype,
+                "url": file_url
+            }))
 
 
 

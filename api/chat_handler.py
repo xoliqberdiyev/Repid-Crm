@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends,  Query, HTTPException
 from websocket.manager import ConnectionManager 
 from utils.settings import SECRET_KEY, ALGORITHM
@@ -39,7 +41,14 @@ async def websocket_endpoint(
     try:
         while True:
             data = await websocket.receive_text()
-            await manager.send_message(websocket, data, room_id)
+            if not data.strip():
+                continue
+            try:
+                parsed = json.loads(data)
+                await manager.send_message(websocket, parsed, room_id)
+            except json.JSONDecodeError:
+                await websocket.send_text(json.dumps({"error": "Invalid JSON"}))
     except WebSocketDisconnect:
+
         await manager.disconnect(websocket, room_id)
         await manager.send_message(websocket, "A user just left the chat", room_id)

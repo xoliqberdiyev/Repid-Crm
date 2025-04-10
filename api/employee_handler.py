@@ -243,6 +243,27 @@ async def get_list_positions(db:AsyncSession = Depends(session.get_db),
 
 @emp_router.post('/position',response_model=schemas.ShowPosition)
 async def create_position(name:str, db:AsyncSession = Depends(session.get_db),
-                          current_user:models.Employees=Depends(get_current_user_from_token)):
+                            current_user:models.Employees=Depends(get_current_user_from_token)):
     return await employee._create_position(session=db, name=name)
 
+@emp_router.post('/create-room')
+async def create_room_users(user1_id:int, current_user:models.Employees=Depends(get_current_user_from_token),
+                            db:AsyncSession = Depends(session.get_db)):
+    return await employee._create_chat_user(user1_id=user1_id, user2_id=current_user.id,
+                                            session=db)
+
+@emp_router.post('/start-message')
+async def start_messaging(data_chat:schemas.StartMessageCreate, current_user:models.Employees=Depends(get_current_user_from_token),
+                          db:AsyncSession = Depends(session.get_db)):
+    return await employee._start_messaging_create(data_chat=data_chat,sender_id=current_user.id, session=db)
+
+@emp_router.get('/chat-rooms')
+async def chat_room_by_users(current_user:models.Employees=Depends(get_current_user_from_token),
+                             db:AsyncSession = Depends(session.get_db)):
+    
+    return await employee._chat_room_users(user_id=current_user.id, session=db)
+
+@emp_router.get('/chat-messages')
+async def chat_message_by_room(chat_room_id:int,db:AsyncSession = Depends(session.get_db)):
+
+    return await employee._chat_room_messages(chat_room_id=chat_room_id,session=db)

@@ -525,3 +525,11 @@ class UpdateIncomeProject(BaseModel):
     #     elif pay_price.isdigit():
     #         raise ValueError('Price must be as integer')
     #     return pay_price
+
+class CreateChat(BaseModel):
+    user1_id:int
+    user2_id:int
+
+class StartMessageCreate(BaseModel):
+    content:str
+    chat_id:int
