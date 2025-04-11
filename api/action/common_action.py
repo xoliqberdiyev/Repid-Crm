@@ -7,6 +7,7 @@ from typing import Optional
 from database import models
 from database import schemas
 from dals import common_dal
+from ..chat_handler import manager
 
 async def _get_all_income_expected_value(session: AsyncSession):
     try:
@@ -322,7 +323,29 @@ async def _get_cash_income(session:AsyncSession):
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
+async def _create_new_notification(notification, session:AsyncSession):
+    com_dal = common_dal.CommonDal(session)
+    notification_data = await com_dal.create_notification(notification)
 
+    message_notification = {
+        "action":"new_notification",
+        "data":{
+            "id":notification_data.id,
+            "user_id":notification_data.user_id,
+            "message":notification_data.message,
+            "is_read":notification_data.is_read
+        }
+    }
+
+    await manager.broadcast(message_notification)
+
+    return notification_data
+
+async def _all_user_or_one_notification(current_user:int, session:AsyncSession):
+    com_dal = common_dal.CommonDal(session)
+    notifications = await com_dal.get_all_notifications(user_id=current_user)
+
+    return notifications
 
 
 

@@ -29,6 +29,14 @@ async def get_all_employee(position_id:Optional[int]=None ,
     disable_installed_extensions_check()
     return paginate(users)
 
+@emp_router.get('/with_admins',response_model=Page[schemas.ShowEmployee])
+async def get_all_employee_with_admin(db:AsyncSession = Depends(session.get_db),
+                           current_user:models.Employees=Depends(get_current_user_from_token),
+                            ):
+    users = await employee._get_all_employee_admin(db)
+    disable_installed_extensions_check()
+    return paginate(users)
+
 @emp_router.delete('')
 async def delete_employee(user_id:int, db:AsyncSession = Depends(session.get_db),
                           current_user:models.Employees=Depends(get_current_user_from_token)):

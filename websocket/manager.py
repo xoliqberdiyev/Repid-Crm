@@ -10,24 +10,32 @@ MEDIA_PATH = "media/messages"
 
 class ConnectionManager:
     def __init__(self):
+        self.active_connections: List[WebSocket] = []
         self.room: Dict[str, List[Tuple[str, WebSocket]]] = {}
-
+        
     async def connect(self, websocket: WebSocket, room_id: str, username: str):
         await websocket.accept()
+
         if room_id not in self.room:
             self.room[room_id] = []
 
-        if len(self.room[room_id]) < 2:
-            self.room[room_id].append((username, websocket))
-        else:
-            await websocket.send_text(json.dumps({"error": "Only two users can communicate"}))
-            await websocket.close()
+        self.room[room_id].append((username, websocket))
+
+    async def connect_notification(self, websocket:WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
 
     async def disconnect(self, websocket: WebSocket, room_id: str):
         if room_id in self.room:
             self.room[room_id] = [(user, ws) for user, ws in self.room[room_id] if ws != websocket]
             if not self.room[room_id]:
                 del self.room[room_id]
+        
+
+    async def disconnect_notify(self, websocket:WebSocket):
+        self.active_connections.remove(websocket)
+
 
     async def send_message(self, sender_ws: WebSocket, data: dict, room_id: str):
         if room_id not in self.room:
@@ -85,6 +93,18 @@ class ConnectionManager:
                 "filetype": filetype,
                 "url": file_url
             }))
+
+    async def broadcast(self, message:dict):
+        disconnected = []
+
+        for connextion in self.active_connections:
+            try:
+                await connextion.send_json(message)
+            except Exception:
+                disconnected.append(connextion)
+        for conn in disconnected:
+            self.disconnect_notify(conn)
+
 
 
 

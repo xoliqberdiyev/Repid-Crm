@@ -189,3 +189,14 @@ async def delete_login_password(login_note_id:int, db:AsyncSession=Depends(sessi
 async def get_cash_income(db:AsyncSession=Depends(session.get_db),
                           current_user:models.Employees=Depends(get_current_user_from_token)):
     return await common_action._get_cash_income(session=db)
+
+@common_router.post('/notifications', response_model=schemas.ListNotification)
+async def create_notifications(notification:schemas.CreatNotification,
+                               db:AsyncSession=Depends(session.get_db)):
+    return await common_action._create_new_notification(session=db,notification=notification)
+
+@common_router.get('/notifications', response_model=List[schemas.ListNotification])
+async def get_all_or_user_notifications(current_user:models.Employees=Depends(get_current_user_from_token),
+                        db:AsyncSession=Depends(session.get_db)):
+    return await common_action._all_user_or_one_notification(current_user=current_user.id, session=db)
+

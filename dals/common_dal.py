@@ -242,8 +242,24 @@ class CommonDal:
                 func.sum(cast(models.ExpenseData.price_paid,BigInteger)
                 )))
         
-
-
         return (result_income.scalar_one(),result_expense.scalar_one())
+    
+    async def create_notification(self,data:schemas.CreatNotification):
+        notification = models.Notification(
+            user_id=data.user_id,
+            message=data.message,
+        )
+        self.db_session.add(notification)
+
+        await self.db_session.commit()
+
+        return notification
+    
+    async def get_all_notifications(self, user_id:int):
+        notifications = await self.db_session.execute(select(models.Notification).where(models.Notification.user_id == user_id))
+
+        return notifications.scalars().all()
+
+
     
    

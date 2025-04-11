@@ -26,6 +26,7 @@ class StatusOperator(str, enum.Enum):
     in_progres = 'in_progres'
     done = 'done'
     cancel = 'cancel'
+    repeat = 'repeat'
 
 class StatusTask(str, enum.Enum):
     to_do = 'to_do'
@@ -110,6 +111,7 @@ class Employees(Base):
     messages: Mapped["Message"] = relationship("Message", foreign_keys="[Message.sender_id]", back_populates="sender")
     position: Mapped['Position'] = relationship(back_populates='user')
     expense:Mapped['ExpenseData'] = relationship(back_populates='employee_salary')
+    notification:Mapped['Notification'] = relationship(back_populates='user')
 
     def __repr__(self) -> str:
         return f"Employees(id={self.id!r}, last_name={self.last_name!r})"
@@ -266,6 +268,18 @@ class Message(Base):
     created_at:Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now)
 
     sender: Mapped["Employees"] = relationship("Employees", foreign_keys=[sender_id], back_populates="messages")
+
+class Notification(Base):
+    __tablename__ = 'notifications'
+
+    id:Mapped[int] = mapped_column(primary_key=True)
+    user_id:Mapped[int] = mapped_column(ForeignKey('employees.id', ondelete='CASCADE'), nullable=True)
+    message:Mapped[str] = mapped_column(String(300))
+    created_at:Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.now)
+    is_read:Mapped[bool] = mapped_column(default=False)
+    
+    user: Mapped['Employees'] = relationship('Employees',back_populates='notification')
+
 
 
 

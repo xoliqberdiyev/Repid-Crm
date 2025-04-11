@@ -533,3 +533,14 @@ class CreateChat(BaseModel):
 class StartMessageCreate(BaseModel):
     content:str
     chat_id:int
+
+class CreatNotification(BaseModel):
+    user_id:int|None
+    message:str
+
+
+class ListNotification(BaseModel):
+    id:int
+    user_id:int|None
+    message:str
+    is_read:bool

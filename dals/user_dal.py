@@ -30,6 +30,15 @@ class EmployeeDal:
         all_user = res.scalars().all()
         return all_user
     
+    async def get_all_employee_admin(self):
+        query = select(models.Employees).join(models.Position).where( 
+                                                                     models.Employees.is_active == True).options(
+                        selectinload(models.Employees.position))
+        res = await self.db_session.execute(query)
+
+        all_user = res.scalars().all()
+        return all_user
+    
     async def create_employee(self, first_name:str, last_name:str,
                               password:str, position_id: int,phone_number:str,
                               date_of_birth:datetime, date_of_jobstarted, salary:int,username:str,

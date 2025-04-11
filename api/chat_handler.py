@@ -31,6 +31,23 @@ async def get_current_user_from_token(
     except JWTError:
         raise HTTPException(status_code=400, detail="Invalid token")
     
+@chat_handler.websocket('/ws/notification')
+async def websocket_notification(
+    websocket: WebSocket):
+
+    await manager.connect_notification(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await websocket.send_text(f"Received your message: {data}")
+
+    except Exception:
+        # Handle disconnects, errors, etc.
+        pass
+    finally:
+        # Remove the websocket from the active connections
+        manager.disconnect(websocket)
+    
 @chat_handler.websocket('/ws/{room_id}')
 async def websocket_endpoint(
     websocket: WebSocket, 

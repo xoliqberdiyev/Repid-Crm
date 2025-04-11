@@ -50,7 +50,7 @@ async def _create_new_employee(body: schemas.EmployeeCreate,
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
 
 async def _get_all_employee(session:AsyncSession, 
-                            position_id:int,current_user:str,):
+                            position_id:int,current_user:str):
     try:
         async with session.begin():
 
@@ -76,6 +76,33 @@ async def _get_all_employee(session:AsyncSession,
     except SQLAlchemyError as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
     
+async def _get_all_employee_admin(session:AsyncSession):
+    try:
+        async with session.begin():
+
+            emp_dal = user_dal.EmployeeDal(session)
+            all_users = await emp_dal.get_all_employee_admin()  # Ensure this is an async call
+            return [
+                schemas.ShowEmployee(
+                    id=user.id,
+                    last_name=user.last_name,
+                    first_name=user.first_name,
+                    phone_number=user.phone_number,
+                    date_of_birth=user.date_of_birth,
+                    date_of_jobstarted=user.date_of_jobstarted,
+                    username=user.username,
+                    position=user.position.name,
+                    salary=user.salary,
+                    user_type=user.user_type,
+                    image=f"https://crmm.repid.uz/media/uploads/{user.image}" if user.image else None,
+                    is_active=user.is_active
+                )
+                for user in all_users
+            ]
+    except SQLAlchemyError as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch income values: {str(e)}")
+    
+
 async def _create_project(session:AsyncSession,
                           body:schemas.CreateProject,
                           image:str):
