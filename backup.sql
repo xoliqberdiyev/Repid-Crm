@@ -2,8 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1)
--- Dumped by pg_dump version 16.9 (Ubuntu 16.9-0ubuntu0.24.04.1)
+\restrict VrOPQqWh7RiIGIXzEeKc9WExFdC4sWqwQgXrx3eADCDDIkFj7E8VxhlUcIYbrst
+
+-- Dumped from database version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
+-- Dumped by pg_dump version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -842,30 +844,30 @@ COPY public.chat_room (id, user1_id, user2_id, created_at) FROM stdin;
 
 COPY public.employees (id, first_name, username, last_name, phone_number, date_of_birth, date_of_jobstarted, position_id, image, salary, user_type, password, is_active, created_time) FROM stdin;
 12	Afzal	Pulatov	Pulatov	+998909103262	\N	2024-10-23 00:00:00	6	\N	3000000	custom	$2b$12$vejEIdJsDDZaFE713XqOreZgIOtR1nlCgvSzM8s6/jC8CNbgGGgn.	t	2025-02-05 16:33:09.108698
-28	Yusufbek	Yusufbek	Khamidullaev	+998949207161	2008-04-14 00:00:00	2025-04-20 00:00:00	3	\N	500000	custom	$2b$12$XxLCq5T4ZzY9Z9t2dEn1iOKEyoKIUSIjsfRlvp41koyemQgNIM.S6	t	2025-04-11 14:00:30.89807
 13	Anvar	Anvar_6268	Maqsudov	+998909106268	\N	2024-11-11 00:00:00	6	\N	100000	custom	$2b$12$CGXlFrpKO.u0lSGBnLHTGOT2rD5MRZXZmUT1yIweLHsGvkkGCE9TO	t	2025-02-08 12:06:43.945902
 15	Bobadiyor	Bobadiyor	Bugalter	+998200002249	2025-02-05 00:00:00	2024-10-23 00:00:00	2	\N	450000	custom	$2b$12$bspNPj9p9zu0Zm0JY9Zjcuq1dcS0epCVGVVSlsI7CXXVKp/BV04wG	t	2025-02-08 12:06:43.945902
 16	Oybek	Oybek_0487	Olimovich	+998977700487	2025-02-22 00:00:00	2024-10-15 00:00:00	7	\N	0	custom	$2b$12$LFweeNB2U95fibgu/zde/.Gb95MpE7F082E0pvJyegmz8Ji3YGfIO	t	2025-02-08 12:06:43.945902
 17	Bahrom	Bahrom_5599	Tohirov	+99894	2025-02-15 00:00:00	2024-10-15 00:00:00	7	\N	0	custom	$2b$12$wNOsbk6B4unjP/sIGVodMO9aVTP.U1UfqP0Wo9nmxf0Sahzh3HqPe	t	2025-02-08 12:06:43.945902
 20	Maftuna	Maftuna	Tursunova	+998977777777	2024-12-05 00:00:00	2024-11-04 00:00:00	2	\N	1000000	custom	$2b$12$sWSBwjgH4ilG0M6CYgy91.FRsh5kYHl/s04zMW8uxuFPA3HRyV9xu	t	2025-02-08 12:06:43.945902
-2	Oybek	oybek	Tojiyev	+998977700487	\N	2024-10-05 00:00:00	1	\N	0	super_admin	$2b$12$F6g7s/7sKJLDWnRIaeSdpeVg4ks5j5RCnYs7eqNJ5RYET/BPGh6uK	t	2025-02-05 14:17:25.918262
 14	Farrosh ayol	Farrosh ayol	ayol	+99897777777	\N	2024-10-23 00:00:00	8	\N	200000	custom	$2b$12$A3SYaWRTGYIkKxv5YTRl.e7be0wNQhlqLBVlOo9q2ejea8YGJ0yoG	t	2025-02-08 12:06:43.945902
-3	Behruz	real_man	Xoliqberdiyev	+998947099971	2009-09-12 00:00:00	2024-11-01 00:00:00	2	profile.jpg	1000000	custom	$2b$12$kNsDvsNUZskdpYiAbo13OeQS6Mz61RmJqu.wdDF.whhnrsTs9uOXu	t	2025-02-05 14:17:25.918262
 22	Mavlon	------	Zokirov	+998904490929	\N	2025-03-03 00:00:00	3	\N	1000000	custom	$2b$12$FgPQaXDUj7Y92TM1sXuBluxVxjIjxllVcO/frayPxzyr22D15b2IG	t	2025-02-28 14:31:11.543623
 8	Jahongir	ismoil	Husanov	+998977042553	2008-08-04 00:00:00	2025-01-27 00:00:00	3	images.jpg	1000000	custom	$2b$12$8AG/NBDyaBo.I/w2r2FTue4T6sy28mHndgnUEdoMygNxkRZ1O44Ii	t	2025-02-05 14:17:25.918262
 11	Diyorbek	Diyorbek	Ibrohimov	+998935037720	2004-04-05 00:00:00	2024-10-18 00:00:00	7	\N	1500000	admin	$2b$12$iuRFju6nxfEahwTkcTtNi.XqrsiquszzUv/NmgCxR6nuavGkOoLMS	t	2025-02-05 16:33:09.108698
 19	Sardor	Sardor	SMM	+998947700487	2025-02-01 00:00:00	2024-11-12 00:00:00	5	\N	1000000	custom	$2b$12$osl0AiFK2W24j2zUWRLtW.ey2MuzhULkL7UT1qe2Nl./ChZtMvOB6	t	2025-02-08 12:06:43.945902
 18	Shahzod	Shahzod_6263	Burxonov	+998906756263	2025-02-01 00:00:00	2024-10-21 00:00:00	4	\N	1500000	super_admin	$2b$12$IKpmT9C.igkDB4LxzhUGYeRcW0VGDuduskJ5JCrNM.agPDX.EH7ju	t	2025-02-08 12:06:43.945902
 4	Shahzod	shahzod_king	Abdashev	+998949252945	2005-07-09 00:00:00	2024-11-01 00:00:00	2	my_picture.jpg	1000000	super_admin	$2b$12$1bEsQ4CQJMhiXl8YJy/pw.bXWlFC7DOYByZrPx8pcyGS1QZ8MFDJO	t	2025-02-05 14:17:25.918262
-31	Bahtiyor	bahtiyor	Hamidullayev	+998995164433	2025-08-05 00:00:00	2025-08-06 00:00:00	3	\N	1000000	custom	$2b$12$b.9t1rrmTI8xHF6iphTeCOLDk8TpCkgFIIOEeltuZkFFryT07JzWm	t	2025-07-26 10:57:49.255247
+31	Bahtiyor	bahtiyor	Hamidullayev	+998995164433	2025-08-05 00:00:00	2025-08-06 00:00:00	6	bervbeve (2).jpg	1000000	custom	$2b$12$2I/hKEvsWbAgUpGDR8hT4uNB7uDc9GlHRjta0OGNUy7WcLMNWwUEm	t	2025-07-26 10:57:49.255247
 5	Nodirbek	nodir_zafarovich	Soliyev	+998947853060	2005-12-06 00:00:00	2025-01-01 00:00:00	3	\N	1000000	custom	$2b$12$znOzxWnnkiF3jD.u2fNAuORwgmchcsFqOu6FervEnLz07k/iS1yia	f	2025-02-05 14:17:25.918262
 7	Mavlon	mavlon_turgunof	Turgunov	+998950420319	2002-03-19 00:00:00	2024-10-16 00:00:00	3	\N	1000000	custom	$2b$12$lnoe8ggGlsNIQLl9GmcP1eEu.g8JRqzBcXM8Q/4bhafQl1nPHQfGe	t	2025-02-05 14:17:25.918262
 29	Shahzod 	shahzod	Abdashev	+998949252945	2025-04-30 00:00:00	2024-11-01 00:00:00	2	\N	1000000	custom	$2b$12$Zs4LwuRpjz.cXq1/j2Sswe.iNxjjBntgnwgXp1dxOZGSWYkWnJeYC	t	2025-04-29 16:12:39.208359
 32	\N	Repid001_	\N	\N	\N	\N	\N	\N	\N	super_admin	Repid001_	t	2025-08-13 14:10:03.805043
 33	Admin	admin	User	+998901234567	\N	\N	\N	\N	\N	super_admin	$2b$12$AbCdEfGhIjKlMnOpQrStUvWxYz	t	2025-08-16 07:31:13.743618
+3	Behruz	real_man	Xoliqberdiyev	+998947099971	2009-09-12 00:00:00	2024-11-01 00:00:00	2	profile.jpg	1000000	super_admin	$2b$12$kNsDvsNUZskdpYiAbo13OeQS6Mz61RmJqu.wdDF.whhnrsTs9uOXu	t	2025-02-05 14:17:25.918262
 9	Xudoyorxon	ad1988491	Avazxonov	+998882062100	2006-01-21 00:00:00	2025-01-18 00:00:00	6	\N	1000000	custom	$2b$12$JlQPXPvgashVLoNgISjmPOEpLLDd3DcQsaoxu5d8fTJiijg2WTyYG	t	2025-02-05 14:17:25.918262
 6	Nodir	jahongir000	Soliyev	+998904490924	\N	2024-10-26 00:00:00	3	\N	1000000	custom	$2b$12$uUQ5tmVT07dqqXGAvSpz4.HOVIk2EUiutuKVp75uqr8lVzenIRam2	t	2025-02-05 14:17:25.918262
-30	Abdurauf	Abdurauf	Ramiz	+998930029571	2009-06-27 00:00:00	2025-07-06 00:00:00	3	\N	1000000	custom	$2b$12$bHgsz5g/8EBFPsjBE/Infe.Nncjhz2U3zUJ3.41bBwZpOE00p2W76	t	2025-07-02 18:02:25.381261
+2	Oybek	oybek	Tojiyev	+998977700487	\N	2024-10-05 00:00:00	1	\N	0	super_admin	$2b$12$F6g7s/7sKJLDWnRIaeSdpeVg4ks5j5RCnYs7eqNJ5RYET/BPGh6uK	t	2025-02-05 14:17:25.918262
+28	Behruz	Behruz	Xoliqberdiyev	+998949207161	2008-04-14 00:00:00	2025-04-20 00:00:00	2	\N	1000000	custom	$2b$12$9fU4cBWoAGOev1Ecut1tN.M3PmYUkKuEKowqpXKZhhTlmIr8gDFkC	t	2025-04-11 14:00:30.89807
+30	Abdurauf	Abdurauf	Ramzboy	+998930029571	2009-06-27 00:00:00	2025-07-06 00:00:00	3	\N	1000000	custom	$2b$12$J.8lGFtkQWBM0cE8Npx2QO77k1omlwOH9BSHAuLPpgWVdG/ubRezO	t	2025-07-02 18:02:25.381261
 \.
 
 
@@ -907,7 +909,6 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 41	Broker	\N	650000	Kirimdan	2025-01-27 00:00:00	\N	other_expense	income
 13	Kechki ovqat	\N	90000	Bahrom	2024-10-15 00:00:00	\N	other_expense	bahrom
 27	10 L suv	\N	14000		2025-02-04 00:00:00	\N	for_office	oybek
-237	Server harajatlari	\N	120000	Kirimdan	2025-03-12 00:00:00	\N	for_office	income
 239	Vedio Studio arenda	\N	250000		2025-03-12 00:00:00	\N	smm_service	income
 17	Yuk mashina	\N	48000	Kirimdan\n	2024-10-28 00:00:00	\N	other_expense	income
 221	Arenda	\N	1500000	Kirimdan	2025-02-13 00:00:00	\N	renting	income
@@ -934,7 +935,6 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 98	Qahva Nescafe Gold	\N	100000	Kirimdan	2024-11-04 00:00:00	\N	for_office	income
 79	Nalog kluchka	\N	37500	Bahrom	2024-10-24 00:00:00	\N	tax	bahrom
 100	Restaran aylangani chiqqanda avtobusga	\N	8000	Kirimdan	2023-11-04 00:00:00	\N	other_expense	income
-231	Arenda naqt	\N	2000000	Kirimdan	2025-02-26 00:00:00	\N	renting	income
 15	Ofisga suv	\N	38000	Bahrom	2024-10-24 00:00:00	\N	for_office	income
 96	Quruq choy 	\N	20000	Kirimdan	2024-11-04 00:00:00	\N	for_office	income
 94	Limanat Barbicon	\N	16000	Kirimdan	2024-11-04 00:00:00	\N	for_office	income
@@ -947,19 +947,16 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 90	Bumaga	\N	10000	Kirimdan	2024-11-04 00:00:00	\N	for_office	income
 14	fleshka	\N	45000	Bahrom	2024-10-24 00:00:00	\N	for_office	bahrom
 273	\N	\N	123456	\N	2025-03-22 00:00:00	\N	employee_salary	\N
-279	Arenda naqt	\N	6100000	3 marta bo'lib bo'lib pul to'ladim \n	2025-04-02 00:00:00	\N	renting	income
 281	We-fi to'lovi	\N	350000	300 ming we-fi oylik to'lovi 50 ming ustanivka	2025-04-04 00:00:00	\N	for_office	income
+231	Arenda naqt	\N	4600000	Kirimdan	2025-02-26 00:00:00	\N	renting	income
 28	10 L suv	\N	14000	Kirimdan 	2025-01-31 00:00:00	\N	for_office	income
 288	10 L suv	\N	12000		2025-04-22 00:00:00	\N	for_office	income
 289	Bank foiz,plastik foiz	\N	80000	$ maydalaganimdagi yo'qotish, plastikdan foiz	2025-04-29 00:00:00	\N	other_expense	income
-296	Server 1 uchun	\N	220000	Serverga oylik to'lov	2025-04-29 00:00:00	\N	for_office	income
-297	Server 2 uchun	\N	220000	Server 2 oylik to'lov uchun	2025-04-30 00:00:00	\N	for_office	income
 32	10 L suv	\N	13000	Kirimdan	2025-01-28 00:00:00	\N	for_office	income
 298	\N	\N	500000	\N	2025-04-30 00:00:00	6	employee_salary	\N
 59	Bumaga	\N	16000	Kirimdan	2025-01-25 00:00:00	\N	for_office	income
 61	2 ta 10 L suv	\N	26000	Kirimdan	2025-01-25 00:00:00	\N	for_office	income
 60	Konfet 500 gram	\N	40000	Kirimdan	2025-01-25 00:00:00	\N	for_office	income
-62	Server To'lovi	\N	110000	Kirimdan	2025-01-13 00:00:00	\N	for_office	income
 63	Telefon Oylik to'lovi	\N	50000	Kirimdan	2025-01-07 00:00:00	\N	for_office	income
 65	Kalit yasattirishga 	\N	25000	Kirimdan	2024-12-26 00:00:00	\N	for_office	income
 76	120 L suv	\N	75000	Bahrom	2024-12-17 00:00:00	\N	for_office	income
@@ -988,6 +985,10 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 315	10 L suv	\N	14000		2025-05-19 00:00:00	\N	for_office	income
 317	\N	\N	200000	\N	2025-05-22 00:00:00	14	employee_salary	\N
 323	Pensiya badali uchun ajratma	\N	3000	Iyun oyida to'ladim	2025-05-15 00:00:00	\N	tax	income
+297	Server 2 uchun	\N	220000	Server 2 oylik to'lov uchun	2025-04-30 00:00:00	\N	other_expense	income
+296	Server 1 uchun	\N	220000	Serverga oylik to'lov	2025-04-29 00:00:00	\N	other_expense	income
+237	Server harajatlari	\N	120000	Kirimdan	2025-03-12 00:00:00	\N	other_expense	income
+62	Server To'lovi	\N	110000	Kirimdan	2025-01-13 00:00:00	\N	other_expense	income
 110	Restaran aylangani chiqanda ovqatlanish va yo'l kira uchun	\N	20000	Kirimdan	2024-11-19 00:00:00	\N	other_expense	income
 132	100 L suv	\N	100000	Kirimdan	2024-11-18 00:00:00	\N	for_office	income
 120	Qora choy	\N	7000	Kirimdan	2024-11-12 00:00:00	\N	for_office	income
@@ -999,25 +1000,34 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 232	Komputer	\N	100000	Someting	2024-01-01 00:00:00	\N	for_office	oybek
 235	120 L suv	\N	90000		2025-03-05 00:00:00	\N	for_office	income
 258	Soliqlar	\N	900000	Fevral oyi soliqlari	2025-03-20 00:00:00	\N	tax	income
-222	Diyorni o'qishi uchun 	\N	1300000	Oybek.	2025-02-08 00:00:00	\N	office_item	oybek
 256	\N	\N	450001	\N	2025-03-20 00:00:00	\N	employee_salary	\N
 248	\N	\N	1000001	\N	2025-03-19 00:00:00	\N	employee_salary	\N
 274	\N	\N	123456	\N	2025-03-22 00:00:00	\N	employee_salary	\N
-280	Server to'lovi	\N	210000	2 oylik qarzdorlik yopildi	2025-04-03 00:00:00	\N	for_office	income
 290	Arendaga naqt	\N	6100000	Aprel oy uchun 	2025-04-29 00:00:00	\N	renting	income
 299	Mikrafon uzum nasiyadan	\N	2348000	Smm vediolar uchun mikrafon uzum nasiyadan olganimiz uchun qimmat bo'ldi	2025-04-29 00:00:00	\N	office_item	income
 306	20 L suv	\N	26000		2025-05-08 00:00:00	\N	for_office	income
-310	Confort syomkaga borganda harajat	\N	100000	Obet yo'l kira moshinaga benzin	2025-05-12 00:00:00	\N	other_expense	income
 316	10 L suv	\N	14000		2025-05-22 00:00:00	\N	for_office	income
 318	Jismoniy shahslardan daromad solig'i	\N	278000	Soliq iyun oyida to'ladim	2025-04-12 00:00:00	\N	tax	income
 322	Ijtimoiy soliq	\N	364000	Iyun oyi to'ladim	2025-05-15 00:00:00	\N	tax	income
-325	Server 2 to'lovi	\N	200000		2025-06-04 00:00:00	\N	for_office	income
 330	Mobilogivga mantaj uchun	\N	650000	3 ta vedioni mantaj qilib bergani uchun	2025-06-01 00:00:00	\N	smm_service	income
 331	Arenda may oyi	\N	9100000		2025-05-31 00:00:00	\N	renting	income
 338	\N	\N	3000000	\N	2025-05-23 00:00:00	12	employee_salary	\N
 352	We fi to'lovi	\N	330000		2025-07-01 00:00:00	\N	for_office	income
 357	\N	\N	1000000	\N	2025-04-04 00:00:00	22	employee_salary	\N
 359	Aylanma dan soliq	\N	315400		2025-08-19 00:00:00	\N	tax	income
+373	10L suv	\N	16000		2025-09-19 00:00:00	\N	for_office	income
+310	Confort syomkaga borganda harajat	\N	100000	Obet yo'l kira moshinaga benzin	2025-05-12 00:00:00	\N	smm_service	income
+222	Diyorni o'qishi uchun 	\N	1300000	Oybek.	2025-02-08 00:00:00	\N	other_expense	oybek
+379	Chatgpt oylik to'lov	\N	70000	5.5 $ oylik to'lovi	2025-10-19 00:00:00	\N	other_expense	income
+399	\N	\N	450000	\N	2025-11-15 00:00:00	15	employee_salary	\N
+382	Server 1 oylik to'lovi	\N	200000		2025-10-30 00:00:00	\N	other_expense	income
+369	Server to'lovi 2	\N	200000		2025-08-27 00:00:00	\N	other_expense	income
+325	Server 2 to'lovi	\N	200000		2025-06-04 00:00:00	\N	other_expense	income
+280	Server to'lovi	\N	210000	2 oylik qarzdorlik yopildi	2025-04-03 00:00:00	\N	other_expense	income
+404	Server 1 oylik to'lovi	\N	200000		2026-01-01 00:00:00	\N	other_expense	income
+390	Devedend daramod solig'i	\N	227000		2025-10-13 00:00:00	\N	tax	income
+412	Aylanmadan olinadigan soliq	\N	62000		2025-12-14 00:00:00	\N	tax	income
+414	\N	\N	450000	\N	2026-01-13 00:00:00	15	employee_salary	\N
 129	bumaga	\N	15000	Kirimdan	2024-11-15 00:00:00	\N	for_office	income
 124	10 L suv	\N	12000	Kirimdan	2024-11-13 00:00:00	\N	for_office	income
 122	Alou wera ichimlik	\N	10000	Kirimdan	2024-11-12 00:00:00	\N	for_office	income
@@ -1048,6 +1058,13 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 353	Mabilogivga 	\N	650000	Suv vediosini olib bergani uchun Doniyor akaga	2025-07-30 00:00:00	\N	smm_service	income
 358	Pensiya badali	\N	2600		2025-08-19 00:00:00	\N	tax	income
 363	Devident soliq	\N	130000		2025-08-19 00:00:00	\N	tax	income
+380	10L sub	\N	16000		2025-10-21 00:00:00	\N	for_office	income
+385	\N	\N	450000	\N	2025-10-15 00:00:00	15	employee_salary	\N
+400	\N	\N	1000000	\N	2025-12-20 00:00:00	31	employee_salary	\N
+391	Chatgpt obuna	\N	66000		2025-11-19 00:00:00	\N	other_expense	income
+383	Server 2 to'lovi 	\N	200000		2025-10-30 00:00:00	\N	other_expense	income
+405	Server 2 to'lovi	\N	200000		2026-01-01 00:00:00	\N	other_expense	income
+413	Ijtimoiy soliq	\N	316000		2025-12-14 00:00:00	\N	tax	income
 111	Restaran aylangani chiqanda ovqatlanish va yo'l kira uchun	\N	30000	Kirimdan	2024-11-21 00:00:00	\N	other_expense	income
 209	Udinitel	\N	115000	Bahromdan	2024-11-03 00:00:00	\N	office_item	bahrom
 128	2 ta 10 l suv	\N	24000	Kirimdan	2024-11-15 00:00:00	\N	for_office	income
@@ -1065,13 +1082,11 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 292	\N	\N	1000000	\N	2025-04-04 00:00:00	29	employee_salary	\N
 293	\N	\N	450000	\N	2025-04-15 00:00:00	15	employee_salary	\N
 294	\N	\N	1000000	\N	2025-04-23 00:00:00	12	employee_salary	\N
-308	Motostan ga syomka harajati	\N	120000	3 ta bolani taksida ob kettim. Obet qildik. Suv ichdik. Syomkadan keyin metroda qaytik	2025-05-09 00:00:00	\N	other_expense	income
 320	Aylanmadan soliq	\N	170000	Iyun oyida to'ladim	2025-04-15 00:00:00	\N	tax	income
 333	\N	\N	1300000	\N	2025-06-10 00:00:00	9	employee_salary	\N
 340	\N	\N	450000	\N	2025-06-15 00:00:00	15	employee_salary	\N
 342	Soliq Iyun oyi uchun 	\N	542000		2025-07-15 00:00:00	\N	tax	income
 344	Bumaga	\N	18000		2025-07-18 00:00:00	\N	for_office	income
-348	Server 1	\N	200000		2025-07-25 00:00:00	\N	for_office	income
 339	\N	\N	3000000	\N	2025-06-15 00:00:00	12	employee_salary	\N
 335	\N	\N	1300000	\N	2025-05-06 00:00:00	9	employee_salary	\N
 303	\N	\N	1000000	\N	2025-04-05 00:00:00	9	employee_salary	\N
@@ -1081,6 +1096,22 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 354	Asadulloh dizaynerga praykt bay	\N	200000		2025-08-04 00:00:00	\N	smm_service	income
 362	Jismoniy shahslar daramotidan soliq	\N	312000		2025-08-19 00:00:00	\N	tax	income
 364	\N	\N	450000	\N	2025-08-19 00:00:00	15	employee_salary	\N
+366	\N	\N	1000000	\N	2025-06-04 00:00:00	8	employee_salary	\N
+370	10L suv	\N	14000		2025-09-11 00:00:00	\N	for_office	income
+376	10L suv	\N	16000		2025-10-03 00:00:00	\N	for_office	income
+308	Motostan ga syomka harajati	\N	120000	3 ta bolani taksida ob kettim. Obet qildik. Suv ichdik. Syomkadan keyin metroda qaytik	2025-05-09 00:00:00	\N	smm_service	income
+381	\N	\N	1000000	\N	2025-07-04 00:00:00	8	employee_salary	\N
+386	\N	\N	1000000	\N	2025-05-04 00:00:00	7	employee_salary	\N
+395	\N	\N	1000000	\N	2025-08-04 00:00:00	8	employee_salary	\N
+401	\N	\N	1000000	\N	2025-12-20 00:00:00	30	employee_salary	\N
+279	Arenda naqt	\N	6100000	3 marta bo'lib bo'lib pul to'ladim \n	2025-03-20 00:00:00	\N	renting	income
+392	Server 1 to'lovi	\N	200000		2025-11-29 00:00:00	\N	other_expense	income
+374	Server 1 to'lovi	\N	200000	Sentabr oyi uchun server to'lovi	2025-09-29 00:00:00	\N	other_expense	income
+348	Server 1	\N	200000		2025-07-25 00:00:00	\N	other_expense	income
+406	Space dan kurs	\N	900000		2026-01-04 00:00:00	\N	office_item	income
+387	Ijtimoiy soliq	\N	320000		2025-10-13 00:00:00	\N	tax	income
+407	\N	\N	1000000	\N	2025-07-04 00:00:00	28	employee_salary	\N
+409	Aylanmadan olinadigan soliq	\N	317000		2025-11-14 00:00:00	\N	tax	income
 134	Bumaga qo'g'oz sochiq	\N	30000	Kirimdan	2024-11-21 00:00:00	\N	for_office	income
 130	Qog'oz sochiq	\N	13000	Kirimdan	2024-11-15 00:00:00	\N	for_office	income
 118	2 ta Pulpy suv	\N	30000	Kirimdan	2024-11-12 00:00:00	\N	for_office	income
@@ -1101,19 +1132,30 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 311	10 L suv	\N	14000		2025-05-15 00:00:00	\N	for_office	income
 314	\N	\N	450000	\N	2025-05-16 00:00:00	15	employee_salary	\N
 321	Jismoniy shahslardan daromad solig'i	\N	357000	Iyun oyida to'ladim	2025-05-15 00:00:00	\N	tax	income
-324	Server 1 oylik to'lovi	\N	200000	Server ishlashi uchun to'lov	2025-06-04 00:00:00	\N	for_office	income
 328	20 L suv	\N	28000		2025-05-31 00:00:00	\N	for_office	income
 334	\N	\N	1300000	\N	2025-05-10 00:00:00	19	employee_salary	\N
-336	Server 1	\N	200000		2025-06-30 00:00:00	\N	for_office	income
 347	Soliqlar 	\N	1208000		2025-06-15 00:00:00	\N	tax	income
-349	Server 2 to'lovi	\N	200000		2025-07-26 00:00:00	\N	for_office	income
 351	We fi to'lovi	\N	300000		2025-06-01 00:00:00	\N	for_office	income
 355	Ofisga parta	\N	340000		2025-08-14 00:00:00	\N	office_item	income
 360	Ijtimoiy soliq	\N	312000		2025-08-19 00:00:00	\N	tax	income
 365	Arenda to'lovi yangi ofis	\N	1260000		2025-08-20 00:00:00	\N	renting	income
+367	\N	\N	1000000	\N	2025-05-04 00:00:00	3	employee_salary	\N
+371	Arenda sentabr oyi uchun	\N	2480000	200$ berdim	2025-09-15 00:00:00	\N	renting	income
+377	10L suv 	\N	16000		2025-10-13 00:00:00	\N	for_office	income
+384	\N	\N	450000	\N	2025-09-15 00:00:00	15	employee_salary	\N
+396	\N	\N	1000000	\N	2025-06-04 00:00:00	28	employee_salary	\N
+398	\N	\N	750000	\N	2025-11-30 00:00:00	31	employee_salary	\N
+402	\N	\N	450000	\N	2025-12-20 00:00:00	15	employee_salary	\N
+393	Server 2 to'lovi	\N	200000		2025-11-29 00:00:00	\N	other_expense	income
+375	Server 2 to'lovi	\N	200000	Server 2 to'lovi sentabr oyi uchun	2025-09-29 00:00:00	\N	other_expense	income
+349	Server 2 to'lovi	\N	200000		2025-07-26 00:00:00	\N	other_expense	income
+336	Server 1	\N	200000		2025-06-30 00:00:00	\N	other_expense	income
+324	Server 1 oylik to'lovi	\N	200000	Server ishlashi uchun to'lov	2025-06-04 00:00:00	\N	other_expense	income
+388	Daromat solug'i	\N	278000		2025-09-13 00:00:00	\N	tax	income
+408	\N	\N	1920000	\N	2025-12-31 00:00:00	11	employee_salary	\N
+411	Daromad solig'i	\N	315000		2025-12-14 00:00:00	\N	tax	income
 220	Instagram targetga	\N	310000	Kirimdan	2025-02-13 00:00:00	\N	smm_service	income
 109	Restaran aylangani chiqanda ovqatlanish va yo'l kira uchun	\N	30000	Kirimdan	2024-11-16 00:00:00	\N	other_expense	income
-241	Foizga chiqib ketti	\N	4781000	Bank foizi uchun	2025-03-21 00:00:00	\N	other_expense	income
 107	Restaran aylangani chiqanda ovqatlanish va yo'l kira uchun	\N	32000	Kirimdan	2024-11-13 00:00:00	\N	other_expense	income
 49	Restaran aylangani chiqqanda avtobusga	\N	8000	Kirimdan	2024-11-04 00:00:00	\N	other_expense	income
 153	Lipton choy ofisda yigitlarga	\N	16000	Kirimdan	2024-11-26 00:00:00	\N	for_office	income
@@ -1134,12 +1176,9 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 164	Play market	\N	340000	Bahromdan	2024-12-02 00:00:00	\N	office_item	bahrom
 165	we-fi internet	\N	500000	Kirimdan	2024-12-02 00:00:00	\N	for_office	income
 166	Olx reklama	\N	23000	Bahromdan	2024-12-05 00:00:00	\N	smm_service	bahrom
-167	Telefonga oylik to'lov	\N	100000	Bahromdan	2024-12-06 00:00:00	\N	other_expense	bahrom
-168	Serverga	\N	325000	Bahromdan	2024-12-06 00:00:00	\N	for_office	bahrom
 169	Arendaga	\N	6500000	Bahromdan	2024-12-10 00:00:00	\N	renting	bahrom
 170	Arendaga	\N	2600000	Kirimdan	2024-12-10 00:00:00	\N	renting	income
 171	Nalogka	\N	605000	Bahromdan	2024-12-12 00:00:00	\N	tax	bahrom
-172	Serverga	\N	104000	Bahromdan	2024-12-12 00:00:00	\N	for_office	bahrom
 173	10 L suv	\N	12000	Kirimdan	2024-12-13 00:00:00	\N	for_office	income
 174	Vilajniy salfetka	\N	12000	Kirimdan	2024-12-13 00:00:00	\N	for_office	income
 175	Birjaga	\N	1300000	Bahromdan	2024-12-20 00:00:00	\N	other_expense	bahrom
@@ -1150,11 +1189,10 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 114	Musir chelak	\N	30000	Kirimdan	2024-11-06 00:00:00	\N	for_office	income
 182	10 L suv	\N	14000	Kirimdan	2025-02-04 00:00:00	\N	for_office	income
 179	Bank hizmati chek daftar	\N	40000	Kirimdan	2025-01-27 00:00:00	\N	tax	income
-126	Serverga oylik to'lov	\N	200000	Kirimdan	2024-11-14 00:00:00	\N	for_office	income
+389	Aylanmadan olinadigan soli1	\N	455000		2025-10-13 00:00:00	\N	tax	income
 187	\N	\N	3000000	\N	2024-12-23 00:00:00	12	employee_salary	\N
 188	\N	\N	3000000	\N	2025-01-23 00:00:00	12	employee_salary	\N
 131	we-fi internet	\N	500000	Kirimdan	2024-11-11 00:00:00	\N	for_office	income
-356	S3 server to'lovi	\N	50000		2025-08-15 00:00:00	\N	for_office	income
 26	Bumaga	\N	10000	Kirimdan	2024-11-04 00:00:00	\N	for_office	income
 33	Limanad Barbican	\N	16000	kirimdan	2024-11-04 00:00:00	\N	for_office	income
 159	Vizitka	\N	40000	Bahromdan	2024-11-28 00:00:00	\N	office_item	bahrom
@@ -1176,18 +1214,30 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 216	100 L suv	\N	75000	Kirimdan	2025-02-06 00:00:00	\N	for_office	income
 217	Tilifonga oylik to'lov	\N	50000	Kirimdan	2025-02-07 00:00:00	\N	for_office	income
 218	Olx reklama	\N	30000	Kirimdan	2025-02-07 00:00:00	\N	smm_service	income
-219	Serverga Oylik to'lov	\N	110000	Kirimdan	2025-02-13 00:00:00	\N	for_office	income
 361	Aylanmadan soliq o'tkan oy uchun	\N	356000		2025-08-19 00:00:00	\N	tax	income
+372	Bumaga	\N	18000		2025-09-19 00:00:00	\N	for_office	income
+309	Smm confort prayktga borganda harajat	\N	100000	Yo'l kira obet qaytish	2025-05-10 00:00:00	\N	smm_service	income
 247	\N	\N	1000001	\N	2025-03-19 00:00:00	\N	employee_salary	\N
 186	\N	\N	2000001	\N	2024-11-23 00:00:00	\N	employee_salary	\N
 272	\N	\N	123456	\N	2025-03-22 00:00:00	\N	employee_salary	\N
 287	Bumaga	\N	16000		2025-04-22 00:00:00	\N	for_office	income
 304	Cup cat mantaj uchun oylik to'lov	\N	95000	Mandaj uchun kerak oylik to'lovi bu	2025-05-06 00:00:00	\N	smm_service	income
-309	Smm confort prayktga borganda harajat	\N	100000	Yo'l kira obet qaytish	2025-05-10 00:00:00	\N	other_expense	income
 312	Bumaga	\N	16000		2025-05-15 00:00:00	\N	for_office	income
-337	Server 2	\N	200000	Iyun oyi uchun server to'lovi	2025-06-30 00:00:00	\N	for_office	income
 343	Ofisga 20 l suv	\N	28000		2025-07-18 00:00:00	\N	for_office	income
 350	We fi to'lovi	\N	300000		2025-05-01 00:00:00	\N	for_office	income
+167	Telefonga oylik to'lov	\N	100000	Bahromdan	2024-12-06 00:00:00	\N	for_office	bahrom
+378	Arenda oktabr oyi uchun	\N	2440000	200$ arenda to'ladim	2025-10-13 00:00:00	\N	renting	income
+394	\N	\N	1500000	\N	2025-11-29 00:00:00	11	employee_salary	\N
+397	\N	\N	750000	\N	2025-11-30 00:00:00	30	employee_salary	\N
+403	Chatgpt oylik to'lovi	\N	66000		2025-12-26 00:00:00	\N	other_expense	income
+368	Server 1 to'lovi	\N	200000		2025-08-27 00:00:00	\N	other_expense	income
+356	S3 server to'lovi	\N	50000		2025-08-15 00:00:00	\N	other_expense	income
+337	Server 2	\N	200000	Iyun oyi uchun server to'lovi	2025-06-30 00:00:00	\N	other_expense	income
+219	Serverga Oylik to'lov	\N	110000	Kirimdan	2025-02-13 00:00:00	\N	other_expense	income
+168	Serverga	\N	325000	Bahromdan	2024-12-06 00:00:00	\N	other_expense	bahrom
+172	Serverga	\N	104000	Bahromdan	2024-12-12 00:00:00	\N	other_expense	bahrom
+126	Serverga oylik to'lov	\N	200000	Kirimdan	2024-11-14 00:00:00	\N	other_expense	income
+410	Jasimoniy shaxslardan olinadigan soliq	\N	315000		2025-11-14 00:00:00	\N	tax	income
 \.
 
 
@@ -1198,19 +1248,16 @@ COPY public.expences (id, name, real_price, price_paid, description, date_paied,
 COPY public.incomes (id, name, real_price, pay_price, date_paied, "position", project_id, type, description) FROM stdin;
 106	\N	\N	1270000	2025-07-01 00:00:00	\N	10	from_project	Sayt uchun Avans 
 107	\N	\N	2600000	2025-07-30 00:00:00	\N	9	from_project	Support puli
-108	Yusufbek	1500000	1500000	2025-02-15 00:00:00	Frontent	\N	from_student	
+134	\N	\N	2400000	2025-12-06 00:00:00	\N	39	from_project	Xilol med support puli
 109	\N	\N	1900000	2025-08-04 00:00:00	\N	7	from_project	Onepc support puli
-83	Diyordan qarz		391300	2025-04-29 00:00:00		\N	investor	
+128	\N	\N	1200000	2025-11-01 00:00:00	\N	34	from_project	Seo oylik suppirt puli 50%
 78	\N	\N	2600000	2025-04-02 00:00:00	\N	9	from_project	Prayekt puli
 79	\N	\N	1950000	2025-03-25 00:00:00	\N	7	from_project	Support puli 150$
 80	Bahtiyor	1500000	1500000	2025-04-02 00:00:00	Frontend 	\N	from_student	
 4	Dilshodov Abdurashid	1200000	1200000	2024-10-08 00:00:00	front-end	\N	from_student	\N
-16	\N	\N	1300000	2025-02-06 10:27:33.777942	\N	10	from_project	\N
 82	Abdurauf	1500000	1950000	2025-04-04 00:00:00	Frontend	\N	from_student	
 5	Dilshodov Abdurashid	1300000	1300000	2024-11-08 00:00:00	front-end	\N	from_student	\N
-84	Oybek Mikrafon uchun 		391300	2025-04-29 00:00:00		\N	investor	
-85	Oybek Chiroq uchun		1806000	2025-04-28 00:00:00		\N	investor	
-86	Oybek arenda uchun qarz onamdan		6500000	2025-04-29 00:00:00		\N	investor	
+132	\N	\N	1200000	2025-11-17 00:00:00	\N	42	from_project	100$ avans puli
 87	\N	\N	2600000	2025-04-29 00:00:00	\N	33	from_project	Birinchi oy to'lovni 50%
 88	\N	\N	1950000	2025-04-30 00:00:00	\N	7	from_project	Support puli
 89	\N	\N	2600000	2025-05-01 00:00:00	\N	33	from_project	Oylik to'lovi ikkinchi yarmi
@@ -1218,8 +1265,7 @@ COPY public.incomes (id, name, real_price, pay_price, date_paied, "position", pr
 91	\N	\N	2500000	2025-05-08 00:00:00	\N	34	from_project	3 oy davomida har oy 200$ dan to'lov qiladi
 110	\N	\N	1250000	2025-08-18 00:00:00	\N	10	from_project	100$ 3 chi qismi yana 100$ qoldi
 38	Diyordan qarz		1500000	2024-11-23 00:00:00		\N	investor	
-60	Oybek qarz		16312000	2025-03-19 00:00:00		\N	investor	
-81	Oybek		1068000	2025-04-02 00:00:00		\N	investor	
+136	\N	\N	2400000	2025-12-11 00:00:00	\N	44	from_project	Restaran uchun menu yasab berdik
 17	\N	\N	300000	2025-01-16 00:00:00	\N	11	from_project	
 18	\N	\N	300000	2025-01-16 00:00:00	\N	12	from_project	
 92	\N	\N	1300000	2025-05-15 00:00:00	\N	35	from_project	Avas yana 2600000 beradi
@@ -1236,22 +1282,47 @@ COPY public.incomes (id, name, real_price, pay_price, date_paied, "position", pr
 1	Yusfbek Hamidullayev	1500000	1500000	2024-12-18 00:00:00	Frontend	\N	from_student	soqqa
 14	\N	\N	23500000	2025-02-06 00:00:00	\N	8	from_project	
 112	\N	\N	1260000	2025-08-20 00:00:00	\N	38	from_project	Birinchi oy 50% to'lovi
-94	Onamdan qarz		1700000	2025-06-04 00:00:00		\N	investor	
-55	\N	\N	7800000	2025-02-25 00:00:00	\N	6	from_project	Qolgan 50% puli
 45	Abdurauf	1500000	1800000	2025-03-02 00:00:00	Front-end 	\N	from_student	
 46	Bahtiyor	1500000	1400000	2025-02-17 00:00:00	Front-end 	\N	from_student	
 56	\N	\N	500000	2025-03-10 00:00:00	\N	7	from_project	We fi uchun to'landi
 95	Boburdan qarz		2000000	2025-06-04 00:00:00		\N	investor	
+113	\N	\N	4200000	2025-08-27 00:00:00	\N	37	from_project	2 oy support puli
 96	\N	\N	1935000	2025-06-04 00:00:00	\N	7	from_project	One pc support puli
 97	\N	\N	2600000	2025-05-30 00:00:00	\N	9	from_project	Motostan support puli
 98	\N	\N	2500000	2025-06-10 00:00:00	\N	35	from_project	200$ berdi 
-99	Onamdan qarz		13000000	2025-06-10 00:00:00		\N	investor	
 100	\N	\N	1900000	2025-07-01 00:00:00	\N	7	from_project	One support 3 oy puli
-101	\N	\N	2600000	2025-07-15 00:00:00	\N	9	from_project	Iyun oyi support 2 oy uchun to'lov
 102	\N	\N	4200000	2025-07-18 00:00:00	\N	37	from_project	Birinchi oy hizmat uchun 33% o'tkazildi
 103	\N	\N	2600000	2025-07-18 00:00:00	\N	34	from_project	Seo hizmatimiz uchun 2 oy to'lovi
+122	\N	\N	840000	2025-09-29 00:00:00	\N	10	from_project	Saytdan qolgan 50$ pul 20$ crm support puli 12.000 mingdan hisoblangan
+142	\N	\N	1200000	2026-01-12 00:00:00	\N	7	from_project	Yambar oyi support to'lovi
+123	\N	\N	1800000	2025-10-06 00:00:00	\N	7	from_project	Onepc support puli 150$
 104	\N	\N	1270000	2025-07-23 00:00:00	\N	10	from_project	2 to'lovni qildi.
+135	\N	\N	2400000	2025-12-09 00:00:00	\N	43	from_project	Seo xizmati oylik to'lovni amalga oshirdi
+129	\N	\N	1200000	2025-11-04 00:00:00	\N	7	from_project	Nayabr oyi support puli
 2	Hamidullayev Yusufbek	1500000	1500000	2024-11-17 00:00:00	front-end	\N	from_student	\N
+101	\N	\N	2600000	2025-06-30 00:00:00	\N	9	from_project	Iyun oyi support 2 oy uchun to'lov
+140	\N	\N	3600000	2025-12-30 00:00:00	\N	40	from_project	
+114	\N	\N	1240000	2025-09-15 00:00:00	\N	7	from_project	Avgust oyi support
+115	\N	\N	620000	2025-09-15 00:00:00	\N	10	from_project	50$ qolgan puldan berildi yana 50$ qoldi
+117	\N	\N	620000	2025-09-17 00:00:00	\N	9	from_project	50$ support puli sentabr oy uchun
+118	\N	\N	1452000	2025-09-18 00:00:00	\N	38	from_project	Seo xizmati sentabr oyi uchun
+16	\N	\N	1300000	2025-01-06 00:00:00	\N	10	from_project	
+130	\N	\N	2400000	2025-11-13 00:00:00	\N	41	from_project	Seo xizmati support puli
+124	\N	\N	2416000	2025-10-10 00:00:00	\N	34	from_project	Seo uchun oktabr oyi to'lovi
+133	\N	\N	3600000	2025-11-29 00:00:00	\N	40	from_project	Oylik 300$ support xizmati
+125	\N	\N	600000	2025-10-13 00:00:00	\N	9	from_project	Motostan oktabr oyi support puli
+126	\N	\N	2400000	2025-10-30 00:00:00	\N	39	from_project	Seo xizmati oylik support puli
+127	\N	\N	3600000	2025-10-30 00:00:00	\N	40	from_project	Seo Oylik support puli 300$
+131	\N	\N	600000	2025-11-15 00:00:00	\N	9	from_project	Nayabr oyi Support puli 
+55	\N	\N	7800000	2025-03-01 00:00:00	\N	6	from_project	Qolgan 50% puli
+141	Yusufbek	1500000	1500000	2025-02-17 00:00:00	Frontend	\N	from_student	
+137	\N	\N	1200000	2025-12-13 00:00:00	\N	7	from_project	Oylik support puli
+138	\N	\N	2400000	2025-12-19 00:00:00	\N	41	from_project	Dekabr oyi support to'lovi
+139	\N	\N	4800000	2025-12-20 00:00:00	\N	42	from_project	Birinchi oy support puli
+99	Onamdan qarz		6000000	2025-06-10 00:00:00		\N	investor	
+143	\N	\N	3600000	2026-01-13 00:00:00	\N	39	from_project	Yanvar oyi support puli
+144	\N	\N	2400000	2026-01-16 00:00:00	\N	43	from_project	
+60	Oybek qarz		4000000	2025-03-19 00:00:00		\N	investor	
 \.
 
 
@@ -1408,166 +1479,182 @@ COPY public.operator_type (id, name) FROM stdin;
 --
 
 COPY public.operators (id, full_name, phone_number, description, status, operator_type_id) FROM stdin;
-21	Elbrus	956052222	Barcha xizmati bor ekan. Telegram bot kerak emas ekan mijozlari faqat telefon qilib zakaz berishar ekan telegram botga o'rganmapdi\n\nWeb sayt bor. telefon raqami noto'g'ri\n	cancel	4
 59	Otabek CRM	943238489	Seshanba 2 3 larda narx taklifini aytish kerak\n\nDushanba kuni 07.04.2025 qayta aloqaga chiqish kerak\n\nQurilish mollari uchun CRM tizimi kerak ekan\n	cancel	1
-45	"HOT CRUCH" xususiy korxonasi	+998917980601	Ovqаtlаnishni tаshkil qilishning boshqа turlаri	empty	4
-71	"EB SOCIETE"  MCHJ	951205737	Ixtisoslаshmаgаn ulgurji sаvdo	empty	4
-68	"MONOLITH JARKURGAN" MCHJ	908239900	Turаr joy binolаrini qurish	empty	4
+45	"HOT CRUCH" xususiy korxonasi	+998917980601	Nommer ish faoliyatida emas\nOvqаtlаnishni tаshkil qilishning boshqа turlаri	cancel	4
+71	"EB SOCIETE"  MCHJ	951205737	Kopya qiladigan mayda biznes ekan\nTk\nIxtisoslаshmаgаn ulgurji sаvdo	cancel	4
+40	"MAXMUDOTA TREDING" MCHJ	+998943589590	Abanent band dedi 2\nBoshqа toifаlаrgа kiritilmаgаn shаxsiy xizmаtlаr	in_progres	4
+17	Arctic	937770056	Telegiram bot yo'q. Web sayt yo'q. Ofisiniyam topa olmadik.\nIkkinchi raqam: 93 777 55 95	cancel	4
 24	Crystal ( Pure water )	881469999	Barcha xizmat o'zida bor ekan\n\nOfisini borib topolmadik	cancel	4
 69	"ACTIVE ASSETS" MCHJ	901147325	Ixtisoslаshmаgаn ulgurji sаvdo	empty	3
-40	"MAXMUDOTA TREDING" MCHJ	+998943589590	Boshqа toifаlаrgа kiritilmаgаn shаxsiy xizmаtlаr	empty	4
-41	"FLEET CORE" MCHJ	+998909005554	Mа'lumotlаrni joylаshtirish vа ishlov berish bo'yichа xizmаtlаr	empty	4
-81	"ALUTECH CABLE" MCHJ	903537504	Xizmat doirasidan tashqarida\nIxtisoslаshmаgаn ulgurji sаvdo	empty	4
+43	"NEW TRUST SERVICE" MCHJ	+998998960234	Kerakmas dedi\nTk\nOb'ektlаrgа kompleks xizmаt ko'rsаtish	cancel	4
+65	"CHEF SWEETS" MCHJ	998273130	Kino studio ekan kerak emas dedi.\nIxtisoslаshmаgаn do'konlаrdа boshqа tovаrlаr chаkаnа sаvdosi	cancel	4
+41	"FLEET CORE" MCHJ	+998909005554	Jamshid- lakostika ekan bizga bu xizmatlar kerak emas dedi\nMа'lumotlаrni joylаshtirish vа ishlov berish bo'yichа xizmаtlаr	cancel	4
+66	"ETOILE GROUP" xususiy korxonasi	917747275	Kerakmas dedi.\nQuruqlik trаnsporti sohаsidаgi xizmаtlаr	cancel	4
 26	Ixtiyor ( ICE BERG )	900920322	Bizdan oldin boshqa kompaniya aloqaga chiqqan ekan o'shalar bilan ishlaydigan bo'lishibdi\nDushanba kuni ko'rishib gaplashib olamiz. CRM tizimi kerak asosan\nBirinchi telefonni ko'tarmadi\n\nMalumot yo'q\nYana raqami: 55 500 88 87	cancel	4
 80	Poytaxt water	884004500	Hozircha qiziqtirmas ekan\nYozganimni o'qib javob yozmagan ekan yena yozib yubordim\nTelegramdan ma'lumotlarni tashlab qo'ydim\nSayt bor bot yo'q\n	cancel	4
-42	"USMANOV PRODUCTION N1" MCHJ	+998946564646	Boshqа toifаlаrgа kiritilmаgаn shаxsiy xizmаtlаr	empty	4
+21	Elbrus	956052222	Barcha xizmati bor ekan. Telegram bot kerak emas ekan mijozlari faqat telefon qilib zakaz berishar ekan telegram botga o'rganmapdi\n\nWeb sayt bor. telefon raqami noto'g'ri\n	cancel	4
+226	Sher Legal	981003344	Yuridik xizmat ko'rsatadi seo xizmatini taklif qilish kerak. sher.legal	empty	4
+148	Daily water	975010023	2\nTelefoni oʻchiq\nFarg'onada\nIntagiram 4.528 ta \nTelegiram bot yo'q\nWeb sayt yo'q	cancel	4
 20	Enjoy water	+998950809070	o'zini IT xizmatchisi bor ekan. \nTelegram boti bor @enjoywaterbot	cancel	4
-43	"NEW TRUST SERVICE" MCHJ	+998998960234	Ob'ektlаrgа kompleks xizmаt ko'rsаtish	empty	4
-148	Daily water	975010023	Farg'onada\nIntagiram 4.528 ta \nTelegiram bot yo'q\nWeb sayt yo'q	empty	4
+79	"FAZO PREMIUM" MCHJ	998024438	Rulda ekan ertaga tel qilish kk\nTk\nIxtisoslаshmаgаn ulgurji sаvdo	cancel	4
+118	Shabnam water	991003200	Rustam-973331776\n\nYakshanba aloqaga chiqish kerak\n\n Sayt yo'q bot yo'q	cancel	4
 19	Zilol	+998951442066	Bu xizmatlar kerakmas hozir dedi\n\nBir xaftadan keyin aloqaga chiqish kerak (28.04) Rahbari turkiyada ekan hali kelmagan ekan\n\nIkki haftadan keyin qayta oloqaga chiqish kerak. 21.04.2025 sanada aloqaga chiqish kerak. Hich nima maʼlum emas	cancel	4
-66	"ETOILE GROUP" xususiy korxonasi	917747275	Quruqlik trаnsporti sohаsidаgi xizmаtlаr	empty	4
+70	"MARKWOOD" MCHJ	998976129	Tk2\nBoshqа mebellаr ishlаb chiqаrish	cancel	4
 22	Do'rmon suv	+998983606600	Malumot tashlab qo'ydim. telefonim o'chib qoladi dedi, malumot tashlab qo'ying dedi\n	cancel	4
 60	Vital water	998048080	O'zini IT xizmatchilari bor ekan\n\nTelefonni ko'tarmadi\nBot bor sayt yo'q\n\n	cancel	4
-17	Arctic	937770056	Telegiram bot yo'q. Web sayt yo'q. Ofisiniyam topa olmadik.\nIkkinchi raqam: 93 777 55 95	empty	4
-73	"MIXPAPER" MCHJ	974411177	Qog`oz vа kаrtondаn boshqа buyumlаr ishlаb chiqаrish	empty	4
+72	"ELNA" MCHJ	993071048	Tk2\nBoshqа kiyimlаr vа аksessuаrlаr ishlаb chiqаrish	cancel	4
+73	"MIXPAPER" MCHJ	974411177	Tk2\nQog`oz vа kаrtondаn boshqа buyumlаr ishlаb chiqаrish	cancel	4
+11	Biolife water	555002555	Bot bor web sayt ham bor taklif berib ko'rish kerak. Ofisini topa olmadik.	cancel	4
 27	Furat water	930462020	Barcha xizmatlari bor ekan to'xtatib qo'ygan ekan\n\nMalumot yo'q \nYana raqamlari: \n93 047 20 20	cancel	4
+74	"ZHONG YA TRAVEL" MCHJ	935900710	Toshkentga borsam telefon qilaman dedi\nTk\nTuristik аgentliklаr fаoliyati	cancel	4
 62	City water	933845995	Boshqalarni xizmatidan foydalanayotgan ekan\nTelegram bot yo'q sayt yo'q\n	cancel	4
-67	"BAIYILIHAO CONSULTING" mas`uliyati cheklangan jamiyati qo'shma korxonasi	909483777	Tijorаt fаoliyati vа boshqаruv mаsаlаlаri bo'yichа mаslаhаt berish	empty	4
+81	"ALUTECH CABLE" MCHJ	903537504	Telefoni oʻchiq\nXizmat doirasidan tashqarida\nIxtisoslаshmаgаn ulgurji sаvdo	in_progres	4
+229	Topceo	+998771515100	Rahbarlarni o'qitadigan joy topceo.uz	empty	4
+82	"TETSU"  MCHJ	996161818	Kerakmas dedi\nTk\nSpirtsiz ichimliklаr ishlаb chiqаrish; butilkаdа minerаl suvlаr vа boshqа suvlаr ishlаb chiqаrish	cancel	4
 6	Ezoza	930648377	@ezozeezozv\nkino\n	cancel	4
-118	Shabnam water	991003200	Rustam-973331776\n\nYakshanba aloqaga chiqish kerak\n\n Sayt yo'q bot yo'q	in_progres	4
-63	"INFIN ESTATE CONSULTING" Mchj	997896666	Boshqа toifаlаrgа kiritilmаgаn, xo'jаlik fаoliyatigа yordаmchi xizmаt ko'rsаtishning boshqа turlаri	empty	4
-64	"SOLIH-PLAST" MCHJ	977025604	Boshqа plаstmаssа buyumlаr ishlаb chiqаrish	empty	4
 16	Soft water	973020202	Feruz Dawylife Water ni sherigi\nTelefonni ko'tarmadi \n\nTelegiram bot yo'q. Web sayt yo'q. \nIkkinchi raqami: 93 178 45 51	cancel	4
-11	Biolife water	555002555	Bot bor web sayt ham bor taklif berib ko'rish kerak. Ofisini topa olmadik.	empty	4
-70	"MARKWOOD" MCHJ	998976129	Boshqа mebellаr ishlаb chiqаrish	empty	4
-65	"CHEF SWEETS" MCHJ	998273130	Ixtisoslаshmаgаn do'konlаrdа boshqа tovаrlаr chаkаnа sаvdosi	empty	4
-74	"ZHONG YA TRAVEL" MCHJ	935900710	Turistik аgentliklаr fаoliyati	empty	4
-75	"HINDUKUSH"  MCHJ	900966884	Yashаsh uchun mo'ljаllаnmаgаn binolаr qurish	empty	4
+83	Ideal water	712008118	Hammasi bor	cancel	4
+84	"BASTION BUILD" MCHJ	903240220	Turаr joy binolаrini qurish	in_progres	4
+86	"ANSOR HELPER" MCHJ	908084395	Boshqа toifаlаrgа kiritilmаgаn shаxsiy xizmаtlаr	in_progres	4
+87	"SHUAIB ALIMI"  MCHJ	955714607	Ixtisoslаshmаgаn do'konlаrdа boshqа tovаrlаr chаkаnа sаvdosi	in_progres	4
 76	"XON TRUST" MCHJ	998282984	Ixtisoslаshmаgаn ulgurji sаvdo	empty	3
-78	"CHANG SHA FAN DIAN"  MCHJ	996664853	Ovqаtlаnishni tаshkil qilishning boshqа turlаri	empty	4
-79	"FAZO PREMIUM" MCHJ	998024438	Ixtisoslаshmаgаn ulgurji sаvdo	empty	4
-82	"TETSU"  MCHJ	996161818	Spirtsiz ichimliklаr ishlаb chiqаrish; butilkаdа minerаl suvlаr vа boshqа suvlаr ishlаb chiqаrish	empty	4
 61	Gumus su	900122414	Boshqa telefon qilmang dedi\n\nTelefonni ko'tarmadi\nxizmat doirasidan tashqarida\nBot bor. sayt yo'q\n	cancel	4
-84	"BASTION BUILD" MCHJ	903240220	Turаr joy binolаrini qurish	empty	4
-86	"ANSOR HELPER" MCHJ	908084395	Boshqа toifаlаrgа kiritilmаgаn shаxsiy xizmаtlаr	empty	4
-87	"SHUAIB ALIMI"  MCHJ	955714607	Ixtisoslаshmаgаn do'konlаrdа boshqа tovаrlаr chаkаnа sаvdosi	empty	4
 111	Extreme water	974247024	hamma narsasi bor ekan\n\n974247024 / 996888688	cancel	4
-83	Ideal water	712008118	Hammasi bor	empty	4
+63	"INFIN ESTATE CONSULTING" Mchj	997896666	Bu boʻyicha shugʻullanadigan bollar bor dedi\nBoshqа toifаlаrgа kiritilmаgаn, xo'jаlik fаoliyatigа yordаmchi xizmаt ko'rsаtishning boshqа turlаri	cancel	4
+224	Best audit	555002227	Bugalteriya soliqlar bo'yicha maslahatlar berishadi. Seo xizmatini taklif qilish kerak. bestaudit.uz	empty	4
 28	Agat water	712030606	Boshliqlariga telefon raqamimizni berar ekan\nHozircha malumot yoʻq \nYana raqamlari: \n99 819 06 06	cancel	4
 112	Imkon water (Suvel water)	917979999	O'iz aloqaga chiqar ekan \nSEO ni taklif qilish kerak\nSayt bor, bot bor\n71-200-200-8\n91-797-9999	cancel	4
-72	"ELNA" MCHJ	993071048	Boshqа kiyimlаr vа аksessuаrlаr ishlаb chiqаrish	empty	4
 85	ADEL premium water	992366159	Kerak bo'lsa o'zi aloqaga chiqar ekan\n\n\nTelegramdan taklifni yozib yubordim\nxech nima yo'q\n	cancel	4
-126	Mone water	90 3338000	TK\n\nXizmat doirasidan tashqarida\nXizmat doirasidan tashqarida\n\nTelefonni ko'tarmadi\nTelefonni ko'tarmadi\n\nhttps://glotr.uz/mineralnaya-voda-zam-zam-p-702234/\n\nhttps://www.yellowpages.uz/kompaniya/mone-water-pitevaya-voda\n\nX	in_progres	4
-89	"ENGRAVE" MCHJ	973685775	Boshqа mаishiy tovаrlаr ulgurji sаvdosi	empty	4
-98	"BUETYBAY" MCHJ	946717774	Pochtа vа Internet orqаli chаkаnа sаvdo	done	4
-91	"MAX PRODUC" MCHJ	951430010	Ixtisoslаshmаgаn ulgurji sаvdo	empty	4
+64	"SOLIH-PLAST" MCHJ	977025604	Kerakmas dedi\nBoshqа plаstmаssа buyumlаr ishlаb chiqаrish	cancel	4
+126	Mone water	90 3338000	2\nTK\n\nXizmat doirasidan tashqarida\nXizmat doirasidan tashqarida\n\nTelefonni ko'tarmadi\nTelefonni ko'tarmadi\n\nhttps://glotr.uz/mineralnaya-voda-zam-zam-p-702234/\n\nhttps://www.yellowpages.uz/kompaniya/mone-water-pitevaya-voda\n\nX	cancel	4
+98	"BUETYBAY" MCHJ	946717774	Tk\nPochtа vа Internet orqаli chаkаnа sаvdo	in_progres	4
+99	"HUSMA TOURS" MCHJ	903502305	Tk\nTuristik аgentliklаr fаoliyati	in_progres	4
 131	Selva	999023333	Telegramdan taklifni yuborib qo'ydim\n\n\nTelegramdan taklifni tashlab qo'yish ekrak\n\nSayt bor bot yo'q\n	cancel	4
-94	"LAZIZBEK DELFIN" MCHJ	888605868	Restorаnlаr vа oziq-ovqаt mаhsulotlаri etkаzish bo'yichа xizmаtlаr	empty	4
 77	Quduq water	903339993	Telefonni ko'tarmadi\n\nNommer operatordan olingan\nsayt bor bot yo'q\n\n	cancel	4
-93	"ORO TECH"  MCHJ	901876747	Ixtisoslаshmаgаn ulgurji sаvdo	empty	4
-95	"CHINA MASTERPRO"  MCHJ	889727271	Ixtisoslаshmаgаn ulgurji sаvdo	empty	4
-96	"ELEKTRON HISOBLAGICH TRADE" MCHJ	992255255	Elektron vа telekommunikаtsion uskunаlаr vа ulаrning ehtiyot qismlаri ulgurji sаvdosi	empty	4
+94	"LAZIZBEK DELFIN" MCHJ	888605868	Restorаnlаr vа oziq-ovqаt mаhsulotlаri etkаzish bo'yichа xizmаtlаr	in_progres	4
 97	"POLYMER DYNAMICS" MCHJ	900918515	Boshqа plаstmаssа buyumlаr ishlаb chiqаrish	empty	3
-100	"STROY EAT" MCHJ	935205026	Turаr joy binolаrini qurish	empty	4
 102	"MEGA INTER TEKS " MCHJ	909793900	To'qilgаn vа trikotаj polotno ishlаb chiqаrish	empty	3
-124	Gidrosfera water	944686666	Xumoyun - 944646666\n\nMobil ilova uchun taklif ishlab chiqish kerak. mobil ilovada CRM + Bot funksiyalari bo'lishi kerak\nQayerga borish kerak, qayerda nechta kapsula bor shularni ham barchasini ko'rsatish kerak	in_progres	4
+122	Zilha water	330255050	Nommer boshqa ekan\n\n\nXech nima yo'q	cancel	4
 134	Aqualife	950775511	CRM ni bollarga aytishar ekan. o'ylab ko'rib aloqaga chiqishar ekan\n\nTelefonni ko'tarmadi\n97 6650909- Bahodir\n\nSayt bor bot yo'q	cancel	4
-127	"A R LOGO" MCHJ	958999111	Sog`liqni sаqlаsh sohаsidаgi boshqа fаoliyat	empty	4
-114	Chimgan water	781503000	BOT + sayt\nish boshlandi\n\n10.04 telefon qilib nima bo'ldi so'rash kerak.\n\n09.04.2025 kuni abetdan keyin uchurashuv belgilandi\n\nUlug'bek degan odam rahbari ekan\n\n970340138-Xilola\n	done	4
+101	"MEROS SAROY" MCHJ	935509041	Ertaga tel qiling dedi\nTurаr joy binolаrini qurish	cancel	4
+89	"ENGRAVE" MCHJ	973685775	Boshqа mаishiy tovаrlаr ulgurji sаvdosi	in_progres	4
+91	"MAX PRODUC" MCHJ	951430010	Ixtisoslаshmаgаn ulgurji sаvdo	in_progres	4
+93	"ORO TECH"  MCHJ	901876747	Ixtisoslаshmаgаn ulgurji sаvdo	in_progres	4
 141	Cleanwater Azamat	886209999	Boshqa kompaniya bilan shartnoma qilishgan ekan qilgan crm tizimlarimizni videoga olib tashlab qoʻying dedi\n\nBir haftalardan qayta aloqaga chiqish kerak(28.04) rahbari kelishi kerak ekan qo'shimcha Telegramdan ma'lumot tashlab qo'ydim telegramda yozishganmiz\n\nTelefonni ko'tarmadi\nTelegiram bot yo'q\nWeb sayt bor	cancel	4
-103	"VENTSHOP" MCHJ	771316656	ventstore.uz lakatsiyasi saytida bor \n\nIxtisoslаshmаgаn ulgurji sаvdo	empty	4
+103	"VENTSHOP" MCHJ	771316656	Tk\nventstore.uz lakatsiyasi saytida bor \n\nIxtisoslаshmаgаn ulgurji sаvdo	in_progres	4
 117	El Clasico	781503003	Oʻzini Aytishnigi borakan\n\nOperatori bilan gaplashdim rahbari xitoyga kamandirofkaga ketgan ekan 1 hafta 10 kunda habar olish kerak (23.05)10kun bo'ladi\n\noperator bilan gaplashdim rahbari hali kelmagan ekan. haftani oxirlariga xabar olish kerak\n\n10 kundan keyin (20.04) habar olish kerak.\noperatori bilan gaplashdim, rahbarlari chetga chiqib ketishgan ekan. Ismimni yozib oldi.\n\nSayt bor bot yo'q	cancel	4
 138	Salohiddin Mavi toshkent	774030808	Erta yoki indin telefon qilib xabar olish kerak. nima bo'ldi gaplashib ko'rdimi yo'qmi. o'zim bir borib tushuntirib bersam yenada tushunarli bo'lardi deyish kerak\n\nbot bor sayti yo'q	cancel	4
+58	Nurali	977075718	Telefonini ko'tarmadi 3\n\nIp-telefoniya kerak ekan. Dushanba kuni 07.04.2025 da meet oraqali gaplashish kerak soat 11:00 dan 14:00 gacha bo'lgan vaqt oralig'ida telefon qilish kerak\n\n\n	cancel	1
 123	Sharshar water	770154147	Hamma xizmati bor ekan\nTelefonni ko'tarmadi 2\n\n17:00 da tel qilish kerak\nXech nimasi yo'q	cancel	4
+95	"CHINA MASTERPRO"  MCHJ	889727271	Tk \nIxtisoslаshmаgаn ulgurji sаvdo	in_progres	4
 147	Grandwater	979199393	Farhod - 915219900 telefonni ko'tarmadi\n\nInstagiram 21.500 obunachi\nbot yo'q \nWeb sayt bor	cancel	4
 145	Dafane water	901097222	Telefonni ko'tarmadi\nPirmat aka - 880507771 nommerini operatoridan oldim\n\nTelefonni ko'tarmadi\nInstagiram 1352 ta obunachi\nTelegiram bot yo'q\nWeb sayt yo'q	cancel	4
+96	"ELEKTRON HISOBLAGICH TRADE" MCHJ	992255255	Tk\nElektron vа telekommunikаtsion uskunаlаr vа ulаrning ehtiyot qismlаri ulgurji sаvdosi	in_progres	4
+149	Eleven Toshkent suvlari	993020011	Barcha narsasi bor	cancel	4
 23	Ibrohim Marwa	990803399	telegramdan ma'lumot tashlab qo'ydim hali javob kelmadi\n\ntelefonni ko'tarmadi\n\npayshanba kuni aloqaga chiqish kerak\n10.04.2025 payshanba kuni bo'sh bo'laman ungacha ko'risha olmasam kerak degan edi\n	cancel	4
 119	Hayot water	909110077	995159182-Erkinbek\nNommerini operatoridan oligan\nhayotwater.uz	cancel	4
-122	Zilha water	330255050	Nommer boshqa ekan\n\n\nXech nima yo'q	in_progres	4
-132	Royal	770983333	Telefonni ko'tarmadi\n\nYoʻlda ekan 1 soatlarda tel qilish kerak 17:00\n\nTelefonni ko'tarmadi\nKamoliddin - 935542002\nNommerini operatordan olinganini aytmaslik kerak\n\nkeyinroq telefon qilish kerak. 5 daqiqa vaqtingiz bormi deganimda tezroq dedi va ishi borligi uchun keyinroq telefon qiling dedi.\n\ntel qilganda \nbiz nima bilan shug'ullanishimiz va kompaniya haqida ma'lumot berish kerak\n\nXech nimasi yo'q	in_progres	4
+100	"STROY EAT" MCHJ	935205026	Tk\nTurаr joy binolаrini qurish	in_progres	4
+142	Toyyiba water	977457755	Telegramdan lakatsiya tashlab qo'yish kerak vaqatimga qarab o'taman dedi\n\nErtaga telefon qilish kerak 14.05\n\nTelefonni ko'tarmadi\nTelegiram bot \nWeb sayt topilmadi.\n	cancel	4
+114	Chimgan water	781503000	BOT + sayt\nish boshlandi\n\n10.04 telefon qilib nima bo'ldi so'rash kerak.\n\n09.04.2025 kuni abetdan keyin uchurashuv belgilandi\n\nUlug'bek degan odam rahbari ekan\n\n970340138-Xilola\n	cancel	4
+225	Ixlos school	781133600	Seo xizmatini taklif qilish kerak xususiy maktab ixlosschool.uz	empty	4
 139	Dua premium water	906989999	Kompaniya haqida ma'lumot berdim telegramdan ham ma'lumoto tashlab qo'ydim. menejerlarimizga telefon raqamingizni beramiz o'zlari aloqaga chiqadi deyishdi. bor bot web sayti yo'q	cancel	4
 133	Eco life	991978694	Hozirlikcha kerak emas deyapti\n\nxizmat doirasidan tashqarida\n\nXech nimasi yo'q	cancel	4
 140	Musaffo suv Nodira	972099999	Hozir bu jarayonda CRM ustida ishlayapmiz 2 martta borib keldim\n\nAsosan CRM ga qiziqish bildirdi telegramdan ma'lumot tashlab berdim\nInstagiram 10,600 obunachi \nTelegiram bot bor	cancel	4
 143	Nest water	959543302	Instagiram profili faol 116 ta obunachi \nTelegiram bot yo'q\nWeb sayt yo'q	empty	3
 135	Obi Zam Rovshan	88 543 88 88	Telegramda yozishganlarimizni o'chirib tashlagan ekan\n\ntelegramdan yozib qo'ydim\n\nXech nimasi yo'q	cancel	4
-142	Toyyiba water	977457755	Telegramdan lakatsiya tashlab qo'yish kerak vaqatimga qarab o'taman dedi\n\nErtaga telefon qilish kerak 14.05\n\nTelefonni ko'tarmadi\nTelegiram bot \nWeb sayt topilmadi.\n	in_progres	4
+127	"A R LOGO" MCHJ	958999111	 Tk\nSog`liqni sаqlаsh sohаsidаgi boshqа fаoliyat	in_progres	4
+227	Macbro 	787772020	Tilifon kamputer planshet sotishadi. Seo xizmatimizni taklif qilamiz. macbro.uz	empty	4
 115	Crystall life water	998660497	Taklifni yozma ravishda jo'natib qo'ydim\n\nTaklifni yozma ravishda tayyorlab jo'natish kerak\n\nXEch nima yo'q	cancel	4
-149	Eleven Toshkent suvlari	993020011	Barcha narsasi bor	empty	4
-58	Nurali	977075718	Telefonini ko'tarmadi 3\n\nIp-telefoniya kerak ekan. Dushanba kuni 07.04.2025 da meet oraqali gaplashish kerak soat 11:00 dan 14:00 gacha bo'lgan vaqt oralig'ida telefon qilish kerak\n\n\n	empty	1
-99	"HUSMA TOURS" MCHJ	903502305	Turistik аgentliklаr fаoliyati	done	4
+124	Gidrosfera water	944686666	Xumoyun - 944646666\n\nMobil ilova uchun taklif ishlab chiqish kerak. mobil ilovada CRM + Bot funksiyalari bo'lishi kerak\nQayerga borish kerak, qayerda nechta kapsula bor shularni ham barchasini ko'rsatish kerak	cancel	4
+67	"BAIYILIHAO CONSULTING" mas`uliyati cheklangan jamiyati qo'shma korxonasi	909483777	Ertaga tel qilin dedi\nTk\nTijorаt fаoliyati vа boshqаruv mаsаlаlаri bo'yichа mаslаhаt berish	in_progres	4
+78	"CHANG SHA FAN DIAN"  MCHJ	996664853	Telegramdan yozildi oʻzbek emas\nOvqаtlаnishni tаshkil qilishning boshqа turlаri	cancel	4
 110	Аqua DELUX Water	941236663	yakshanba kuni aloqaga chiqishar ekan\nXech narx yo'q\n	cancel	4
-101	"MEROS SAROY" MCHJ	935509041	Turаr joy binolаrini qurish	empty	4
 137	Aqua ice	959510033	Mijozlari yetarli ekan ko'pi zo'riqtirib gemaroyi chiqishiga sabab bo'larkan\n\n991290033- Dilmurod\n\nBot bor sayt yo'q\n	cancel	4
 128	simma water	770017777	Hammasi bor ekan yasatayotgan ekan\n774088885- Muhammadyusuf\n Bot bor sayt yo'q	cancel	4
-166	COOL WATER SERVICE	(95) 194-07-57	Raqami noto'g'ri\nX	empty	4
-158	Royal gold water	911323041	Raqam noto'g'ri\n	empty	4
-160	Safo water	886661111	X Farg'onada ekan	empty	4
-125	OASIS water	712005515	Buxoroda X	empty	4
-170	HUB WATER	977148816	Raqamga qo'ng'iroq qilib bo'lmaydi deyapti\nX	empty	4
+167	MEGA WATER COMPANY	(71) 255-49-45	2\nTK\nTK\nTK\nTK\nTelefonni ko'tarmadi\nX	cancel	4
+158	Royal gold water	911323041	Raqam noto'g'ri\n	cancel	4
+166	COOL WATER SERVICE	(95) 194-07-57	Raqami noto'g'ri\nX	cancel	4
+160	Safo water	886661111	X Farg'onada ekan	cancel	4
+218	Narxlash uz 	+99888373333	Mavjud boʻlmagan raqam dedi\nBuyam Alimardonlar qilgan sayt Seo xizmatini taklif qilish kerak \nnarxlash.uz\n	in_progres	4
+170	HUB WATER	977148816	Raqamga qo'ng'iroq qilib bo'lmaydi deyapti\nX	cancel	4
 136	Aquasoff	991400999	Akasi bilan gaplashibdi akasi hozircha kerak emas degan ekan\n\nAkasi xorazimdan kelishi kerak ekan xaftani oxirlarida bir xabar olish kerak (26.04)\n\nErta yoki indin ofisingizga o'taman degan\n16.04 yoki 17.04 da telefon qilib. aka nima bo'ldi kela olasizmi yoki o'zim boraymi deyish kerak\n\nTelefonni ko'tarmadi\nhammasi bor lekin ishlamaydi\n	cancel	4
 152	Enjoy water	950809070	Aytishnik ishga olingan ekan sayti endi ishga tushayotgan ekan\nTelegram bot bor sayt yo'q	cancel	4
 57	Mushtari BRILLIANT PURE WATER	99 0993113 	Crm tizimi o'chib ketibdi. Eski CRM tizimi yaxshi ishlamagan ekan. deyarli eplab o'rnatib ham berishmagan ekan.\n\nGaplashdim hozir tashlab beraman dedi\n\nErtalab 10 larda tel qilish kerak\nertalab yoki abetdan keyin telefon qilish kerak. Doniyor aka aytgandilar CRM linkini tashlab yuborsangiz yoki nimalar bo'lishi kerakligini aytsangiz biz sizga mos CRM tizimini taklif qilamiz\n\nrahbarim kelsin degandi\nqayta aloqaga chiqish kerak\n\n55 5005115\ninstagramdan topildi. tg sayt yo'q\n	cancel	4
-18	Bayer Mineral water Muhammadjon	+998951638090	Ofisga borib lakatsiya tashlab qo'yaman dedi\nTelegiram bot yo'q. Web sayt yo'q. 	in_progres	4
 151	Alyaska water 2	973358111	Telegramdan yozishganmiz\n	cancel	4
 153	Elbrus	956052222	Navarasi aytishnik ekan Sayt bor bot yo'q	cancel	4
 169	GROT WATER	901759731	Rahmat hozir kerak emas deyapti\nX	cancel	4
+223	Defast 	900920077	Seo xizmatini ko'rsatamiz\n200$ + 100$ reklama\ndefact.uz	empty	4
 150	Alyaska water	781138989	nommerimizni yozib oldi o'zi aloqaga chiqar ekan\n\nnstagiram bor\nWeb sayt yo'q\nTelegiram bot yo'q	cancel	4
-165	Mill water O'lmas	97 441 94 99	Telegramdan yozib qo'ying dedi\n\nchorshanba(21.05) yoki payshanba(22.05) telefon qilib lakatsiyasini so'rash kerak.\nkompaniya haqida ma'lumot berdim bu haftamas keyingi hafta gaplashaylik dedi\n\nErtaga telefon qilish kerak 14.05\n\nErtaga yoki indinga telefon qilish kerak\n5 daqiqa vaqtingiz bormi desam "To'g'risi ummuman vaqtim yo'q" dedi\nqachon telefon qilay bo'lmasa desam ertaga yoki indinga telefon qiling dedi\nX	in_progres	4
-167	MEGA WATER COMPANY	(71) 255-49-45	TK\nTK\nTK\nTK\nTelefonni ko'tarmadi\nX	in_progres	4
+125	OASIS water	712005515	Buxoroda X	cancel	4
+228	Dream level	773434777	Uy qurib sotadi seo xizmatimizni sotish kerak.\n dreamlevel.uz	empty	4
 162	Bulvar water	908661111	904436666 shu nommerga telefon qilib dardini eshitish kerak\n\nKeyinroq telefon qilar ekan.\nOldin CRM tizimini ishlatgan ekan. omoCRM ishlatgan ekan. CRM ishlatganimdan afsuslanyapman menga kerak emas ekan deyapti.\nX	cancel	4
+68	"MONOLITH JARKURGAN" MCHJ	908239900	Rus ekan telegramdan ma'lumot jo'natildi\n\nTk\nTurаr joy binolаrini qurish	cancel	4
 173	Ma'ruf Miracle water	977993039	15.06 dan keyin tel qilish kerak\n\nBu suv yopilgan ekan. telegramdan yozish kerak lakatsiya so'rab. hozir balon sotish bilan shug'ullanishar ekan\n\n\nX	cancel	4
-159	Safis water	781473113	Hammasi bor	empty	4
+18	Bayer Mineral water Muhammadjon	+998951638090	Ofisga borib lakatsiya tashlab qo'yaman dedi\nTelegiram bot yo'q. Web sayt yo'q. 	cancel	4
+165	Mill water O'lmas	97 441 94 99	Telegramdan yozib qo'ying dedi\n\nchorshanba(21.05) yoki payshanba(22.05) telefon qilib lakatsiyasini so'rash kerak.\nkompaniya haqida ma'lumot berdim bu haftamas keyingi hafta gaplashaylik dedi\n\nErtaga telefon qilish kerak 14.05\n\nErtaga yoki indinga telefon qilish kerak\n5 daqiqa vaqtingiz bormi desam "To'g'risi ummuman vaqtim yo'q" dedi\nqachon telefon qilay bo'lmasa desam ertaga yoki indinga telefon qiling dedi\nX	cancel	4
+217	Hafta 24	998918483635	Mavjud boʻlmagan raqam deyapti\n\nHafta 24 loyihasi alimardonlar yozib bergan codeni saytiga 3-4 ta odam kirvotkanakan ceo xizmatimizni tavsiya qilosh kerak narxi 200$ oylik to'lovi birinchi oydan 500 ta odam kirishiga kafolat beramiz. Har oy 500 ta ko'payib boradi. https://www.hafta24.uz/ru\n	in_progres	4
+75	"HINDUKUSH"  MCHJ	900966884	Whatsabdan yozish kerak\nYashаsh uchun mo'ljаllаnmаgаn binolаr qurish	cancel	4
+230	Coursetop 	917089151	O'quv kurslarini tashkil qilish boshqorishni o'rgatadi. Ceo xizmatini taklif qilish kerak.\ncoursetop.uz	empty	4
+219	Invision agency 	202032020	Mavjud boʻlmagan raqam\nShahsiy brend xizmatini taklif qiladi.\ninvision.uz tildada qilingan seo xizmatimizni taklif qilamiz	in_progres	4
 172	LION WATER	993097373	X	cancel	4
 157	Azizbek Yaxtan water	993348950	CRM tizimi bor ekan. sotuvchilar uchun alohida kuryerlar uchun alohida CRM qildirgan ekan.\n\nTelefonni ko'tarmadi\n\n993348950-Azizbek \ntelefon raqami operatoridan olingan. bu rahbari ekan tel qilib xizmatlarimizni taklif qilish kerak\n\nBoshqa yo'nalishga javob beryapti\n\nTelefonni ko'tarmadi X	cancel	4
 161	Uzbegimwater	950878000	Telegramdan tallif joʻnatib qoʻydim\n\ntelegramdan teklifni yozma ravishta jo'natish kerak\nX	cancel	4
-200	Endlesswater	783330808	Suv ishlab chiqaradi. Instagiram faol telegiram bot bor\n	empty	4
-201	Buloq suv	978994444	Suv ishlab chiqaradi instagiram bor	empty	4
-208	Aquawater	901000066	Bot bor sayt yo'q\n	empty	4
+159	Safis water	781473113	Hammasi bor	cancel	4
+164	Fosso	950118228	Telegramdan ma'lumot tashlab qo'ydim\n974144197-Alibek\n\nTelefonni ko'tarmadi\n\nX	cancel	4
+203	Elsuv	555180505	Telegramdan yozish kerak\nSuv ishlab chiqaradi instagiram aktiv boti bor web sayti ham bor tildada qilingan	cancel	4
+175	Aqualime Ibrohim	950635727	2\nTK\nTK TK\nRulda edim dedi keyinroq tel qilish kerak\nTK\nSuv ishlab chiqazadu olx dan oldim\nIkkinchi raqami 992280504	cancel	4
+168	VODA KRISTALNAYA	(78) 140-02-51	Telegramdan yozib bo'lmadi sms ham ketmadi\nRus ekan o'zbekchani tushunmas ekan\nX	cancel	4
+171	LIFE WATER	33 066 66 26	Raqami noto'g'ri X	cancel	4
+179	Blue Spring	71 235 67 89	Raqam sistemada mavjud emas deyapti\n\nTelefon raqam tarmoqda mavjud emas\nChatgpt dan oldim suv ishlab chiqadigan komponiya\n	cancel	4
 108	Doniyor Brilliant Pure water	909097171	gaplashdim narigi nommeriga telefon qilish kerak.3113\n\nErtaga telefon qilish kerak. eski crm tizimi bor ekan shuni ko'rish uchun telefon qilish kerak. ko'rib chiqib qanday kamchiliklari bor biz bunga qanday yechim qilib bera olamiz\nBrilliant Pure water	cancel	1
-187	Anjum water	888705225	Buxoda da joylashgan.\nOlx dan oldim	in_progres	4
-109	Dawylife water Feruz	948789999	Sherigim kelsin maslahatlashib ko'ray degandi. botni narxini 100$ dan qilib bera olarkanmiz deyish kerak\n\nbir hatalarda tel qilish kerak 18.04\n\nHozir rasxot qilmay turay potent xal bo'lsin deyapti.\n\ntelegram botni o'ylab ko'ryapti\n\nSoft water bilan sherik ekan. ertaga ofisga kelishi kerak	in_progres	4
+193	Murodbaxshsuv	555005070	Tk\nTK\nInstagiramdan oldim	cancel	4
 186	Temiz water	555208080	Ikkinchi raqam: 95 020 80 80\nInstagiramdan oldim	empty	3
-188	Saxovat suvlari	997362020	Buxoroda joylashgan olxdan oldim	empty	4
-189	Aqua Delux	971236663	Ikkinchi raqam: 93 140 88 83\nBuxoroda joylashgan\nOlxdan oldim	empty	4
-191	Yasmin water	771070074	Buxoroda joylashgan olxdan oldim	empty	4
-175	Aqualime Ibrohim	950635727	TK\nTK TK\nRulda edim dedi keyinroq tel qilish kerak\nTK\nSuv ishlab chiqazadu olx dan oldim\nIkkinchi raqami 992280504	in_progres	4
-193	Murodbaxshsuv	555005070	Instagiramdan oldim	empty	4
+181	Uz Aqua	71 201 11 22	Mavjud bo'lmagan raqam deyapti\nChatgpt dan oldim suv ishlab chiqadi	cancel	4
 163	Nest water	959543302	Azamat 18:00 dan keyin tel qilish kerak. Bu bo'yicha rahbarim bilan gaplashib ko'ray anig'ini aytaman dedi\nX	cancel	4
-171	LIFE WATER	33 066 66 26	Raqami noto'g'ri X	empty	4
-203	Elsuv	555180505	Suv ishlab chiqaradi instagiram aktiv boti bor web sayti ham bor tildada qilingan	empty	4
-168	VODA KRISTALNAYA	(78) 140-02-51	Telegramdan yozib bo'lmadi sms ham ketmadi\nRus ekan o'zbekchani tushunmas ekan\nX	empty	4
-196	Besh og'ayni milliy toamlari	909740070	2 Restaran\nChorsu gumda joylashgan	empty	4
-198	Rayxon milliy taomlari	+998783332875	4- Reataran instagiram profili bor\nSamarqand darvada joylashgan	empty	4
+182	Baraka Suvi	71 256 77 88	Sistemada mavjud emas deyapti\nChatgptda sergilida joylashgan dib ko'rsatdi.\nOlx da navoiyda dib ko'rsatdi raqami bitta	cancel	4
 12	Magicwater_uz	+998712036767	Kompaniya telefon raqamini managerlarga berib qo'yar ekan bizga o'zi aloqaga chiqadi\n\nTelegiram bot bor. Web sayti yo'q. \n	cancel	4
-116	DR water	950410909	keyingi hafta yena bir telefon qilib habar olish kerak. telefon qilganda nima bo'ldi ishlarizni hal qildizmi deb so'rash kerak. (Nimadir hal bo'lsin o'zimiz aloqaga chiqamiz degan edi.) (23.05 da tel qilish kerak)\n\nTelefonni ko'tarmadi\n\nTelefonni ko'tarmasi\ntelefon qilganda qachon vaqti bor ko'risha olamizmi so'rash kerak\n\n\nTelefonni ko'tarmadi\n\n11.04 telefon qilish kerak\n\nTelefonni ko'tarmadi\n\nJurat. 09.04 ertaga ertalab telefon qilish kerak\n\nSayt bor, bot yo'q	in_progres	4
-164	Fosso	950118228	Telegramdan ma'lumot tashlab qo'ydim\n974144197-Alibek\n\nTelefonni ko'tarmadi\n\nX	in_progres	4
+196	Besh og'ayni milliy toamlari	909740070	2 Restaran\nChorsu gumda joylashgan	in_progres	4
+188	Saxovat suvlari	997362020	Buxoroda joylashgan olxdan oldim	cancel	4
 204	tibet water	998745210	warter	cancel	4
-205	Zarkent suv	990851505	Instagiram bor\nko'chada dastavka mashinasini ko'rib yozib oldim	empty	4
+206	Avera water 	555208048	Instagirami bor ikkinchi nomi divozamzam	cancel	4
 130	Zinnur pure	996066333	Iyul oyida qayta aloqaga chiqish kerak. Hozirda o'zini yani zavodni rivojlantirish bilan shug'ullanayotgan ekan bozorga chiqishga marketingga keyinroq harakat qilar ekan. sezon boshlangan lekin biz boshlay olmayapmiz dedi.\n\n976336333-Ziyovuddin Telefonni ko'tarmadi\n\nTelefonni ko'tarmadi\nTelefonni ko'tarmadi\nTelefonni ko'tarmadi\n\nXech nimasi yo'q	cancel	4
 178	Shaffof Servis QK	71 278 00 88	Boshqa nommer ekan\nChatgpt dan oldim	cancel	4
-199	Gumus su Jamshid	998429949	Bir soatdan keyin tel qilish kerak ekan 16:30\n\nSayti yo'q bot bor lekin ishlamayapti\n	in_progres	4
+201	Buloq suv	978994444	Telefon qilib boʻlmadi\nSuv ishlab chiqaradi instagiram bor	cancel	4
 194	Aquazamin	991232228	Manageriga raqamimizni berib qo'yar ekan\nIkkinchi raqam: 1232229\nInstagiramdan oldim	cancel	4
-206	Avera water 	555208048	Instagirami bor ikkinchi nomi divozamzam	empty	4
-207	Nefrit suvlari	712093332	Suv ishlab chiqaradi instagiram mi telegiram boti bor	empty	4
-121	Nafis suv  Abdullo	946693883	Telefonni o'chirib qo'ydi\nTelefonni koʻtarmadi\n\nTelefonni ko'tarmadi\nYangi O'zbekiston tomonda joylashgan\n\n10.04 soat 18:00 19:00 larda qayta aloqaga chiqish kerak\nqachon ko'rishsa bo'ladi so'rash kerak\nyangi o'zbekiston tomonda ekan\n\nAbdullo - 946693883\nDiyora - 947635070\nraqamini operatoridan olindi\nBot sayt yo'q\n	in_progres	4
+42	Mirjalol "USMANOV PRODUCTION N1" MCHJ	+998946564646	Keyinroq telefon qiling dedi\nBoshqа toifаlаrgа kiritilmаgаn shаxsiy xizmаtlаr	cancel	4
 183	Shaffof water	712008888	Yoʻq rahmat deb telefonni oʻchirib qoʻydi 909151122 - Shavkat \n\nInstagiramdan oldim. Veb sayt oldin bo'lgan hozir ishlamayapti.	cancel	4
-181	Uz Aqua	71 201 11 22	Mavjud bo'lmagan raqam deyapti\nChatgpt dan oldim suv ishlab chiqadi	empty	4
+189	Aqua Delux	971236663	Ikkinchi raqam: 93 140 88 83\nBuxoroda joylashgan\nOlxdan oldim	cancel	4
 180	Imir Trade Group	71 244 56 78	TK\nSuv ishlab chiqazadi\nWeb sayti bor lekin ishlamayapti	in_progres	4
-182	Baraka Suvi	71 256 77 88	Sistemada mavjud emas deyapti\nChatgptda sergilida joylashgan dib ko'rsatdi.\nOlx da navoiyda dib ko'rsatdi raqami bitta	empty	4
-202	Oqtosh meneral	771681111	Sayti bor bot yo'q\nBostoqliqda joylashgan suv ishlab chiqaradi. Instagirami bor	empty	4
+191	Yasmin water	771070074	Buxoroda joylashgan olxdan oldim	cancel	4
+205	Zarkent suv	990851505	Instagiram bor\nko'chada dastavka mashinasini ko'rib yozib oldim	cancel	4
 190	Ewo water	330200520	Manga umuman kerak emas hozi boshqa ishlarim bor deyapti\n\nIkkinchi raqam: 33 007 37 27\nOlxdan oldim	cancel	4
-192	La Vita water	951705858	Operatori oldi rahbarimizga telefon raqamingizni berib qo'yamiz dedi telegramdan yozib ham qo'ydim\n\nIkkinchi raqam: 71 203 58 58\nInstagiramdan oldim	in_progres	4
-13	Minera life	+998908226644	Telefonni ko'tarmadi telegramdan yozsangiz tashlab beraman degani uchun telegramdan yozib qo'ydim\n\nKEchga soat 21:00 da telefon qilib meetga chaqirish kerak\n\nDushanba kechga meet qilib gaplashib olamiz\nErtaga (05.04.2025) ertalabdan abetgacha bo'lgan vaqt oralig'ida uchrashuv\nTelegiram bot bor lekin ishlamidi. Web sayti bor. Ofisiga bordik tapa olmadik.	cancel	4
 195	Sayfullo shashlik	+998933841809	1 - Restaran\nNushafshon ko'chada joylashgan	in_progres	4
-197	Kamolon Osh markazi	+998712455087	3- Restaran	in_progres	4
+13	Minera life	+998908226644	Telefonni ko'tarmadi telegramdan yozsangiz tashlab beraman degani uchun telegramdan yozib qo'ydim\n\nKEchga soat 21:00 da telefon qilib meetga chaqirish kerak\n\nDushanba kechga meet qilib gaplashib olamiz\nErtaga (05.04.2025) ertalabdan abetgacha bo'lgan vaqt oralig'ida uchrashuv\nTelegiram bot bor lekin ishlamidi. Web sayti bor. Ofisiga bordik tapa olmadik.	cancel	4
+202	Oqtosh meneral	771681111	Tk\nSayti bor bot yo'q\nBostoqliqda joylashgan suv ishlab chiqaradi. Instagirami bor	cancel	4
+199	Gumus su Jamshid	998429949	Bir soatdan keyin tel qilish kerak ekan 16:30\n\nSayti yo'q bot bor lekin ishlamayapti\n	cancel	4
 185	Begzod Tibet water	977751144	Borib gaplashib keldim korxonani  bsohqaruvchi CRM tizimi kerak ekan\n\nShanba kuni telefon qilib uchrashuv belgilash kerak\n\n\nPayshanba 15.05 kuni telegramdan yozish kerak vaqtiga qarab nechchida bo'sh bo'lishini aytadi va lakatsiya tashlab beradi\n\nBir joyga kirib ketayotgan ekan 1 soatlardan telefon qilish kerak\n\nSub ishlab chiqaradi. Instagiramdan oldim.	cancel	4
-179	Blue Spring	71 235 67 89	Raqam sistemada mavjud emas deyapti\n\nTelefon raqam tarmoqda mavjud emas\nChatgpt dan oldim suv ishlab chiqadigan komponiya\n	empty	4
-184	Just water	97 138 20 00	971382000 Shu raqamga telegramdan ma’lumot joʻnatish kerak\n\nSayt bor bot yo'q\n	in_progres	4
-176	NEO suvlari	337715080	Kompaniya haqida ma'lumot berdim CRM ni narxini so'radi narxni aytdim yo'q bizga kerak emas ekan dedi. bispro CRM ishlatar ekan oyiga 350 ming to'layman dedi. 1 2 ta savol berganimdan keyin o'zim telefon qilsam bo'ladimi dedi\n\nTK\nSuv ishlab chiqadi Olx dan oldim	in_progres	4
+207	Nefrit suvlari	957095333	Tk\nNommeri operatordan olingan\n\nSuv ishlab chiqaradi instagiram mi telegiram boti bor\n	cancel	4
+200	Endlesswater	783330808	Nommerizzi yozvolaman oʻzlari aloqaga chiqishadi dedi\nTk\nSuv ishlab chiqaradi. Instagiram faol telegiram bot bor \nSayti ishlamayapti\n	cancel	4
+192	La Vita water	951705858	Operatori oldi rahbarimizga telefon raqamingizni berib qo'yamiz dedi telegramdan yozib ham qo'ydim\n\nIkkinchi raqam: 71 203 58 58\nInstagiramdan oldim	cancel	4
+184	Just water	97 138 20 00	971382000 Shu raqamga telegramdan ma’lumot joʻnatish kerak\n\nSayt bor bot yo'q\n	cancel	4
+121	Nafis suv  Abdullo	946693883	Telefonni o'chirib qo'ydi\nTelefonni koʻtarmadi\n\nTelefonni ko'tarmadi\nYangi O'zbekiston tomonda joylashgan\n\n10.04 soat 18:00 19:00 larda qayta aloqaga chiqish kerak\nqachon ko'rishsa bo'ladi so'rash kerak\nyangi o'zbekiston tomonda ekan\n\nAbdullo - 946693883\nDiyora - 947635070\nraqamini operatoridan olindi\nBot sayt yo'q\n	cancel	4
+197	Kamolon Osh markazi	+998712455087	3- Restaran	in_progres	4
+109	Dawylife water Feruz	948789999	Sherigim kelsin maslahatlashib ko'ray degandi. botni narxini 100$ dan qilib bera olarkanmiz deyish kerak\n\nbir hatalarda tel qilish kerak 18.04\n\nHozir rasxot qilmay turay potent xal bo'lsin deyapti.\n\ntelegram botni o'ylab ko'ryapti\n\nSoft water bilan sherik ekan. ertaga ofisga kelishi kerak	cancel	4
+187	Anjum water	888705225	Buxoda da joylashgan.\nOlx dan oldim	cancel	4
+198	Rayxon milliy taomlari	+998783332875	4- Reataran instagiram profili bor\nSamarqand darvada joylashgan	in_progres	4
+220	Vkusna by Seva	555158515	Saytim topda turibdi dedi\n900072552 Elyor\nSeo xizmatimizni taklif qilamiz\n200$ + 100$ reklama \nvkusnobyseva.com	cancel	4
+176	NEO suvlari	337715080	Kompaniya haqida ma'lumot berdim CRM ni narxini so'radi narxni aytdim yo'q bizga kerak emas ekan dedi. bispro CRM ishlatar ekan oyiga 350 ming to'layman dedi. 1 2 ta savol berganimdan keyin o'zim telefon qilsam bo'ladimi dedi\n\nTK\nSuv ishlab chiqadi Olx dan oldim	cancel	4
+216	Akbar rech eshiklari	973442417	Tk tgdan malumot tashab qoʻydim +998998855195 Mahammad\nSaytga seo yozib beramiz oylik to'lob 200$ bo'ladi google adsga 100$ ishlatadi. Sayti bor qidirganda chiqmayapti https://www.akbar-rich.uz/	in_progres	4
+221	Jalinga interaktiv vediostudiya	991440088	Telegramdam malumot tashab qoʻying dedi. Saytni toʻgʻirlash xizmati ham bormi dedi\nSeo xizmatimizni taklif qilamiz.\n200$ + 100$ reklamaga \njalinga.uz	in_progres	4
 174	Geolife	941479000	Maslahatlashib ko'raman dedi\n\nTK TK\nKeyinroq tell qilish kerak 18:00\n\n21.05 Telegramdan ma'lumot tashlab qo'ydim ertaga yena telefon qilib Nima bo'ldi ko'rib chiqdingizmi vaqtingiz bo'lsa biron kun belgilab ko'rishib olsak batafsil ma'lumot berib kelar edim deyish kerak\nX	cancel	4
-209	O'quv markaz Dilbar	881160917	Nurafshon tomonda ekan\n\nSardor SMM xizmati bo'yicha yozgan ekan	empty	1
-210	Bot. Xisobchi bot	500307624	Xisobchi botga oʻxshagan bot soʻragandi 2 3 haftadan keyin xabar olish kerak tahminan 25.07	empty	1
-211	minimdesign.uz	+998 97 400-04-13	Sayti yonib yotibdi\n	empty	4
+116	DR water	950410909	keyingi hafta yena bir telefon qilib habar olish kerak. telefon qilganda nima bo'ldi ishlarizni hal qildizmi deb so'rash kerak. (Nimadir hal bo'lsin o'zimiz aloqaga chiqamiz degan edi.) (23.05 da tel qilish kerak)\n\nTelefonni ko'tarmadi\n\nTelefonni ko'tarmasi\ntelefon qilganda qachon vaqti bor ko'risha olamizmi so'rash kerak\n\n\nTelefonni ko'tarmadi\n\n11.04 telefon qilish kerak\n\nTelefonni ko'tarmadi\n\nJurat. 09.04 ertaga ertalab telefon qilish kerak\n\nSayt bor, bot yo'q	cancel	4
+132	Royal	770983333	Telefonni ko'tarmadi\n\nYoʻlda ekan 1 soatlarda tel qilish kerak 17:00\n\nTelefonni ko'tarmadi\nKamoliddin - 935542002\nNommerini operatordan olinganini aytmaslik kerak\n\nkeyinroq telefon qilish kerak. 5 daqiqa vaqtingiz bormi deganimda tezroq dedi va ishi borligi uchun keyinroq telefon qiling dedi.\n\ntel qilganda \nbiz nima bilan shug'ullanishimiz va kompaniya haqida ma'lumot berish kerak\n\nXech nimasi yo'q	cancel	4
+222	Dizipro	994008800	Seo xizmatini taklif qilamiz\n200$ + 100$ reklama\ndizipromaktab.uz	empty	4
+209	O'quv markaz Dilbar	881160917	Nurafshon tomonda ekan\n\nSardor SMM xizmati bo'yicha yozgan ekan	cancel	1
+210	Bot. Xisobchi bot	500307624	Xisobchi botga oʻxshagan bot soʻragandi 2 3 haftadan keyin xabar olish kerak tahminan 25.07	cancel	1
+208	Aquawater	901000066	Ertaga tel qilish kk ma’lumot berdim shu masala boʻyicha ertaga telefon qila olasizmi dedi\nBot bor sayt yo'q\n	cancel	4
+211	minimdesign.uz	+998 97 400-04-13	Sayti yonib yotibdi\n	cancel	4
+231	kyariz turba	976000003	turba ishlab chiqaradi. Alimardorlar saytini qilib topshiribdi seo xizmstini taklif qilish kerak. kyariz.uz	empty	4
 \.
 
 
@@ -1593,20 +1680,11 @@ COPY public.positions (id, name) FROM stdin;
 --
 
 COPY public.project_programmer (id, project_id, programmer_id) FROM stdin;
-226	31	7
-227	31	6
-228	31	8
 115	10	6
 116	10	11
 235	6	5
 236	6	3
 237	6	6
-238	32	3
-239	32	22
-240	32	6
-241	32	12
-242	32	9
-243	32	11
 244	33	9
 245	33	19
 246	34	8
@@ -1625,8 +1703,22 @@ COPY public.project_programmer (id, project_id, programmer_id) FROM stdin;
 252	37	16
 253	38	11
 254	38	16
+255	39	16
+256	39	11
 51	11	6
 52	12	7
+257	40	11
+258	40	16
+259	41	16
+260	41	11
+261	42	30
+262	42	11
+263	42	16
+264	43	30
+265	43	31
+266	43	11
+267	44	31
+268	44	30
 99	9	7
 100	9	6
 101	9	11
@@ -1640,20 +1732,24 @@ COPY public.project_programmer (id, project_id, programmer_id) FROM stdin;
 
 COPY public.projects (id, name, start_date, end_date, status, image, price, is_deleted) FROM stdin;
 6	WTC	2025-01-31 00:00:00	2025-02-13 00:00:00	done	project/None	15600000	f
-32	Chimgan water	2025-04-22 00:00:00	2025-05-10 00:00:00	in_progres	projects/None	12900000	f
 7	One PC	2024-11-01 00:00:00	2025-02-20 00:00:00	done	project/None	9100000	f
 9	Motostan	2024-12-10 00:00:00	2025-02-15 00:00:00	done	project/None	1300000	f
 8	OGMK CRM	2024-12-15 00:00:00	2025-02-05 00:00:00	done	project/None	23500000	f
-34	Mauntain Ceo hizmati	2025-05-08 00:00:00	2025-08-08 00:00:00	in_progres	projects/None	7800000	f
-36	Aroma atir	2025-05-15 00:00:00	2025-06-15 00:00:00	in_progres	projects/None	2600000	f
-37	Crestal Ice Smm	2025-07-17 00:00:00	2025-09-17 00:00:00	in_progres	projects/None	12700000	f
 38	Neosocial seo	2025-08-20 00:00:00	2025-11-20 00:00:00	in_progres	projects/None	2600000	f
 33	Canfort Smm hizmati	2025-05-01 00:00:00	2025-05-31 00:00:00	done	projects/None	5200000	f
 35	Azim Studio	2025-05-15 00:00:00	2025-05-31 00:00:00	done	projects/None	3900000	f
+39	Hilol Med klinikasi	2025-10-27 00:00:00	2025-11-27 00:00:00	in_progres	projects/None	2400000	f
+40	Daimond	2025-10-24 00:00:00	2025-11-24 00:00:00	in_progres	projects/None	3600000	f
+41	Xilol hospital	2025-11-13 00:00:00	2025-12-13 00:00:00	in_progres	projects/None	2400000	f
+42	Real Dreams	2025-11-17 00:00:00	2025-12-17 00:00:00	in_progres	projects/None	2400000	f
+34	Mauntain Ceo hizmati	2025-05-08 00:00:00	2025-08-08 00:00:00	done	projects/None	7800000	f
+36	Aroma atir	2025-05-15 00:00:00	2025-06-15 00:00:00	done	projects/None	2600000	f
+37	Crestal Ice Smm	2025-07-17 00:00:00	2025-09-17 00:00:00	done	projects/None	12700000	f
+43	Patent Markazi	2025-12-08 00:00:00	2026-01-08 00:00:00	in_progres	projects/None	2400000	f
+44	Restaran menu	2025-12-01 00:00:00	2025-12-11 00:00:00	done	projects/None	2400000	f
 12	Marwa tour ( Kartaga ulab berish)	2025-01-15 00:00:00	2025-01-16 00:00:00	done	projects/None	300000	f
 11	Fayz to'yxona ( forma )	2025-01-15 00:00:00	2025-01-16 00:00:00	done	projects/None	300000	f
 10	Media zone ( Sevi.lv )	2025-02-04 00:00:00	2025-02-05 00:00:00	done	project/None	1300000	f
-31	agency sayt	2025-03-26 00:00:00	2025-03-31 00:00:00	done	projects/None	6000000	f
 \.
 
 
@@ -1772,6 +1868,10 @@ COPY public.task_programmer (id, task_id, programmer_id) FROM stdin;
 152	66	28
 153	67	30
 154	68	30
+155	69	30
+157	70	30
+158	70	31
+160	71	30
 \.
 
 
@@ -1821,7 +1921,7 @@ COPY public.tasks (id, name, start_date, end_date, status, is_deleted, descripti
 28	WTC ni kamchiliklarini to'g'irlash kerak	2025-02-01 00:00:00	2025-02-25 00:00:00	done	t	undefined	\N
 29	WTC ga kontent qo'shib chiqish kerak	2025-02-21 00:00:00	2025-02-25 00:00:00	done	t	undefined	\N
 52	qwerty	2025-03-01 00:00:00	2025-03-03 00:00:00	to_do	t	qwert	\N
-30	WTC ni kontentlarini qo'shish kerak	2025-02-10 00:00:00	2025-02-15 00:00:00	success	f	undefined	\N
+71	Makkarim	2026-01-01 00:00:00	2026-01-17 00:00:00	code_review	t	undefined	7bfc0e4a4113157ec65147c9fbce047e.jpg
 44	sdfg	2025-03-01 00:00:00	2025-03-04 00:00:00	to_do	t	sdfg	IMG_5524.jpg
 65	test	2025-05-28 00:00:00	2025-05-29 00:00:00	code_review	t	1231234	\N
 35	front-end	2025-02-01 00:00:00	2025-02-26 00:00:00	to_do	t	geiurbge	20210617_010331.jpg
@@ -1829,23 +1929,26 @@ COPY public.tasks (id, name, start_date, end_date, status, is_deleted, descripti
 43	...	2025-03-01 00:00:00	2025-03-04 00:00:00	to_do	t	erty	Artboard 1 copy@3x.png
 45	Katta pul topish	2025-03-04 00:00:00	2025-03-31 00:00:00	to_do	t	katata	photo_2024-10-30_18-56-34.jpg
 66	test	2025-05-28 00:00:00	2025-05-30 00:00:00	to_do	t	test	\N
+69	Makkarim	2025-08-22 00:00:00	2025-08-27 00:00:00	to_do	t	frfrfrf	7bfc0e4a4113157ec65147c9fbce047e.jpg
 46	qwert	2025-03-01 00:00:00	2025-03-04 00:00:00	to_do	t	qwert	512px-Map_of_Central_Asia.svg.png
 47	qqwert	2025-03-01 00:00:00	2025-03-18 00:00:00	to_do	t	qwewtre	Professional Photo.jpeg
 33	WTC ni test qilish kerak	2025-02-13 00:00:00	2025-02-15 00:00:00	done	t	undefined	\N
 48	qwert	2025-03-01 00:00:00	2025-03-18 00:00:00	done	t	qwert	STP-Produkte-Auto-013.webp
 49	qwert	2025-03-01 00:00:00	2025-03-04 00:00:00	to_do	t	1234qwer	\N
 58	test	2025-05-27 00:00:00	2025-05-29 00:00:00	to_do	t	1234	\N
-55	Brendlar boʻyicha saralash kerak	2025-05-03 00:00:00	2025-05-04 00:00:00	to_do	f	undefined	\N
-57	fsfd	2025-05-17 00:00:00	2025-05-24 00:00:00	to_do	f	asdff	\N
-63	wewewe	2025-05-27 00:00:00	2025-05-28 00:00:00	in_progres	f	testt	\N
-53	CRM tasklarni	2025-03-22 00:00:00	2025-03-31 00:00:00	in_progres	f	undefined	\N
+30	WTC ni kontentlarini qo'shish kerak	2025-02-10 00:00:00	2025-02-15 00:00:00	success	t	undefined	\N
+53	CRM tasklarni	2025-03-22 00:00:00	2025-03-31 00:00:00	in_progres	t	undefined	\N
+55	Brendlar boʻyicha saralash kerak	2025-05-03 00:00:00	2025-05-04 00:00:00	to_do	t	undefined	\N
+62	test223	2025-05-28 00:00:00	2025-05-31 00:00:00	done	f	testttt	\N
+57	fsfd	2025-05-17 00:00:00	2025-05-24 00:00:00	to_do	t	asdff	\N
 59	test	2025-05-28 00:00:00	2025-05-30 00:00:00	done	t	134124	\N
 32	Footerni to'g'irlash kerak	2025-02-13 00:00:00	2025-02-15 00:00:00	success	f	undefined	\N
 56	test	2025-05-09 00:00:00	2025-05-10 00:00:00	code_review	t	test	\N
 60	test	2025-05-27 00:00:00	2025-05-30 00:00:00	code_review	t	testttt	\N
 61	wewewe	2025-05-28 00:00:00	2025-05-31 00:00:00	success	f	шгнек	\N
 64	wewewe	2025-05-22 00:00:00	2025-05-30 00:00:00	done	t	1313123	\N
-62	test223	2025-05-28 00:00:00	2025-05-31 00:00:00	done	f	testttt	\N
+70	Makkarim	2025-08-22 00:00:00	2025-08-17 00:00:00	success	t	Wess\r\n\r\n	\N
+63	wewewe	2025-05-27 00:00:00	2025-05-28 00:00:00	done	f	testt	\N
 68	deded	2025-08-12 00:00:00	2025-08-19 00:00:00	success	t	deded	\N
 67	ee	2025-08-14 00:00:00	2025-08-11 00:00:00	success	t	ded	\N
 \.
@@ -1876,14 +1979,14 @@ SELECT pg_catalog.setval('public.expected_value_id_seq', 29, true);
 -- Name: expences_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.expences_id_seq', 365, true);
+SELECT pg_catalog.setval('public.expences_id_seq', 414, true);
 
 
 --
 -- Name: incomes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.incomes_id_seq', 112, true);
+SELECT pg_catalog.setval('public.incomes_id_seq', 144, true);
 
 
 --
@@ -1918,7 +2021,7 @@ SELECT pg_catalog.setval('public.operator_type_id_seq', 4, true);
 -- Name: operators_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.operators_id_seq', 211, true);
+SELECT pg_catalog.setval('public.operators_id_seq', 231, true);
 
 
 --
@@ -1932,28 +2035,28 @@ SELECT pg_catalog.setval('public.positions_id_seq', 9, true);
 -- Name: project_programmer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.project_programmer_id_seq', 254, true);
+SELECT pg_catalog.setval('public.project_programmer_id_seq', 268, true);
 
 
 --
 -- Name: projects_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.projects_id_seq', 38, true);
+SELECT pg_catalog.setval('public.projects_id_seq', 44, true);
 
 
 --
 -- Name: task_programmer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.task_programmer_id_seq', 154, true);
+SELECT pg_catalog.setval('public.task_programmer_id_seq', 160, true);
 
 
 --
 -- Name: tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.tasks_id_seq', 68, true);
+SELECT pg_catalog.setval('public.tasks_id_seq', 71, true);
 
 
 --
@@ -2213,4 +2316,6 @@ ALTER TABLE ONLY public.task_programmer
 --
 -- PostgreSQL database dump complete
 --
+
+\unrestrict VrOPQqWh7RiIGIXzEeKc9WExFdC4sWqwQgXrx3eADCDDIkFj7E8VxhlUcIYbrst
 
